@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/include"
+        layout="@layout/details_title"/>
+    <GridView
+        android:id="@+id/gv_smartpay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnWidth="60dp"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:horizontalSpacing="2dp"
+        android:verticalSpacing="2dp"
+        android:background="@color/bg_content"
+        />
+
+</LinearLayout>
