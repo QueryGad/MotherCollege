@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_content"
+    android:orientation="vertical">
+    <RelativeLayout
+        style="@style/title"
+        android:background="@color/bg_title">
+
+        <TextView
+            style="@style/title_text"
+            android:text="发现" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ddd" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/bg_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_find_frend"
+                    style="@style/linear_button_item">
+
+                    <ImageView
+                        style="@style/icon_find"
+                        android:src="@mipmap/ic_find_invite" />
+
+                    <TextView
+                        style="@style/text_find_title"
+                        android:text="邀请好友" />
+
+                    <TextView
+                        style="@style/text_find_des"
+                        android:gravity="right"
+                        android:text="赚智慧币"
+                        android:textColor="#FF0000" />
+
+                    <ImageView style="@style/icon_find_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_find_lucky"
+                    style="@style/linear_button_item"
+                    android:layout_marginTop="13dp">
+
+                    <ImageView
+                        style="@style/icon_find"
+                        android:src="@mipmap/ic_find_lucky" />
+
+                    <TextView
+                        style="@style/text_find_title"
+                        android:text="我的福田" />
+
+                    <TextView
+                        style="@style/text_find_des"
+                        android:text="" />
+
+                    <ImageView style="@style/icon_find_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_find_love"
+                    style="@style/linear_button_item"
+                    android:layout_marginTop="13dp">
+
+                    <ImageView
+                        style="@style/icon_find"
+                        android:src="@mipmap/ic_find_love" />
+
+                    <TextView
+                        style="@style/text_find_title"
+                        android:text="爱心大使" />
+
+                    <TextView
+                        style="@style/text_find_des"
+                        android:text="" />
+
+                    <ImageView style="@style/icon_find_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_find_market"
+                    style="@style/linear_button_item"
+                    android:layout_marginTop="13dp">
+
+                    <ImageView
+                        style="@style/icon_find"
+                        android:src="@mipmap/ic_find_market" />
+
+                    <TextView
+                        style="@style/text_find_title"
+                        android:text="商城" />
+
+                    <TextView
+                        style="@style/text_find_des"
+                        android:text="" />
+
+                    <ImageView style="@style/icon_find_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_find_vip"
+                    style="@style/linear_button_item"
+                    android:layout_marginTop="13dp">
+
+                    <ImageView
+                        style="@style/icon_find"
+                        android:src="@mipmap/ic_find_vip" />
+
+                    <TextView
+                        style="@style/text_find_title"
+                        android:text="成为天使会员" />
+
+                    <TextView
+                        style="@style/text_find_des"
+                        android:text="" />
+
+                    <ImageView style="@style/icon_find_right" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
