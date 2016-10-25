@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
     <include
         android:id="@+id/include"
-        layout="@layout/details_title" />
+        layout="@layout/details_title"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_refresh"
+            android:layout_width="270dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="106dp"
+            android:src="@mipmap/icon_cutting"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btn_refrsh"
+            android:layout_width="127dp"
+            android:layout_height="37dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="305dp"
+            android:background="@drawable/btn_refresh"
+            android:visibility="gone" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_att"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
 </LinearLayout>
