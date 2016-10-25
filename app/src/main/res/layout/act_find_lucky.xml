@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <include
+        android:id="@+id/include"
+        layout="@layout/details_title"/>
+
+    <RadioGroup
+        android:id="@+id/rg_find_lucky"
+        android:layout_width="match_parent"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/rb_find_gengzhong"
+            style="@style/rb_home_line"
+            android:text="耕种福田"/>
+        <RadioButton
+            android:id="@+id/rb_find_jieli"
+            style="@style/rb_home_line"
+            android:text="爱心接力"/>
+    </RadioGroup>
+    <View
+        android:id="@+id/indicator_lucky"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="#FF0000" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_find_lucky"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

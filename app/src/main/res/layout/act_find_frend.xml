@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/include"
+        layout="@layout/details_title"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="310dp"
+                android:layout_height="338dp">
+                <ImageView
+                    android:layout_marginTop="19dp"
+                    android:layout_width="310dp"
+                    android:layout_height="338dp"
+                    android:src="@mipmap/bg_erweima"
+                    android:id="@+id/imageView2" />
+                <ImageView
+                    android:id="@+id/iv_find_frend"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="41dp"
+                    android:layout_alignTop="@+id/imageView2"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_marginTop="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="分享邀请码，下载母亲大学堂APP"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_yaoqingma"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FF0000"
+                    android:textSize="17sp"
+                    android:text="您的邀请码:"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FF0000"
+                    android:textSize="17sp"
+                    android:text=""/>
+            </LinearLayout>
+            <Button
+                android:layout_marginTop="10dp"
+                android:layout_width="236dp"
+                android:layout_height="wrap_content"
+                android:background= "@drawable/share_selector"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:text="立即分享 赚智慧币"/>
+            <TextView
+                android:id="@+id/tv_frend_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="每邀请一个人，送50个智慧币\n智慧币可订阅《学院》中的收费课程"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

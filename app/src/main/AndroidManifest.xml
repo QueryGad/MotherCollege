@@ -31,6 +31,13 @@
         <activity android:name=".activity.MainActivity" android:screenOrientation="portrait"
             android:theme="@style/Theme.PageIndicatorDefaults"/>
 
+        //发现
+        <activity android:name=".find.FrendActivity" android:screenOrientation="portrait"/> //邀请好友
+        <activity android:name=".find.LuckyActivity" android:screenOrientation="portrait"/> //我的福田
+        <activity android:name=".find.LoveActivity" android:screenOrientation="portrait"/> //爱心大使
+        <activity android:name=".find.MarketActivity" android:screenOrientation="portrait"/> //商城
+        <activity android:name=".find.VIPActivity" android:screenOrientation="portrait"/> //成为天使会员
+
     </application>
 
 </manifest>
