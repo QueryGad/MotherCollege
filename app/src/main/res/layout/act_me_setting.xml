@@ -1,8 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
     <include
         android:id="@+id/include"
-        layout="@layout/details_title" />
+        layout="@layout/details_title"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/bg_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="新消息提醒"
+                android:textSize="17sp"/>
+            <ch.ielse.view.SwitchView
+                android:id="@+id/setting_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:isOpened="true"
+                android:layout_marginRight="10dp"
+                />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#AAA"/>
+        <LinearLayout
+            android:id="@+id/ll_me_setting_cache"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/press_selector"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="17sp"
+                android:text="清除缓存"/>
+            <TextView
+                android:id="@+id/tv_setting_cache"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:layout_marginRight="10dp"
+                android:text=""
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_right"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#AAA"/>
+        <RelativeLayout
+            android:id="@+id/rl_me_setting_help"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/press_selector"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="17sp"
+                android:text="帮助与反馈"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_right"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#AAA"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_me_setting_about"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/press_selector"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="17sp"
+                android:text="关于"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_right"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#AAA"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_me_setting_out"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/press_selector"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="17sp"
+                android:text="退出"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#AAA"/>
+
+    </LinearLayout>
+
+
 </LinearLayout>

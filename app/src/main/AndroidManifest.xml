@@ -59,6 +59,8 @@
         <activity android:name=".me.details.SmartMakeOverActivity" android:screenOrientation="portrait"/>//智慧币转让
         <activity android:name=".me.details.GlodeDetailsActivity" android:screenOrientation="portrait"/>//金币明细
         <activity android:name=".me.details.GetGlodeActivity" android:screenOrientation="portrait"/>//提现
+        <activity android:name=".me.details.SettingHelpActivity" android:screenOrientation="portrait"/>//帮助与反馈
+        <activity android:name=".me.details.SettingAboutActivity" android:screenOrientation="portrait"/>//关于
     </application>
 
 </manifest>
