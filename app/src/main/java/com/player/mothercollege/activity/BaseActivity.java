@@ -1,13 +1,13 @@
 package com.player.mothercollege.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 
 /**
  * Created by Administrator on 2016/10/24.
  */
-public abstract class BaseActivity extends Activity{
+public abstract class BaseActivity extends FragmentActivity{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
