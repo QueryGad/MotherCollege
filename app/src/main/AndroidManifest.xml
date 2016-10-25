@@ -38,6 +38,19 @@
         <activity android:name=".find.MarketActivity" android:screenOrientation="portrait"/> //商城
         <activity android:name=".find.VIPActivity" android:screenOrientation="portrait"/> //成为天使会员
 
+        //我的
+        <activity android:name=".me.HeadIconActivity" android:screenOrientation="portrait"/>//个人资料
+        <activity android:name=".me.EditActivity" android:screenOrientation="portrait"/>//修改资料
+        <activity android:name=".me.SmartMoneyActivity" android:screenOrientation="portrait"/>//智慧币
+        <activity android:name=".me.GlodeMoneyActivity" android:screenOrientation="portrait"/>//金币
+        <activity android:name=".me.AttActivity" android:screenOrientation="portrait"/>//关注
+        <activity android:name=".me.FansActivity" android:screenOrientation="portrait"/>//粉丝
+        <activity android:name=".me.TakeActivity" android:screenOrientation="portrait"/>//订阅
+        <activity android:name=".me.CourseActivity" android:screenOrientation="portrait"/>//课程
+        <activity android:name=".me.CirleActivity" android:screenOrientation="portrait"/>//圈子
+        <activity android:name=".me.MessageActivity" android:screenOrientation="portrait"/>//消息
+        <activity android:name=".me.CollectActivity" android:screenOrientation="portrait"/>//收藏
+        <activity android:name=".me.SettingActivity" android:screenOrientation="portrait"/>//设置
     </application>
 
 </manifest>
