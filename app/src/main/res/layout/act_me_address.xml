@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_content"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/include"
+        layout="@layout/details_title"/>
+    <RelativeLayout
+        android:id="@+id/rl_add_address"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/press_selector"
+        >
+        <TextView
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:text="添加新地址"
+            android:textColor="#f00"
+            android:textSize="18sp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/icon_right"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc"/>
+</LinearLayout>

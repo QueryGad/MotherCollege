@@ -51,6 +51,10 @@
         <activity android:name=".me.MessageActivity" android:screenOrientation="portrait"/>//消息
         <activity android:name=".me.CollectActivity" android:screenOrientation="portrait"/>//收藏
         <activity android:name=".me.SettingActivity" android:screenOrientation="portrait"/>//设置
+        <activity android:name=".me.details.AlterNameActivity" android:screenOrientation="portrait"/>//修改昵称
+        <activity android:name=".me.details.AddressActivity" android:screenOrientation="portrait"/>//收货地址
+        <activity android:name=".me.details.StyleActivity" android:screenOrientation="portrait"/>//个性签名
+
     </application>
 
 </manifest>
