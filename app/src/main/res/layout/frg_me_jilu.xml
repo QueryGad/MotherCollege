@@ -21,7 +21,7 @@
         android:background="@drawable/btn_refresh"
         android:visibility="gone" />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_find_gengzhong"
+        android:id="@+id/rv_jilu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </FrameLayout>

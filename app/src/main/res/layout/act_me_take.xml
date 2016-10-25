@@ -1,8 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include
-        android:id="@+id/include"
-        layout="@layout/details_title" />
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#eee"
+        >
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/transprant"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_return"/>
+        <RadioGroup
+            android:id="@+id/rg_me_take"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rb_me_take_dingyue"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginRight="10dp"
+                android:text="我的订阅"/>
+            <RadioButton
+                android:id="@+id/rb_me_take_jilu"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:text="观看记录"/>
+        </RadioGroup>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_me_take"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </LinearLayout>
