@@ -160,7 +160,7 @@ public class SplashActivity extends BaseActivity {
         //联网得到公钥
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.APPTOKEN_URL, RequestMethod.GET);
         request.add("devID",getdeviceId());
-        request.add("op","appktoken");
+        request.add("op","apptoken");
         request.add("devType","2");
         requestQueue.add(GET_APPTOKEN_DATA, request, new OnResponseListener<String>() {
             @Override
