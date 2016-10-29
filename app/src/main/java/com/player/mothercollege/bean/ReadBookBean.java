@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class ReadBookBean {
     /**
-     * books : [{"bookID":"b238445","bookName":"天真的父母","pages":[{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/2.png","isnew":"true","pageIndex":1,"sid":"s43984","title":"章节1","viewCount":"34"},{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/8.png","isnew":"true","pageIndex":2,"sid":"s43984","title":"章节2","viewCount":"34"}]},{"bookID":"b238445","bookName":"亲子成长计划","pages":[{"date":"2017-09-13","editor":"周正","img":"http://121.42.31.133:8201/m/img/6.png","isnew":"true","pageIndex":1,"sid":"s43984","title":"章节1","viewCount":"34"},{"date":"2017-09-13","editor":"周正","img":"http://121.42.31.133:8201/m/img/3.png","isnew":"true","pageIndex":2,"sid":"s43984","title":"章节2","viewCount":"334"}]}]
+     * books : [{"bookID":"b238445","bookName":"天真的父母","pages":[{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/4.png","isnew":"true","pageIndex":1,"sid":"s43984","title":"章节1","viewCount":"34"},{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/1.png","isnew":"true","pageIndex":2,"sid":"s43984","title":"章节2","viewCount":"34"}]},{"bookID":"b238445","bookName":"亲子成长计划","pages":[{"date":"2017-09-13","editor":"周正","img":"http://121.42.31.133:8201/m/img/2.png","isnew":"true","pageIndex":1,"sid":"s43984","title":"章节1","viewCount":"34"},{"date":"2017-09-13","editor":"周正","img":"http://121.42.31.133:8201/m/img/2.png","isnew":"true","pageIndex":2,"sid":"s43984","title":"章节2","viewCount":"334"}]}]
      * endNo : 9
      */
 
@@ -15,7 +15,7 @@ public class ReadBookBean {
     /**
      * bookID : b238445
      * bookName : 天真的父母
-     * pages : [{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/2.png","isnew":"true","pageIndex":1,"sid":"s43984","title":"章节1","viewCount":"34"},{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/8.png","isnew":"true","pageIndex":2,"sid":"s43984","title":"章节2","viewCount":"34"}]
+     * pages : [{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/4.png","isnew":"true","pageIndex":1,"sid":"s43984","title":"章节1","viewCount":"34"},{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/1.png","isnew":"true","pageIndex":2,"sid":"s43984","title":"章节2","viewCount":"34"}]
      */
 
     private List<BooksBean> books;
@@ -42,7 +42,7 @@ public class ReadBookBean {
         /**
          * date : 2017-09-13
          * editor : 张三
-         * img : http://121.42.31.133:8201/m/img/2.png
+         * img : http://121.42.31.133:8201/m/img/4.png
          * isnew : true
          * pageIndex : 1
          * sid : s43984

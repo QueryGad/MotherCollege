@@ -129,4 +129,19 @@ public class MyUtils {
 
 		return output;
 	}
+
+	public static File upPhoto(Bitmap photoBitmap, String path,
+								   String photoName) {
+		File dir = null;
+		File photoFile =null;
+		if (android.os.Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED)) {
+			dir = new File(path);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+			photoFile = new File(path, photoName + ".png");
+		}
+		return photoFile;
+	}
 }

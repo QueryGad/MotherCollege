@@ -7,27 +7,26 @@ import java.util.List;
  */
 public class OriginalBean {
     /**
-     * books : [{"date":"2016-10-13 15:52","editor":"李峰","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/5.png","index":1,"likeCount":0,"pState":"1","price":5,"sid":"s3w4oi5","title":"小二心里健康培养","url":"#","viewCount":"1432","viewType":0},{"date":"2016-10-13 15:52","editor":"孙正茂","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/4.png","index":2,"likeCount":0,"pState":"1","price":5,"sid":"s3w4oi5","title":"三岁决定孩子的一生","url":"#","viewCount":"1432","viewType":0},{"date":"2016-10-13 15:52","editor":"魏来","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/6.png","index":3,"likeCount":0,"pState":"1","price":5,"sid":"s3w4oi5","title":"非暴力沟通孩子","url":"#","viewCount":"1432","viewType":0},{"date":"2016-10-13 15:52","editor":"赫鲁晓夫","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/3.png","index":4,"likeCount":0,"pState":"1","price":5,"sid":"s3w4oi5","title":"非暴力沟通孩子","url":"#","viewCount":"1432","viewType":0}]
-     * lastIndex : 5
+     * books : [{"date":"2016-10-27 21:47","editor":"孙正茂","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/5.png","index":1,"isNew":false,"isTop":true,"likeCount":0,"sid":"Y0001","title":"让孩子学会心悦诚服","url":"#","viewCount":999},{"date":"2016-10-27 21:47","editor":"李峰","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/1.png","index":1,"isNew":false,"isTop":true,"likeCount":0,"sid":"Y0001","title":"让孩子学会心悦诚服","url":"#","viewCount":999},{"date":"2016-10-27 21:47","editor":"张微风","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/8.png","index":1,"isNew":false,"isTop":true,"likeCount":0,"sid":"Y0001","title":"小二心里健康培养","url":"#","viewCount":999},{"date":"2016-10-27 21:47","editor":"万长春","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/4.png","index":1,"isNew":false,"isTop":true,"likeCount":0,"sid":"Y0001","title":"端正孩子的从众心里","url":"#","viewCount":999},{"date":"2016-10-27 21:47","editor":"曾丽友","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/5.png","index":1,"isNew":false,"isTop":true,"likeCount":0,"sid":"Y0001","title":"三岁决定孩子的一生","url":"#","viewCount":999},{"date":"2016-10-27 21:47","editor":"李峰","hasKeep":false,"hasLike":false,"hasReview":false,"img":"http://121.42.31.133:8201/m/img/6.png","index":1,"isNew":false,"isTop":true,"likeCount":0,"sid":"Y0001","title":"让孩子学会心悦诚服","url":"#","viewCount":999}]
+     * lastIndex : 6
      */
 
     private int lastIndex;
     /**
-     * date : 2016-10-13 15:52
-     * editor : 李峰
+     * date : 2016-10-27 21:47
+     * editor : 孙正茂
      * hasKeep : false
      * hasLike : false
      * hasReview : false
      * img : http://121.42.31.133:8201/m/img/5.png
      * index : 1
+     * isNew : false
+     * isTop : true
      * likeCount : 0
-     * pState : 1
-     * price : 5.0
-     * sid : s3w4oi5
-     * title : 小二心里健康培养
+     * sid : Y0001
+     * title : 让孩子学会心悦诚服
      * url : #
-     * viewCount : 1432
-     * viewType : 0
+     * viewCount : 999
      */
 
     private List<BooksBean> books;
@@ -56,14 +55,13 @@ public class OriginalBean {
         private boolean hasReview;
         private String img;
         private int index;
+        private boolean isNew;
+        private boolean isTop;
         private int likeCount;
-        private String pState;
-        private double price;
         private String sid;
         private String title;
         private String url;
-        private String viewCount;
-        private int viewType;
+        private int viewCount;
 
         public String getDate() {
             return date;
@@ -121,28 +119,28 @@ public class OriginalBean {
             this.index = index;
         }
 
+        public boolean isIsNew() {
+            return isNew;
+        }
+
+        public void setIsNew(boolean isNew) {
+            this.isNew = isNew;
+        }
+
+        public boolean isIsTop() {
+            return isTop;
+        }
+
+        public void setIsTop(boolean isTop) {
+            this.isTop = isTop;
+        }
+
         public int getLikeCount() {
             return likeCount;
         }
 
         public void setLikeCount(int likeCount) {
             this.likeCount = likeCount;
-        }
-
-        public String getPState() {
-            return pState;
-        }
-
-        public void setPState(String pState) {
-            this.pState = pState;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
         }
 
         public String getSid() {
@@ -169,20 +167,12 @@ public class OriginalBean {
             this.url = url;
         }
 
-        public String getViewCount() {
+        public int getViewCount() {
             return viewCount;
         }
 
-        public void setViewCount(String viewCount) {
+        public void setViewCount(int viewCount) {
             this.viewCount = viewCount;
-        }
-
-        public int getViewType() {
-            return viewType;
-        }
-
-        public void setViewType(int viewType) {
-            this.viewType = viewType;
         }
     }
 }

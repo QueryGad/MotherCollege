@@ -6,25 +6,24 @@ import java.util.List;
  * Created by Administrator on 2016/10/12.
  */
 public class RecommBean {
-
     /**
-     * img : http://121.42.31.133:8201/m/img/5.png
      * index : 1
+     * title : 张教授教学1
      * link : #
+     * img : http://121.42.31.133:8201/m/img/1.png
      * rtype : 1
      * sid : r1
-     * title : 张教授教学1
      */
 
     private List<BanerBean> baner;
     /**
-     * aState : 1
-     * date : 2016-10-01
-     * editor : 张三
-     * img : http://121.42.31.133:8201/m/img/4.png
      * sid : r40923
-     * title : 小二心里健康培养
+     * editor : 张三
+     * title : 最美中国妈妈
+     * img : http://121.42.31.133:8201/m/img/5.png
+     * aState : 1
      * type : a01
+     * date : 2016-10-01
      * viewCount : 233
      */
 
@@ -47,20 +46,12 @@ public class RecommBean {
     }
 
     public static class BanerBean {
-        private String img;
         private int index;
+        private String title;
         private String link;
+        private String img;
         private int rtype;
         private String sid;
-        private String title;
-
-        public String getImg() {
-            return img;
-        }
-
-        public void setImg(String img) {
-            this.img = img;
-        }
 
         public int getIndex() {
             return index;
@@ -70,12 +61,28 @@ public class RecommBean {
             this.index = index;
         }
 
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
         public String getLink() {
             return link;
         }
 
         public void setLink(String link) {
             this.link = link;
+        }
+
+        public String getImg() {
+            return img;
+        }
+
+        public void setImg(String img) {
+            this.img = img;
         }
 
         public int getRtype() {
@@ -93,40 +100,24 @@ public class RecommBean {
         public void setSid(String sid) {
             this.sid = sid;
         }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
     }
 
     public static class ListBean {
-        private String aState;
-        private String date;
-        private String editor;
-        private String img;
         private String sid;
+        private String editor;
         private String title;
+        private String img;
+        private String aState;
         private String type;
+        private String date;
         private String viewCount;
 
-        public String getAState() {
-            return aState;
+        public String getSid() {
+            return sid;
         }
 
-        public void setAState(String aState) {
-            this.aState = aState;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
+        public void setSid(String sid) {
+            this.sid = sid;
         }
 
         public String getEditor() {
@@ -137,22 +128,6 @@ public class RecommBean {
             this.editor = editor;
         }
 
-        public String getImg() {
-            return img;
-        }
-
-        public void setImg(String img) {
-            this.img = img;
-        }
-
-        public String getSid() {
-            return sid;
-        }
-
-        public void setSid(String sid) {
-            this.sid = sid;
-        }
-
         public String getTitle() {
             return title;
         }
@@ -161,12 +136,36 @@ public class RecommBean {
             this.title = title;
         }
 
+        public String getImg() {
+            return img;
+        }
+
+        public void setImg(String img) {
+            this.img = img;
+        }
+
+        public String getAState() {
+            return aState;
+        }
+
+        public void setAState(String aState) {
+            this.aState = aState;
+        }
+
         public String getType() {
             return type;
         }
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
         }
 
         public String getViewCount() {

@@ -12,4 +12,5 @@
     <color name="transprant">#00000000</color>
     <color name="indicator_true">#FF0000</color>
     <color name="indicator_false">#000000</color>
+    <color name="divider_color">@null</color>
 </resources>

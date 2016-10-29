@@ -21,8 +21,15 @@ import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.me.details.AddressActivity;
 import com.player.mothercollege.me.details.AlterNameActivity;
 import com.player.mothercollege.me.details.StyleActivity;
+import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.MyUtils;
 import com.player.mothercollege.utils.PrefUtils;
+import com.yolanda.nohttp.NoHttp;
+import com.yolanda.nohttp.RequestMethod;
+import com.yolanda.nohttp.rest.OnResponseListener;
+import com.yolanda.nohttp.rest.RequestQueue;
+import com.yolanda.nohttp.rest.Response;
+import com.yolanda.nohttp.rest.StringRequest;
 
 import java.io.File;
 
@@ -51,10 +58,12 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     private static final int CROP_SMALL_PICTURE = 2;
     protected static Uri tempUri;
     private ImageView iv_personal_icon;
+    private RequestQueue requestQueue;
 
     @Override
     public void setContentView() {
        setContentView(R.layout.act_me_edit);
+        requestQueue = NoHttp.newRequestQueue();
     }
 
     @Override
@@ -252,10 +261,51 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 .getExternalStorageDirectory().getAbsolutePath(), String
                 .valueOf(System.currentTimeMillis()));
         PrefUtils.setString(EditActivity.this,"imagePath",imagePath);
+
+        File file = new File(imagePath);
         Log.e("imagePath", imagePath+"");
-        if(imagePath != null){
             // 拿着imagePath上传了
-            // ...
-        }
+            String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
+            String url = "http://121.42.31.133:8201/m/api/tools/fileUploadapi.ashx";
+//            Request<String> request = NoHttp.createStringRequest("http://121.42.31.133:8201/m/api/tools/fileUploadapi.ashx", RequestMethod.POST);
+            StringRequest request = new StringRequest(url, RequestMethod.POST);
+            request.setContentType("multipart/form-data");
+            request.add("apptoken",apptoken);
+            request.add("imgFile",new File(Environment.getExternalStorageDirectory()
+                    ,"headImage.jpg"));
+            request.add("filetype","image");
+            request.add("optype","101");
+            requestQueue.add(001, request, new OnResponseListener<String>() {
+                @Override
+                public void onStart(int what) {
+
+                }
+
+                @Override
+                public void onSucceed(int what, Response<String> response) {
+                    String info = response.get();
+                    MyLog.testLog("上传头像"+info);
+                }
+
+                @Override
+                public void onFailed(int what, Response<String> response) {
+
+                }
+
+                @Override
+                public void onFinish(int what) {
+
+                }
+            });
     }
+
+    private String StrToBinstr(String imagePath) {
+        char[] strChar=imagePath.toCharArray();
+        String result="";
+        for(int i=0;i<strChar.length;i++){
+             result +=Integer.toBinaryString(strChar[i]);
+           }
+        return result;
+    }
+
 }

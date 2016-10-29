@@ -30,6 +30,9 @@
         <activity android:name=".activity.GuideActicity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.MainActivity" android:screenOrientation="portrait"
             android:theme="@style/Theme.PageIndicatorDefaults"/>
+        //学院
+        <activity android:name=".college.details.ReadBookItemActivity" android:screenOrientation="portrait"/>//读书章节
+        <activity android:name=".college.details.BzzbDeatilsActivity" android:screenOrientation="portrait"/>//本周直播详情页面
 
         //发现
         <activity android:name=".find.FrendActivity" android:screenOrientation="portrait"/> //邀请好友
