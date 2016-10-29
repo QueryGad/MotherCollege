@@ -73,4 +73,33 @@
         android:layout_marginRight="7dp"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginRight="7dp"
+        android:gravity="center_vertical|right"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@mipmap/icon_favour_samll"/>
+        <TextView
+            android:id="@+id/tv_person_zan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:layout_marginLeft="3dp"
+            android:text="0"/>
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@mipmap/icon_discuss_small"/>
+        <TextView
+            android:id="@+id/tv_person_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:layout_marginLeft="3dp"
+            android:text="0"/>
+    </LinearLayout>
 </LinearLayout>

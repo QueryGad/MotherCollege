@@ -65,6 +65,8 @@ public class PersonAdapter extends BaseAdapter{
             ph.tv_title = (TextView) view.findViewById(R.id.tv_title);
             ph.tv_desc = (TextView) view.findViewById(R.id.tv_desc);
             ph.nineGrid = (NineGridView) view.findViewById(R.id.nineGrid);
+            ph.tv_person_zan = (TextView) view.findViewById(R.id.tv_person_zan);
+            ph.tv_person_comment = (TextView) view.findViewById(R.id.tv_person_comment);
             view.setTag(ph);
         }else {
             view = convertView;
@@ -82,6 +84,10 @@ public class PersonAdapter extends BaseAdapter{
             ph.tv_title.setText(lists.get(position).getTitle());
         }
         ph.tv_desc.setText(lists.get(position).getContent());
+        List<PersonDynamicBean.TrendsBean.ZlikesBean> zlikesList = lists.get(position).getZlikes();//点赞
+        ph.tv_person_zan.setText(zlikesList.size()+"");
+        List<PersonDynamicBean.TrendsBean.ReviewsBean> reviewsList = lists.get(position).getReviews();//评论
+        ph.tv_person_comment.setText(reviewsList.size()+"");
         //九宫格图片
         ArrayList<ImageInfo> imageInfo = new ArrayList<>();
         List<String> imageDetails = lists.get(position).getPics();
@@ -102,7 +108,7 @@ public class PersonAdapter extends BaseAdapter{
 
     class PersonHolder{
         public ImageView iv_head;
-        public TextView tv_name,tv_time,tv_address,tv_title,tv_desc;
+        public TextView tv_name,tv_time,tv_address,tv_title,tv_desc,tv_person_zan,tv_person_comment;
         public NineGridView nineGrid;
     }
 }
