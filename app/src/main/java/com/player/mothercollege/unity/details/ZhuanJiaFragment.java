@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -34,7 +36,8 @@ public class ZhuanJiaFragment extends Fragment {
     private View view;
     private ListView lv_unity_zhuanjia;
     private RequestQueue requestQueue;
-
+    private ImageView iv_refresh;
+    private Button btn_refrsh;
 
     @Nullable
     @Override
@@ -48,7 +51,8 @@ public class ZhuanJiaFragment extends Fragment {
 
     private void initView() {
         lv_unity_zhuanjia = (ListView) view.findViewById(R.id.lv_unity_zhuanjia);
-
+        iv_refresh = (ImageView) view.findViewById(R.id.iv_refresh);
+        btn_refrsh = (Button) view.findViewById(R.id.btn_refrsh);
     }
 
     private void initData() {
@@ -69,6 +73,8 @@ public class ZhuanJiaFragment extends Fragment {
 
             @Override
             public void onSucceed(int what, Response<String> response) {
+                iv_refresh.setVisibility(View.GONE);
+                btn_refrsh.setVisibility(View.GONE);
                 String info = response.get();
                 MyLog.testLog("专家咨询"+info);
                 parseJson(info);
@@ -76,7 +82,15 @@ public class ZhuanJiaFragment extends Fragment {
 
             @Override
             public void onFailed(int what, Response<String> response) {
-
+                iv_refresh.setVisibility(View.VISIBLE);
+                btn_refrsh.setVisibility(View.VISIBLE);
+                btn_refrsh.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        netWork();
+                        //TODO: 2016/10/29  点击未反馈
+                    }
+                });
             }
 
             @Override
