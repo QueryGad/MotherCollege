@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -39,6 +40,7 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
     private RequestManager glideRequest;
     private PersonDynamicBean.TrendsBean trendsBean;
     private NineGridView nineGrid;
+    private ListView lv_details;
 
     @Override
     public void setContentView() {
@@ -67,6 +69,7 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
         tv_person_othername = (TextView) findViewById(R.id.tv_person_othername);
         tv_person_othercontent = (TextView) findViewById(R.id.tv_person_othercontent);
         nineGrid = (NineGridView)findViewById(R.id.nineGrid);
+        lv_details = (ListView) findViewById(R.id.lv_details);
 
         tv_details_title.setText("帖子详情");
     }
@@ -134,21 +137,18 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
      * 下方是否有评论
      */
     private void haveNoComment() {
+
         List<PersonDynamicBean.TrendsBean.ReviewsBean> reviewsList = trendsBean.getReviews();
         if (reviewsList.size()==0){
             iv_persondetails_nocomment.setVisibility(View.VISIBLE);
             tv_persondetails_nocomment.setVisibility(View.VISIBLE);
-            tv_person_othername.setVisibility(View.GONE);
-            tv_person_othercontent.setVisibility(View.GONE);
+            lv_details.setVisibility(View.GONE);
         }else {
             iv_persondetails_nocomment.setVisibility(View.GONE);
             tv_persondetails_nocomment.setVisibility(View.GONE);
-            tv_person_othername.setVisibility(View.VISIBLE);
-            tv_person_othercontent.setVisibility(View.VISIBLE);
-            for (int i=0;i<reviewsList.size();i++){
-                tv_person_othername.setText(reviewsList.get(i).getUnicename()+":");
-                tv_person_othercontent.setText(reviewsList.get(i).getContent());
-            }
+            lv_details.setVisibility(View.VISIBLE);
+            DetailsConmmentAdapter adapter = new DetailsConmmentAdapter();
+            lv_details.setAdapter(adapter);
         }
 
     }
@@ -162,6 +162,34 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
             case R.id.iv_invit_right:
                 //点击移动
                 break;
+        }
+    }
+
+    class DetailsConmmentAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return trendsBean.getReviews().size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = View.inflate(PersonDetailsActivity.this,R.layout.item_persondetails_comment,null);
+            TextView tv_person_othername = (TextView) view.findViewById(R.id.tv_person_othername);
+            TextView tv_person_othercontent = (TextView) view.findViewById(R.id.tv_person_othercontent);
+            tv_person_othername.setText(trendsBean.getReviews().get(position).getUnicename()+":");
+            tv_person_othercontent.setText(trendsBean.getReviews().get(position).getContent());
+            return view;
         }
     }
 
