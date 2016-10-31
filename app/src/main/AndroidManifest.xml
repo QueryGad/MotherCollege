@@ -33,6 +33,7 @@
         //学院
         <activity android:name=".college.details.ReadBookItemActivity" android:screenOrientation="portrait"/>//读书章节
         <activity android:name=".college.details.BzzbDeatilsActivity" android:screenOrientation="portrait"/>//本周直播详情页面
+        <activity android:name=".unity.details.HotArticleDetailsActivity" android:screenOrientation="portrait"/>//热帖详情页面
 
         //发现
         <activity android:name=".find.FrendActivity" android:screenOrientation="portrait"/> //邀请好友
@@ -43,6 +44,7 @@
 
         //我的
         <activity android:name=".me.HeadIconActivity" android:screenOrientation="portrait"/>//个人资料
+        <activity android:name=".me.details.PersonDetailsActivity" android:screenOrientation="portrait"/>//帖子详情
         <activity android:name=".me.EditActivity" android:screenOrientation="portrait"/>//修改资料
         <activity android:name=".me.SmartMoneyActivity" android:screenOrientation="portrait"/>//智慧币
         <activity android:name=".me.GlodeMoneyActivity" android:screenOrientation="portrait"/>//金币

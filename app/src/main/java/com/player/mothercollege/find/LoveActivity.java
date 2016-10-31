@@ -80,7 +80,6 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
         request.add("op","axds");
         request.add("lastindex","0");
         request.add("apptoken",apptoken);
-        request.add("uid","null");
         requestQueue.add(GET_LOVE_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

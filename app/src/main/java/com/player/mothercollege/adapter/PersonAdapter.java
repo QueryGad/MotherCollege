@@ -1,10 +1,12 @@
 package com.player.mothercollege.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -14,6 +16,7 @@ import com.lzy.ninegrid.NineGridView;
 import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.PersonDynamicBean;
+import com.player.mothercollege.me.details.PersonDetailsActivity;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.ScreenUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
@@ -52,12 +55,13 @@ public class PersonAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = null;
         PersonHolder ph = null;
         if (convertView==null){
             view = View.inflate(context, R.layout.item_person,null);
             ph = new PersonHolder();
+            ph.ll_person = (LinearLayout) view.findViewById(R.id.ll_person);
             ph.iv_head = (ImageView) view.findViewById(R.id.iv_head);
             ph.tv_name = (TextView) view.findViewById(R.id.tv_name);
             ph.tv_time = (TextView) view.findViewById(R.id.tv_time);
@@ -84,9 +88,11 @@ public class PersonAdapter extends BaseAdapter{
             ph.tv_title.setText(lists.get(position).getTitle());
         }
         ph.tv_desc.setText(lists.get(position).getContent());
-        List<PersonDynamicBean.TrendsBean.ZlikesBean> zlikesList = lists.get(position).getZlikes();//点赞
+        //点赞
+        List<PersonDynamicBean.TrendsBean.ZlikesBean> zlikesList = lists.get(position).getZlikes();
         ph.tv_person_zan.setText(zlikesList.size()+"");
-        List<PersonDynamicBean.TrendsBean.ReviewsBean> reviewsList = lists.get(position).getReviews();//评论
+        //评论
+        List<PersonDynamicBean.TrendsBean.ReviewsBean> reviewsList = lists.get(position).getReviews();
         ph.tv_person_comment.setText(reviewsList.size()+"");
         //九宫格图片
         ArrayList<ImageInfo> imageInfo = new ArrayList<>();
@@ -103,10 +109,21 @@ public class PersonAdapter extends BaseAdapter{
         ph.nineGrid.setSingleImageSize(width);
         ph.nineGrid.setGridSpacing(DensityUtils.dip2px(context,5));
         ph.nineGrid.setAdapter(new NineGridViewClickAdapter(context,imageInfo));
+        //点击进入详情页面
+        ph.ll_person.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,PersonDetailsActivity.class);
+                PersonDynamicBean.TrendsBean trendsBean = lists.get(position);
+                intent.putExtra("trendsBean",trendsBean);
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 
     class PersonHolder{
+        public LinearLayout ll_person;
         public ImageView iv_head;
         public TextView tv_name,tv_time,tv_address,tv_title,tv_desc,tv_person_zan,tv_person_comment;
         public NineGridView nineGrid;
