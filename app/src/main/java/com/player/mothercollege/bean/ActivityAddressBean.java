@@ -1,5 +1,7 @@
 package com.player.mothercollege.bean;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/10/29.
  */
@@ -9,22 +11,34 @@ public class ActivityAddressBean {
      * key : zhengzhou
      */
 
-    private String city;
-    private String key;
+    private List<CitysBean> citys;
 
-    public String getCity() {
-        return city;
+    public List<CitysBean> getCitys() {
+        return citys;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCitys(List<CitysBean> citys) {
+        this.citys = citys;
     }
 
-    public String getKey() {
-        return key;
-    }
+    public static class CitysBean {
+        private String city;
+        private String key;
 
-    public void setKey(String key) {
-        this.key = key;
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
     }
 }

@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@color/transprant"
-        android:divider="#0000"
+        android:divider="#ccc"
         android:dividerHeight="0.5dp"
         android:listSelector="@color/transprant"/>
 </LinearLayout>
