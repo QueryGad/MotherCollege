@@ -118,6 +118,7 @@ public class VideoFragment extends Fragment{
      */
     private void sqhgkVideoBind() {
         View oldView = View.inflate(getActivity(), R.layout.head_video_old,null);
+        LinearLayout ll_old_video = (LinearLayout) oldView.findViewById(R.id.ll_old_video);
         ImageView iv = (ImageView) oldView.findViewById(R.id.iv_video_old);
         TextView date = (TextView) oldView.findViewById(R.id.tv_videoOld_date);
         TextView title = (TextView) oldView.findViewById(R.id.tv_videoOld_title);
@@ -131,7 +132,16 @@ public class VideoFragment extends Fragment{
         editor.setText(sqhgBean.getEditor());
         editor.setTextColor(Color.RED);
         viewCount.setText(sqhgBean.getViewCount());
+        ll_old_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), BzzbDeatilsActivity.class);
+                intent.putExtra("sid", sid);
+                startActivity(intent);
+            }
+        });
         lv_college_video.addHeaderView(oldView);
+
     }
 
     /**
@@ -163,7 +173,6 @@ public class VideoFragment extends Fragment{
         ll_bzzb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getActivity(), BzzbDeatilsActivity.class);
                 intent.putExtra("sid", sid);
                 startActivity(intent);
