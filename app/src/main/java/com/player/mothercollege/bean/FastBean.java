@@ -1,11 +1,12 @@
 package com.player.mothercollege.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/10/29.
  */
-public class FastBean {
+public class FastBean implements Serializable{
     /**
      * lastIndex : 6
      * qustions : [{"asw_content":"我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容","asw_uicon":"http://121.42.31.133:8201/m/face/faA085[1].bmp","asw_uid":"U4559","asw_unicename":"答题人昵称","date":"2016-10-29 10:19","qid":"1","qusition":"这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容","reviewCount":999,"title":"我是问题的标题","uicon":"http://121.42.31.133:8201/m/face/faA099[1].bmp","uid":"u4096","unicename":"宝东"},{"asw_content":"我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容","asw_uicon":"http://121.42.31.133:8201/m/face/faA065[1].bmp","asw_uid":"U4559","asw_unicename":"答题人昵称","date":"2016-10-29 10:19","qid":"1","qusition":"这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容","reviewCount":999,"title":"我是问题的标题","uicon":"http://121.42.31.133:8201/m/face/faA031[1].bmp","uid":"u4096","unicename":"听雨人生"},{"asw_content":"我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容","asw_uicon":"http://121.42.31.133:8201/m/face/faA022[1].bmp","asw_uid":"U4559","asw_unicename":"答题人昵称","date":"2016-10-29 10:19","qid":"1","qusition":"这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容","reviewCount":999,"title":"我是问题的标题","uicon":"http://121.42.31.133:8201/m/face/faA015[1].bmp","uid":"u4096","unicename":"Agnes"},{"asw_content":"我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容","asw_uicon":"http://121.42.31.133:8201/m/face/faA066[1].bmp","asw_uid":"U4559","asw_unicename":"答题人昵称","date":"2016-10-29 10:19","qid":"1","qusition":"这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容","reviewCount":999,"title":"我是问题的标题","uicon":"http://121.42.31.133:8201/m/face/faA100[1].bmp","uid":"u4096","unicename":"快乐就好"},{"asw_content":"我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容","asw_uicon":"http://121.42.31.133:8201/m/face/faA010[1].bmp","asw_uid":"U4559","asw_unicename":"答题人昵称","date":"2016-10-29 10:19","qid":"1","qusition":"这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容","reviewCount":999,"title":"我是问题的标题","uicon":"http://121.42.31.133:8201/m/face/faA040[1].bmp","uid":"u4096","unicename":"宝东"},{"asw_content":"我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容，我是回答内容","asw_uicon":"http://121.42.31.133:8201/m/face/faA012[1].bmp","asw_uid":"U4559","asw_unicename":"答题人昵称","date":"2016-10-29 10:19","qid":"1","qusition":"这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容、这里是问题的内容","reviewCount":999,"title":"我是问题的标题","uicon":"http://121.42.31.133:8201/m/face/faA006[1].bmp","uid":"u4096","unicename":"吊儿郎当"}]
@@ -45,7 +46,7 @@ public class FastBean {
         this.qustions = qustions;
     }
 
-    public static class QustionsBean {
+    public static class QustionsBean implements Serializable{
         private String asw_content;
         private String asw_uicon;
         private String asw_uid;

@@ -1,5 +1,6 @@
 package com.player.mothercollege.unity.details;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -105,7 +106,9 @@ public class FastFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_fast_public:
-                //点击回答问题
+                //点击进入提问页面
+                Intent intent = new Intent(getActivity(),RequestActivity.class);
+                startActivity(intent);
                 break;
         }
     }

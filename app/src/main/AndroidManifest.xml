@@ -37,6 +37,8 @@
 
         //社区
         <activity android:name=".unity.details.ActivityDetailsActivity" android:screenOrientation="portrait"/>//活动详情页面
+        <activity android:name=".unity.details.FastInquiryDetailsActivity" android:screenOrientation="portrait"/>//快速咨询详情页面
+        <activity android:name=".unity.details.RequestActivity" android:screenOrientation="portrait"/>//提问页面
 
         //发现
         <activity android:name=".find.FrendActivity" android:screenOrientation="portrait"/> //邀请好友

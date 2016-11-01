@@ -1,13 +1,16 @@
 package com.player.mothercollege.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.FastBean;
+import com.player.mothercollege.unity.details.FastInquiryDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +45,7 @@ public class FastInquiryAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = null;
         FastInquiryHolder flh = null;
         if (convertView==null){
@@ -54,6 +57,7 @@ public class FastInquiryAdapter extends BaseAdapter{
             flh.tv_fastinquiry_conmment = (TextView) view.findViewById(R.id.tv_fastinquiry_conmment);
             flh.tv_fastinquiry_daname = (TextView) view.findViewById(R.id.tv_fastinquiry_daname);
             flh.tv_fastinquiry_dacontent = (TextView) view.findViewById(R.id.tv_fastinquiry_dacontent);
+            flh.rl_item_fastinquiry = (RelativeLayout) view.findViewById(R.id.rl_item_fastinquiry);
             view.setTag(flh);
         }else {
             view = convertView;
@@ -66,11 +70,20 @@ public class FastInquiryAdapter extends BaseAdapter{
         flh.tv_fastinquiry_conmment.setText(lists.size()+"");
         flh.tv_fastinquiry_daname.setText(lists.get(position).getUnicename()+":");
         flh.tv_fastinquiry_dacontent.setText(lists.get(position).getAsw_content());
+        flh.rl_item_fastinquiry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,FastInquiryDetailsActivity.class);
+                intent.putExtra("qid",lists.get(position).getQid());
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 
     class FastInquiryHolder {
         private TextView tv_fastinquiry_title,tv_fastinquiry_time,tv_fastinquiry_desc,
                 tv_fastinquiry_conmment,tv_fastinquiry_daname,tv_fastinquiry_dacontent;
+        private RelativeLayout rl_item_fastinquiry;
     }
 }

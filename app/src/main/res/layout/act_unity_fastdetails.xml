@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/include"
+        layout="@layout/details_title"/>
+    <ListView
+        android:id="@+id/lv_fastdetails"
+        android:layout_below="@id/include"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <Button
+        android:id="@+id/btn_fastdetails_answer"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="我来回答"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:background="#FD4D71"/>
+</RelativeLayout>
