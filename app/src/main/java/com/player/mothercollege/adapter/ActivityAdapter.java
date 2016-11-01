@@ -1,6 +1,7 @@
 package com.player.mothercollege.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.ActivityAddressBean;
 import com.player.mothercollege.bean.ActivityBean;
+import com.player.mothercollege.unity.details.ActivityDetailsActivity;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.ScreenUtils;
 import com.squareup.picasso.Picasso;
@@ -55,7 +57,7 @@ public class ActivityAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         for (int i=0;i<citysList.size();i++){
             city.clear();
             String citys = citysList.get(i).getCity();
@@ -98,7 +100,16 @@ public class ActivityAdapter extends BaseAdapter{
         ah.tv_recomm_activity_title.setText(lists.get(position).getTitle());
         ah.tv_recomm_activity_place.setText(lists.get(position).getCity());
         ah.tv_recomm_activity_viewCount.setText(lists.get(position).getJoinCount()+"人");
-
+        //设置点击事件进入详情页面
+        ah.iv_recomm_activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ActivityDetailsActivity.class);
+                int aid = lists.get(position).getAid();
+                intent.putExtra("aid",aid);
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 

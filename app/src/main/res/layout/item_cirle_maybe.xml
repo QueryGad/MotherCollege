@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tv_cirle_maybe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="你可能感兴趣的圈子"
+        android:textColor="#000"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn_cirle_checkAll"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_width="57dp"
+        android:layout_height="22dp"
+        android:background="@mipmap/icon_cirle_no_join" />
+    <ImageView
+        android:id="@+id/iv_cirle_head"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/tv_cirle_maybe"
+        android:src="@mipmap/head_group"/>
+    <TextView
+        android:id="@+id/tv_cirle_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#333"
+        android:textSize="16sp"
+        android:layout_below="@id/tv_cirle_maybe"
+        android:layout_toRightOf="@id/iv_cirle_head"
+        android:text="群名称"/>
+    <ImageView
+        android:id="@+id/iv_cirle_viewCount"
+        android:layout_below="@id/tv_cirle_name"
+        android:layout_toRightOf="@id/iv_cirle_head"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@mipmap/icon_person"/>
+    <TextView
+        android:id="@+id/tv_cirle_viewCount"
+        android:layout_below="@id/tv_cirle_name"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/iv_cirle_viewCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="人数"/>
+    <Button
+        android:id="@+id/btn_cirle_check"
+        android:layout_width="57dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="10dp"
+        android:background="@mipmap/icon_2_join"
+        android:layout_alignTop="@+id/tv_cirle_name"
+        android:layout_alignLeft="@+id/btn_cirle_checkAll"
+        android:layout_alignStart="@+id/btn_cirle_checkAll" />
+    <TextView
+        android:id="@+id/tv_cirle_more"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:textColor="#f00"
+        android:text="更多推荐圈子>>"
+        android:layout_below="@+id/iv_cirle_head"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

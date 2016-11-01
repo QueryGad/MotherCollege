@@ -35,6 +35,9 @@
         <activity android:name=".college.details.BzzbDeatilsActivity" android:screenOrientation="portrait"/>//本周直播详情页面
         <activity android:name=".unity.details.HotArticleDetailsActivity" android:screenOrientation="portrait"/>//热帖详情页面
 
+        //社区
+        <activity android:name=".unity.details.ActivityDetailsActivity" android:screenOrientation="portrait"/>//活动详情页面
+
         //发现
         <activity android:name=".find.FrendActivity" android:screenOrientation="portrait"/> //邀请好友
         <activity android:name=".find.LuckyActivity" android:screenOrientation="portrait"/> //我的福田

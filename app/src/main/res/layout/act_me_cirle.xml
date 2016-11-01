@@ -5,4 +5,8 @@
     <include
         android:id="@+id/include"
         layout="@layout/details_title" />
+    <ListView
+        android:id="@+id/lv_cirle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

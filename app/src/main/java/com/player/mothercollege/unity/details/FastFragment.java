@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
+import com.player.mothercollege.adapter.FastInquiryAdapter;
 import com.player.mothercollege.bean.FastBean;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -96,7 +97,8 @@ public class FastFragment extends Fragment implements View.OnClickListener {
         FastBean fastBean = gson.fromJson(info, FastBean.class);
         int lastIndex = fastBean.getLastIndex();//数据索引
         List<FastBean.QustionsBean> qustionsList = fastBean.getQustions();
-        //TODO
+        FastInquiryAdapter adapter = new FastInquiryAdapter(getActivity(),qustionsList);
+        lv_unity_fast.setAdapter(adapter);
     }
 
     @Override

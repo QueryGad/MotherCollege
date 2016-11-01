@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tv_cirle_mygroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="已关注的圈子(0)"
+        android:textColor="#000"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/iv_cirle_head"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/tv_cirle_mygroup"
+        android:src="@mipmap/head_group"/>
+    <TextView
+        android:id="@+id/tv_cirle_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#333"
+        android:textSize="16sp"
+        android:layout_below="@id/tv_cirle_mygroup"
+        android:layout_toRightOf="@id/iv_cirle_head"
+        android:text="群名称"/>
+    <ImageView
+        android:id="@+id/iv_cirle_viewCount"
+        android:layout_below="@id/tv_cirle_name"
+        android:layout_toRightOf="@id/iv_cirle_head"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@mipmap/icon_person"/>
+    <TextView
+        android:id="@+id/tv_cirle_viewCount"
+        android:layout_below="@id/tv_cirle_name"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/iv_cirle_viewCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="人数"/>
+    <Button
+        android:id="@+id/btn_cirle_check"
+        android:layout_width="57dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="10dp"
+        android:background="@mipmap/icon_join"
+        android:layout_alignTop="@+id/tv_cirle_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>
