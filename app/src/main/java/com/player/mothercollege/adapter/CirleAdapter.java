@@ -6,13 +6,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.CirleBean;
-import com.player.mothercollege.utils.DensityUtils;
-import com.squareup.picasso.Picasso;
+import com.player.mothercollege.view.GlideCircleTransform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +24,18 @@ import java.util.List;
 public class CirleAdapter extends BaseAdapter{
 
     private Context context;
-    private List<CirleBean> list = new ArrayList<>();
-    private List<CirleBean.MaybeLikeGroupsBean> maybeLikeGroupsBeenList = new ArrayList<>();//感兴趣的圈子
+    private List<CirleBean.MaybeLikeGroupsBean> lists = new ArrayList<>();
+    private RequestManager glideRequest;
 
-    public CirleAdapter(Context context,List maybeLikeGroupsBeenList) {
+    public CirleAdapter(Context context,List lists) {
         super();
         this.context = context;
-        this.maybeLikeGroupsBeenList = maybeLikeGroupsBeenList;
+        this.lists = lists;
     }
 
     @Override
     public int getCount() {
-        return maybeLikeGroupsBeenList.size();
+        return lists.size();
     }
 
     @Override
@@ -50,50 +51,44 @@ public class CirleAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = null;
-        CirleHolder ch = null;
+        CirleHolder holder = null;
         if (convertView==null){
             view = View.inflate(context, R.layout.item_cirle_maybe,null);
-            ch = new CirleHolder();
-            ch.btn_cirle_checkAll = (Button) view.findViewById(R.id.btn_cirle_checkAll);
-            ch.iv_cirle_head = (ImageView) view.findViewById(R.id.iv_cirle_head);
-            ch.btn_cirle_check = (Button) view.findViewById(R.id.btn_cirle_check);
-            ch.tv_cirle_name = (TextView) view.findViewById(R.id.tv_cirle_name);
-            ch.tv_cirle_viewCount = (TextView) view.findViewById(R.id.tv_cirle_viewCount);
-            ch.tv_cirle_more = (TextView) view.findViewById(R.id.tv_cirle_more);
-            view.setTag(ch);
+            holder = new CirleHolder();
+            holder.btn_cirle_checkAll = (Button) view.findViewById(R.id.btn_cirle_checkAll);
+            holder.btn_cirle_check = (Button) view.findViewById(R.id.btn_cirle_check);
+            holder.iv_cirle_head = (ImageView) view.findViewById(R.id.iv_cirle_head);
+            holder.tv_cirle_name = (TextView) view.findViewById(R.id.tv_cirle_name);
+            holder.tv_cirle_viewCount = (TextView) view.findViewById(R.id.tv_cirle_viewCount);
+            holder.tv_cirle_more = (TextView) view.findViewById(R.id.tv_cirle_more);
+            holder.ll_circle_line = (LinearLayout) view.findViewById(R.id.ll_circle_line);
+            view.setTag(holder);
         }else {
-            view = convertView;
-            ch = (CirleHolder) view.getTag();
+           view = convertView;
+           holder = (CirleHolder) view.getTag();
         }
-        Picasso.with(context).load(maybeLikeGroupsBeenList.get(position).getIcon())
-                .resize(DensityUtils.dip2px(context,44),DensityUtils.dip2px(context,44))
-                .centerCrop().into(ch.iv_cirle_head);
-        ch.tv_cirle_name.setText(maybeLikeGroupsBeenList.get(position).getGroupName());
-        ch.tv_cirle_viewCount.setText(maybeLikeGroupsBeenList.get(position).getJoinCount()+"");
-        if (position==maybeLikeGroupsBeenList.size()-1){
-            ch.tv_cirle_more.setVisibility(View.VISIBLE);
+        glideRequest = Glide.with(context);
+        glideRequest.load(lists.get(position).getIcon())
+                .transform(new GlideCircleTransform(context)).into(holder.iv_cirle_head);
+        holder.tv_cirle_name.setText(lists.get(position).getGroupName());
+        holder.tv_cirle_viewCount.setText(lists.get(position).getJoinCount()+"");
+        if (position==0){
+            holder.ll_circle_line.setVisibility(View.VISIBLE);
         }else {
-            ch.tv_cirle_more.setVisibility(View.GONE);
+            holder.ll_circle_line.setVisibility(View.GONE);
         }
-        boolean hasJoin = maybeLikeGroupsBeenList.get(position).isHasJoin();
-        if (hasJoin){//已加入
-            ch.btn_cirle_check.setBackgroundResource(R.mipmap.icon_join);
-        }else {//未加入
-            ch.btn_cirle_check.setBackgroundResource(R.mipmap.icon_2_join);
-            ch.btn_cirle_check.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context,"我该变状态",Toast.LENGTH_SHORT).show();
-                }
-            });
+        if (position==lists.size()-1){
+            holder.tv_cirle_more.setVisibility(View.VISIBLE);
+        }else {
+            holder.tv_cirle_more.setVisibility(View.GONE);
         }
-
         return view;
     }
 
     class CirleHolder{
+        private Button btn_cirle_checkAll,btn_cirle_check;
         private ImageView iv_cirle_head;
         private TextView tv_cirle_name,tv_cirle_viewCount,tv_cirle_more;
-        private Button btn_cirle_checkAll,btn_cirle_check;
+        private LinearLayout ll_circle_line;
     }
 }

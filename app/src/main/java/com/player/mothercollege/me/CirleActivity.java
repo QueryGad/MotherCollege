@@ -32,14 +32,13 @@ public class CirleActivity extends BaseActivity implements View.OnClickListener 
     private static final int GET_CIRLE_DATA = 001;
     private Button btn_back;
     private TextView tv_details_title;
-    private RequestQueue requestQueue;
     private ListView lv_cirle;
-    private View viewHead;
+    private RequestQueue requestQueue;
+    private List<CirleBean.MyGroupsBean> myGroupsList;
 
     @Override
     public void setContentView() {
         setContentView(R.layout.act_me_cirle);
-        viewHead = View.inflate(CirleActivity.this, R.layout.head_cirle_mygroup,null);
         requestQueue = NoHttp.newRequestQueue();
     }
 
@@ -54,7 +53,7 @@ public class CirleActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initListeners() {
-       btn_back.setOnClickListener(this);
+        btn_back.setOnClickListener(this);
     }
 
     @Override
@@ -65,8 +64,8 @@ public class CirleActivity extends BaseActivity implements View.OnClickListener 
     private void netWork() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
-        request.add("op","myGroup");
         request.add("apptoken",apptoken);
+        request.add("op","myGroup");
         request.add("uid","null");
         requestQueue.add(GET_CIRLE_DATA, request, new OnResponseListener<String>() {
             @Override
@@ -96,22 +95,22 @@ public class CirleActivity extends BaseActivity implements View.OnClickListener 
     private void parseJson(String info){
         Gson gson = new Gson();
         CirleBean cirleBean = gson.fromJson(info, CirleBean.class);
-        List<CirleBean.MaybeLikeGroupsBean> maybeLikeGroups = cirleBean.getMaybeLikeGroups();//可能感兴趣的圈子
-        List<CirleBean.MyGroupsBean> myGroupsList = cirleBean.getMyGroups();//我的圈子
-        initMyGroup(myGroupsList);
-        CirleAdapter adapter = new CirleAdapter(CirleActivity.this,maybeLikeGroups);
+        List<CirleBean.MaybeLikeGroupsBean> maybeList = cirleBean.getMaybeLikeGroups();//可能感兴趣的圈子
+        List<CirleBean.MyGroupsBean> myGroupsList =  cirleBean.getMyGroups(); //我的圈子
+        initMyGroupData(myGroupsList);
+        CirleAdapter adapter = new CirleAdapter(CirleActivity.this,maybeList);
         lv_cirle.setAdapter(adapter);
     }
 
-    private void initMyGroup(List myGroupsList) {
+    private void initMyGroupData(List myGroupsList) {
+        View viewHead = View.inflate(CirleActivity.this,R.layout.head_cirle_mygroup,null);
         TextView tv_cirle_mygroup = (TextView) viewHead.findViewById(R.id.tv_cirle_mygroup);
         ImageView iv_cirle_head = (ImageView) viewHead.findViewById(R.id.iv_cirle_head);
         TextView tv_cirle_name = (TextView) viewHead.findViewById(R.id.tv_cirle_name);
         TextView tv_cirle_viewCount = (TextView) viewHead.findViewById(R.id.tv_cirle_viewCount);
-        for (int i = 0;i<myGroupsList.size();i++){
+        Button btn_cirle_check = (Button) viewHead.findViewById(R.id.btn_cirle_check);
 
-        }
-
+        //TOdo 没有进行添加头布局 无法分类我的圈子与感兴趣的圈子
     }
 
     @Override
@@ -120,6 +119,7 @@ public class CirleActivity extends BaseActivity implements View.OnClickListener 
             case R.id.btn_back:
                 finish();
                 break;
+
         }
     }
 }

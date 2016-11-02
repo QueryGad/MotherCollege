@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
@@ -40,7 +39,7 @@ public class OriginalFragment extends Fragment{
     private OriginalAdapter.OnItemClickListener OriginalItemListener = new OriginalAdapter.OnItemClickListener() {
         @Override
         public void onClick(View v, int position, OriginalBean.BooksBean data) {
-            Toast.makeText(getActivity(),position+"",Toast.LENGTH_SHORT).show();
+
         }
     };
 
