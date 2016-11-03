@@ -73,6 +73,8 @@
         <activity android:name=".me.details.GetGlodeActivity" android:screenOrientation="portrait"/>//提现
         <activity android:name=".me.details.SettingHelpActivity" android:screenOrientation="portrait"/>//帮助与反馈
         <activity android:name=".me.details.SettingAboutActivity" android:screenOrientation="portrait"/>//关于
+        <activity android:name=".me.details.CirleDetailsActivity" android:screenOrientation="portrait"/>//圈子详情页面
+        <activity android:name=".me.details.CirleArticleDetailsActivity" android:screenOrientation="portrait"/>//圈子中帖子详情
     </application>
 
 </manifest>

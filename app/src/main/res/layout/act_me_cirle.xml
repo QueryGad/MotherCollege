@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     >
+    <include
+        android:id="@+id/include"
+        layout="@layout/details_title" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <include
-        android:id="@+id/include"
-        layout="@layout/details_title" />
     <com.player.mothercollege.view.ListViewForScrollView
         android:id="@+id/lv_mygroup"
         android:layout_width="match_parent"
@@ -24,4 +28,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

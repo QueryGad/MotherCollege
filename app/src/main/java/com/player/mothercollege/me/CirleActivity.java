@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
-import com.player.mothercollege.activity.MainActivity;
 import com.player.mothercollege.adapter.MaybeAdapter;
 import com.player.mothercollege.adapter.MyCirleAdapter;
 import com.player.mothercollege.bean.CirleBean;
