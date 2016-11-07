@@ -6,18 +6,149 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.player.mothercollege.R;
+import com.player.mothercollege.bean.ClassBean;
+import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.DensityUtils;
+import com.player.mothercollege.utils.MyLog;
+import com.player.mothercollege.utils.PrefUtils;
+import com.squareup.picasso.Picasso;
+import com.yolanda.nohttp.NoHttp;
+import com.yolanda.nohttp.rest.OnResponseListener;
+import com.yolanda.nohttp.rest.Request;
+import com.yolanda.nohttp.rest.RequestQueue;
+import com.yolanda.nohttp.rest.Response;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/11/7.
  */
 public class FuMuClassFragment extends Fragment{
 
+    private static final int GET_CLASS_DATA = 001;
+    private View view;
+    private ListView lv_class;
+    private RequestQueue requestQueue;
+    private List<ClassBean.TabClassBean.VediosBean> fuMuList = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        TextView tv = new TextView(getActivity());
-        tv.setText("父母课堂");
-        return tv;
+        view = View.inflate(getActivity(), R.layout.frg_college_classcontent,null);
+        requestQueue = NoHttp.newRequestQueue();
+        initView();
+        initData();
+        return view;
+    }
+
+    private void initView() {
+        lv_class = (ListView) view.findViewById(R.id.lv_class);
+    }
+
+    private void initData() {
+        netWork();
+    }
+
+    private void netWork() {
+        String apptoken = PrefUtils.getString(getActivity(),"apptoken","");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL);
+        request.add("op","class");
+        request.add("apptoken",apptoken);
+        request.add("udi","null");
+        requestQueue.add(GET_CLASS_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("课堂数据"+info);
+                parseJson(info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    private void parseJson(String info){
+        Gson gson = new Gson();
+        ClassBean classBean = gson.fromJson(info, ClassBean.class);
+        List<ClassBean.TabClassBean> tabClass = classBean.getTabClass();
+        fuMuList = tabClass.get(0).getVedios();
+        FuMuClassAdapter adapter = new FuMuClassAdapter();
+        lv_class.setAdapter(adapter);
+    }
+
+    class FuMuClassAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return fuMuList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = null;
+            FuMuClassHolder holder = null;
+            if (convertView==null){
+                view = View.inflate(getActivity(),R.layout.item_college_class,null);
+                holder = new FuMuClassHolder();
+                holder.ll_class_item = (LinearLayout) view.findViewById(R.id.ll_class_item);
+                holder.iv_classitem = (ImageView) view.findViewById(R.id.iv_classitem);
+                holder.tv_classitem_date = (TextView) view.findViewById(R.id.tv_classitem_date);
+                holder.tv_classitem_title = (TextView) view.findViewById(R.id.tv_classitem_title);
+                holder.tv_classitem_money = (TextView) view.findViewById(R.id.tv_classitem_money);
+                holder.tv_classitem_editor = (TextView) view.findViewById(R.id.tv_classitem_editor);
+                holder.tv_classitem_viewCount = (TextView) view.findViewById(R.id.tv_classitem_viewCount);
+                view.setTag(holder);
+            }else {
+                view = convertView;
+                holder = (FuMuClassHolder) view.getTag();
+            }
+            Picasso.with(getActivity()).load(fuMuList.get(position).getImg())
+                    .resize(DensityUtils.dip2px(getActivity(),116f),DensityUtils.dip2px(getActivity(),63.5f))
+                    .centerCrop().into(holder.iv_classitem);
+            holder.tv_classitem_date.setText(fuMuList.get(position).getDate());
+            holder.tv_classitem_title.setText(fuMuList.get(position).getTitle());
+            holder.tv_classitem_money.setText(fuMuList.get(position).getPrice()+"");
+            holder.tv_classitem_editor.setText(fuMuList.get(position).getEditor());
+            holder.tv_classitem_viewCount.setText(fuMuList.get(position).getViewCount()+"");
+            return view;
+        }
+    }
+
+    class FuMuClassHolder{
+        private LinearLayout ll_class_item;
+        private ImageView iv_classitem;
+        private TextView tv_classitem_date,tv_classitem_title,tv_classitem_money,tv_classitem_editor,tv_classitem_viewCount;
     }
 }
