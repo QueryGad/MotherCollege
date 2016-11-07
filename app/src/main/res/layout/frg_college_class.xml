@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_class_head"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:orientation="horizontal" >
+            <LinearLayout
+                android:id="@+id/ll_class_dot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal" >
+            </LinearLayout>
+        </RelativeLayout>
+    </FrameLayout>
+    <RadioGroup
+        android:id="@+id/rg_college_class"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/rb_fumu_class"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:textSize="15sp"
+            android:textColor="@drawable/tab_home_top_color"
+            android:gravity="center"
+            android:text="父母课堂"
+
+            />
+        <RadioButton
+            android:id="@+id/rb_fuqi_class"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:textSize="15sp"
+            android:textColor="@drawable/tab_home_top_color"
+            android:gravity="center"
+            android:text="夫妻课堂"
+            />
+        <RadioButton
+            android:id="@+id/rb_xinling_class"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:textSize="15sp"
+            android:textColor="@drawable/tab_home_top_color"
+            android:gravity="center"
+            android:text="心灵课堂"/>
+    </RadioGroup>
+    <FrameLayout
+        android:id="@+id/fl_class"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
