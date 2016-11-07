@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 import com.player.mothercollege.R;
@@ -21,6 +22,7 @@ import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.me.details.AddressActivity;
 import com.player.mothercollege.me.details.AlterNameActivity;
 import com.player.mothercollege.me.details.StyleActivity;
+import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.MyUtils;
@@ -29,11 +31,17 @@ import com.squareup.picasso.Picasso;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
+import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 import com.yolanda.nohttp.rest.StringRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+
+import ch.ielse.view.SwitchView;
 
 /**
  * Created by Administrator on 2016/10/25.
@@ -41,6 +49,7 @@ import java.io.File;
  */
 public class EditActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final int POST_PHONE_STATE =001 ;
     private Button btn_back;
     private TextView tv_details_title;
     private LinearLayout ll_me_data_name;
@@ -53,6 +62,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     private AlertDialog alertDialog;
     private int sex_index ;
     private RequestManager glideRequest;
+    private SwitchView sv_phone;
 
     //修改用户头像
     protected static final int CHOOSE_PICTURE = 0;
@@ -62,6 +72,25 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     private ImageView iv_personal_icon;
     private RequestQueue requestQueue;
     private String uniceName;
+    private SwitchView.OnStateChangedListener SwitchButtonStateListener = new SwitchView.OnStateChangedListener() {
+        @Override
+        public void toggleToOn(SwitchView view) {
+            //打开状态
+            postData("0","1");
+        }
+
+        @Override
+        public void toggleToOff(SwitchView view) {
+           //关闭状态
+            postData("1","0");
+        }
+    };
+    private View.OnClickListener SwitchButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            boolean isOpened = sv_phone.isOpened();
+        }
+    };
 
     @Override
     public void setContentView() {
@@ -87,6 +116,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         tv_me_data_sex = (TextView) findViewById(R.id.tv_me_data_sex);
         tv_me_data_style = (TextView) findViewById(R.id.tv_me_data_style);
 
+        sv_phone = (SwitchView) findViewById(R.id.sv_phone);
+
         tv_details_title.setText("个人资料");
         //进行数据回显
         Picasso.with(EditActivity.this).load(uicon)
@@ -103,6 +134,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         ll_me_data_sex.setOnClickListener(this);
         ll_me_data_style.setOnClickListener(this);
         ll_me_data_address.setOnClickListener(this);
+        sv_phone.setOnStateChangedListener(SwitchButtonStateListener);
+        sv_phone.setOnClickListener(SwitchButtonClickListener);
     }
 
     @Override
@@ -316,5 +349,54 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
            }
         return result;
     }
+
+    //手机号是否公开
+    private void postData(String ctype,String cvalue){
+        String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","changeUserInfo");
+        request.add("uid","null");
+        request.add("ctype",ctype);
+        request.add("cvalue",cvalue);
+        requestQueue.add(POST_PHONE_STATE, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("提交结果"+info);
+                try {
+                    JSONObject json = new JSONObject(info);
+                    String resultCode = json.getString("resultCode");
+                    int resultInt = Integer.parseInt(resultCode);
+                    if (resultInt==1001){
+                        Toast.makeText(EditActivity.this,"ctype 不在内定的参数范围.",Toast.LENGTH_SHORT).show();
+                    }else if (resultInt==1002){
+                        Toast.makeText(EditActivity.this,"提交的参数值不在规定的格式内或为空",Toast.LENGTH_SHORT).show();
+                    }else if (resultInt==5001){
+                        Toast.makeText(EditActivity.this,"服务器内部错误",Toast.LENGTH_SHORT).show();
+                    }else if (resultInt==1){
+                        Toast.makeText(EditActivity.this,"修改成功!",Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    };
 
 }

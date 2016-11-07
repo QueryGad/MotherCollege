@@ -30,7 +30,7 @@ import org.json.JSONObject;
  */
 public class AlterNameActivity extends BaseActivity implements View.OnClickListener {
 
-    private static final int GET_ALTERNAME_DATA = 001;
+    private static final int POST_ALTERNAME_DATA = 001;
     private Button btn_back;
     private TextView tv_me_alter_ok;
     private EditText et_me_alter_content;
@@ -99,7 +99,7 @@ public class AlterNameActivity extends BaseActivity implements View.OnClickListe
         request.add("uid","null");
         request.add("ctype",uniceName);
         request.add("cvalue",newName);
-        requestQueue.add(GET_ALTERNAME_DATA, request, new OnResponseListener<String>() {
+        requestQueue.add(POST_ALTERNAME_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
                 pd = new ProgressDialog(AlterNameActivity.this);
