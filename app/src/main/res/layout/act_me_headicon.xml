@@ -45,5 +45,37 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_return"/>
     </FrameLayout>
+    <LinearLayout
+        android:id="@+id/ll_other_zhuanchat"
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:background="#eeff4e72"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:id="@+id/tv_otherperson_guanzhu"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="关注"
+            android:textSize="18sp"
+            android:textColor="#fff"
+            android:gravity="center"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#fff"/>
+        <TextView
+            android:id="@+id/tv_otherperson_chat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="聊天"
+            android:textSize="18sp"
+            android:textColor="#fff"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

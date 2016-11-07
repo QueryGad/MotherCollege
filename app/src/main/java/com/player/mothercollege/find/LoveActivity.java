@@ -1,18 +1,19 @@
 package com.player.mothercollege.find;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.LoveAdapter;
 import com.player.mothercollege.bean.LoveBean;
+import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -42,7 +43,9 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
     private LoveAdapter.OnItemClickListener LoveItemListener = new LoveAdapter.OnItemClickListener() {
         @Override
         public void onClick(View v, int position, LoveBean.UsersBean data) {
-            Toast.makeText(LoveActivity.this,position+"",Toast.LENGTH_SHORT).show();
+            //点击头像进入他人主页
+            Intent intent = new Intent(LoveActivity.this, HeadIconActivity.class);
+            startActivity(intent);
         }
     };
 

@@ -1,5 +1,7 @@
 package com.player.mothercollege.college.details;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -116,7 +118,7 @@ public class XinLingClassFragment extends Fragment{
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View view = null;
             XinLingClassHolder holder = null;
             if (convertView==null){
@@ -128,6 +130,7 @@ public class XinLingClassFragment extends Fragment{
                 holder.tv_classitem_title = (TextView) view.findViewById(R.id.tv_classitem_title);
                 holder.tv_classitem_money = (TextView) view.findViewById(R.id.tv_classitem_money);
                 holder.tv_classitem_editor = (TextView) view.findViewById(R.id.tv_classitem_editor);
+                holder.tv_classitem_editor.setTextColor(Color.RED);
                 holder.tv_classitem_viewCount = (TextView) view.findViewById(R.id.tv_classitem_viewCount);
                 view.setTag(holder);
             }else {
@@ -142,6 +145,15 @@ public class XinLingClassFragment extends Fragment{
             holder.tv_classitem_money.setText(xinLingList.get(position).getPrice()+"");
             holder.tv_classitem_editor.setText(xinLingList.get(position).getEditor());
             holder.tv_classitem_viewCount.setText(xinLingList.get(position).getViewCount()+"");
+            holder.ll_class_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String sid = xinLingList.get(position).getSid();
+                    Intent intent = new Intent(getActivity(),BzzbDeatilsActivity.class);
+                    intent.putExtra("sid",sid);
+                    startActivity(intent);
+                }
+            });
             return view;
         }
     }

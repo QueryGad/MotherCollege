@@ -1,5 +1,6 @@
 package com.player.mothercollege.find;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,12 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.adapter.JieLiAdapter;
 import com.player.mothercollege.bean.JieLiBean;
+import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -44,7 +45,9 @@ public class JieLiFragment extends Fragment{
     private JieLiAdapter.OnItemClickListener JieLiItemListener = new JieLiAdapter.OnItemClickListener() {
         @Override
         public void onClick(View v, int position, JieLiBean.UsersBean data) {
-            Toast.makeText(getActivity(),position+"",Toast.LENGTH_SHORT).show();
+            //点击头像进入他人主页
+            Intent intent = new Intent(getActivity(), HeadIconActivity.class);
+            startActivity(intent);
         }
     };
 

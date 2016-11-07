@@ -1,5 +1,6 @@
 package com.player.mothercollege.college.details;
 
+import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.ReadBookDetailsBean;
+import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -235,6 +237,14 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
             glideRequest = Glide.with(OriginalDetailsActivity.this);
             glideRequest.load(readBookDetailsBean.getZlist().get(position).getUicon())
                     .transform(new GlideCircleTransform(OriginalDetailsActivity.this)).into(iv_person_zan);
+            iv_person_zan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //点击头像进入他人主页
+                    Intent intent = new Intent(OriginalDetailsActivity.this, HeadIconActivity.class);
+                    startActivity(intent);
+                }
+            });
             return view;
         }
     }

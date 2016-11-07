@@ -1,5 +1,7 @@
 package com.player.mothercollege.college.details;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -116,7 +118,7 @@ public class FuMuClassFragment extends Fragment{
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View view = null;
             FuMuClassHolder holder = null;
             if (convertView==null){
@@ -141,7 +143,17 @@ public class FuMuClassFragment extends Fragment{
             holder.tv_classitem_title.setText(fuMuList.get(position).getTitle());
             holder.tv_classitem_money.setText(fuMuList.get(position).getPrice()+"");
             holder.tv_classitem_editor.setText(fuMuList.get(position).getEditor());
+            holder.tv_classitem_editor.setTextColor(Color.RED);
             holder.tv_classitem_viewCount.setText(fuMuList.get(position).getViewCount()+"");
+            holder.ll_class_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String sid = fuMuList.get(position).getSid();
+                    Intent intent = new Intent(getActivity(),BzzbDeatilsActivity.class);
+                    intent.putExtra("sid",sid);
+                    startActivity(intent);
+                }
+            });
             return view;
         }
     }

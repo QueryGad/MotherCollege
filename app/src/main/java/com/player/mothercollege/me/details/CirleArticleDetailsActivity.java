@@ -1,5 +1,6 @@
 package com.player.mothercollege.me.details;
 
+import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.CirleArticleBean;
+import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.ScreenUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
@@ -215,6 +217,14 @@ public class CirleArticleDetailsActivity extends BaseActivity implements View.On
             glideRequest = Glide.with(CirleArticleDetailsActivity.this);
             glideRequest.load(trendsBean.getZlikes().get(position).getUicon())
                     .transform(new GlideCircleTransform(CirleArticleDetailsActivity.this)).into(iv_person_zan);
+            iv_person_zan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //点击头像进入他人主页
+                    Intent intent = new Intent(CirleArticleDetailsActivity.this, HeadIconActivity.class);
+                    startActivity(intent);
+                }
+            });
             return view;
         }
     }

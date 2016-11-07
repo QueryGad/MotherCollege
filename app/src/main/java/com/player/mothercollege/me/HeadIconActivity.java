@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -43,6 +45,8 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     private RequestQueue requestQueue;
     private View personHeadView;
     private ProgressDialog pd;
+    private TextView tv_otherperson_guanzhu,tv_otherperson_chat;
+    private LinearLayout ll_other_zhuanchat;
 
     @Override
     public void setContentView() {
@@ -56,7 +60,9 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         btn_refrsh = (Button) findViewById(R.id.btn_refrsh);
         btn_back = (Button) findViewById(R.id.btn_back);
         lv_headicon = (ListView) findViewById(R.id.lv_headicon);
-
+        tv_otherperson_guanzhu = (TextView) findViewById(R.id.tv_otherperson_guanzhu);
+        tv_otherperson_chat = (TextView) findViewById(R.id.tv_otherperson_chat);
+        ll_other_zhuanchat = (LinearLayout) findViewById(R.id.ll_other_zhuanchat);
     }
 
     @Override
@@ -86,7 +92,6 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onSucceed(int what, Response<String> response) {
-
                 String info = response.get();
                 MyLog.testLog("帖子详情:"+info);
                 parseJson2(info);
@@ -185,6 +190,25 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         String phone = personHeadBean.getPhone();//手机号
         boolean isShowPhone = personHeadBean.isIsShowPhone();//是否显示手机号
         String autograph = personHeadBean.getAutograph();//个性签名
+        boolean isSelf = personHeadBean.isIsSelf();//是否是用户本人
+        if (isSelf){
+           //是用户本人 隐藏关注、聊天两个按钮
+            ll_other_zhuanchat.setVisibility(View.GONE);
+        }else {
+            ll_other_zhuanchat.setVisibility(View.VISIBLE);
+            tv_otherperson_guanzhu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(HeadIconActivity.this,"关注",Toast.LENGTH_SHORT).show();
+                }
+            });
+            tv_otherperson_chat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(HeadIconActivity.this,"聊天",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         //赋值
         glideRequest = Glide.with(this);
