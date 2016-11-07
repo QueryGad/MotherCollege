@@ -86,8 +86,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onSucceed(int what, Response<String> response) {
-                iv_refresh.setVisibility(View.GONE);
-                btn_refrsh.setVisibility(View.GONE);
+
                 String info = response.get();
                 MyLog.testLog("帖子详情:"+info);
                 parseJson2(info);
@@ -95,15 +94,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onFailed(int what, Response<String> response) {
-                iv_refresh.setVisibility(View.VISIBLE);
-                btn_refrsh.setVisibility(View.VISIBLE);
-                btn_refrsh.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        netWork1();
-                        netWork2();
-                    }
-                });
+
             }
 
             @Override
@@ -136,15 +127,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onFailed(int what, Response<String> response) {
-                iv_refresh.setVisibility(View.VISIBLE);
-                btn_refrsh.setVisibility(View.VISIBLE);
-                btn_refrsh.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        netWork1();
-                        netWork2();
-                    }
-                });
+
             }
 
             @Override

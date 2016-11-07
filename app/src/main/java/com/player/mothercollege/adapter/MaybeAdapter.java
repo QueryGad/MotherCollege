@@ -1,6 +1,7 @@
 package com.player.mothercollege.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.CirleBean;
+import com.player.mothercollege.me.details.MoreCirleListActivity;
 import com.player.mothercollege.view.GlideCircleTransform;
 
 import java.util.ArrayList;
@@ -84,6 +86,14 @@ public class MaybeAdapter extends BaseAdapter{
         }else {
             holder.btn_moreCirle.setVisibility(View.GONE);
         }
+        //点击更多推荐圈子展示圈子列表
+        holder.btn_moreCirle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,MoreCirleListActivity.class);
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 
