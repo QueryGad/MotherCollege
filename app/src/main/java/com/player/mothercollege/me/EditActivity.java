@@ -1,6 +1,7 @@
 package com.player.mothercollege.me;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 import com.player.mothercollege.R;
@@ -33,7 +35,9 @@ import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
-import com.yolanda.nohttp.rest.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 
@@ -46,6 +50,8 @@ import ch.ielse.view.SwitchView;
 public class EditActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int POST_PHONE_STATE =001 ;
+    private static final int POST_IMAGEPATH_STATE = 002;
+    private ProgressDialog pd;
     private Button btn_back;
     private TextView tv_details_title;
     private LinearLayout ll_me_data_name;
@@ -83,6 +89,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
             postData("1","0");
         }
     };
+    private String uicon;
 
     @Override
     public void setContentView() {
@@ -93,7 +100,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void initViews() {
 
-        String uicon = getIntent().getStringExtra("uicon");
+        uicon = getIntent().getStringExtra("uicon");
         uniceName = getIntent().getStringExtra("uniceName");
 
         btn_back = (Button) findViewById(R.id.btn_back);
@@ -293,42 +300,53 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 .getExternalStorageDirectory().getAbsolutePath(), String
                 .valueOf(System.currentTimeMillis()));
         PrefUtils.setString(EditActivity.this,"imagePath",imagePath);
+        String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","changeUserInfo");
+        request.add("uid","null");
+        request.add("ctype",uicon);
+        request.add("cvalue",imagePath);
+        requestQueue.add(POST_IMAGEPATH_STATE, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                pd = new ProgressDialog(EditActivity.this);
+                pd.show();
+            }
 
-        File file = new File(imagePath);
-        Log.e("imagePath", imagePath+"");
-            // 拿着imagePath上传了
-            String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
-            String url = "http://121.42.31.133:8201/m/api/tools/fileUploadapi.ashx";
-//            Request<String> request = NoHttp.createStringRequest("http://121.42.31.133:8201/m/api/tools/fileUploadapi.ashx", RequestMethod.POST);
-            StringRequest request = new StringRequest(url, RequestMethod.POST);
-            request.setContentType("multipart/form-data");
-            request.add("apptoken",apptoken);
-            request.add("imgFile",new File(Environment.getExternalStorageDirectory()
-                    ,"headImage.jpg"));
-            request.add("filetype","image");
-            request.add("optype","101");
-            requestQueue.add(001, request, new OnResponseListener<String>() {
-                @Override
-                public void onStart(int what) {
-
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("提交结果"+info);
+                try {
+                    JSONObject json = new JSONObject(info);
+                    String resultCode = json.getString("resultCode");
+                    int resultInt = Integer.parseInt(resultCode);
+                    if (resultInt==1001){
+                        Toast.makeText(EditActivity.this,"ctype 不在内定的参数范围.",Toast.LENGTH_SHORT).show();
+                    }else if (resultInt==1002){
+                        Toast.makeText(EditActivity.this,"提交的参数值不在规定的格式内或为空",Toast.LENGTH_SHORT).show();
+                    }else if (resultInt==5001){
+                        Toast.makeText(EditActivity.this,"服务器内部错误",Toast.LENGTH_SHORT).show();
+                    }else if (resultInt==1){
+                        Toast.makeText(EditActivity.this,"修改成功!",Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void onSucceed(int what, Response<String> response) {
-                    String info = response.get();
-                    MyLog.testLog("上传头像"+info);
-                }
+            }
 
-                @Override
-                public void onFailed(int what, Response<String> response) {
+            @Override
+            public void onFailed(int what, Response<String> response) {
 
-                }
+            }
 
-                @Override
-                public void onFinish(int what) {
-
-                }
-            });
+            @Override
+            public void onFinish(int what) {
+                 pd.dismiss();
+            }
+        });
     }
 
     private String StrToBinstr(String imagePath) {
