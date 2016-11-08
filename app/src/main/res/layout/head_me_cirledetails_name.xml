@@ -44,6 +44,7 @@
         android:layout_toRightOf="@id/iv_cirledetails_trend"
         android:text="0"/>
     <ImageView
+        android:id="@+id/iv_cirle_hasjoin"
         android:layout_width="56dp"
         android:layout_height="22dp"
         android:src="@mipmap/icon_join"

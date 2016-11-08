@@ -76,7 +76,7 @@
         <activity android:name=".me.details.CirleDetailsActivity" android:screenOrientation="portrait"/>//圈子详情页面
         <activity android:name=".me.details.CirleArticleDetailsActivity" android:screenOrientation="portrait"/>//圈子中帖子详情
         <activity android:name=".me.details.MoreCirleListActivity" android:screenOrientation="portrait"/>//推荐更多圈子列表
-        //他人主页
+        <activity android:name=".me.details.CirlePostMessageActivity" android:screenOrientation="portrait"/>//发帖页面
     </application>
 
 </manifest>

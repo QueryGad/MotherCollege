@@ -1,11 +1,14 @@
 package com.player.mothercollege.me.details;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -36,12 +39,16 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private static final int GET_CIRLEDETAILS_DATA = 001;
     private static final int GET_CIRLEDETAILSTITLE_DATA = 002;
+    private static final int POST_CANLEGUANZHU_DATA = 003;
+    private static final int POST_ADDGUANZHU_DATA = 004;
     private Button btn_back;
     private TextView tv_details_title;
     private ListView lv_cirledetails;
     private RequestQueue requestQueue;
     private String groupId;
     private RequestManager glideRequest;
+    private ImageView iv_cirle_edit;
+    private ProgressDialog pd;
 
     @Override
     public void setContentView() {
@@ -57,11 +64,13 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
         lv_cirledetails = (ListView) findViewById(R.id.lv_cirledetails);
+        iv_cirle_edit = (ImageView) findViewById(R.id.iv_cirle_edit);
     }
 
     @Override
     public void initListeners() {
         btn_back.setOnClickListener(this);
+        iv_cirle_edit.setOnClickListener(this);
     }
 
     @Override
@@ -152,6 +161,7 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
     private void initHead(final CirleNameDetailsBean cirleNameDetailsBean) {
         View viewHead = View.inflate(CirleDetailsActivity.this,R.layout.head_me_cirledetails_name,null);
         ImageView iv_cirledetails_head = (ImageView) viewHead.findViewById(R.id.iv_cirledetails_head);
+        final ImageView iv_cirle_hasjoin = (ImageView) viewHead.findViewById(R.id.iv_cirle_hasjoin);
         TextView tv_cirledetails_join = (TextView) viewHead.findViewById(R.id.tv_cirledetails_join);
         TextView tv_cirledetails_trend = (TextView) viewHead.findViewById(R.id.tv_cirledetails_trend);
         TextView tv_cirledetails_introduce = (TextView) viewHead.findViewById(R.id.tv_cirledetails_introduce);
@@ -161,6 +171,33 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
         tv_cirledetails_join.setText(cirleNameDetailsBean.getJoinCount()+"");
         tv_cirledetails_trend.setText(cirleNameDetailsBean.getTrendCount()+"");
         tv_details_title.setText(cirleNameDetailsBean.getGroupName());
+        boolean hasJoin = cirleNameDetailsBean.isHasJoin();
+        final String groupId = cirleNameDetailsBean.getGroupId();
+        if (hasJoin){
+            iv_cirle_hasjoin.setImageResource(R.mipmap.icon_join);
+            //如果加入过的圈子点击可取消关注
+            iv_cirle_hasjoin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iv_cirle_hasjoin.setImageResource(R.mipmap.icon_2_join);
+                    iv_cirle_edit.setVisibility(View.GONE);
+                    postCanleGuanZhu(groupId);
+                }
+            });
+        }else {
+            iv_cirle_hasjoin.setImageResource(R.mipmap.icon_2_join);
+            //如果未加入过的圈子点击可关注
+            iv_cirle_hasjoin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iv_cirle_hasjoin.setImageResource(R.mipmap.icon_join);
+                    iv_cirle_edit.setVisibility(View.VISIBLE);
+                    postAddGuanZhu(groupId);
+                }
+            });
+        }
+
+
         tv_cirledetails_introduce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,6 +216,77 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
             case R.id.btn_back:
                 finish();
                 break;
+            case R.id.iv_cirle_edit:
+                //进入编辑页面上传文章与图片
+                Intent intent = new Intent(CirleDetailsActivity.this,CirlePostMessageActivity.class);
+                startActivity(intent);
+                break;
         }
+    }
+
+    private void postCanleGuanZhu(String groupId){
+        String apptoken = PrefUtils.getString(this, "apptoken", "");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("uid","null");
+        request.add("op","exitGroup");
+        request.add("groupNo",groupId);
+        requestQueue.add(POST_CANLEGUANZHU_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                 pd = new ProgressDialog(CirleDetailsActivity.this);
+                 pd.show();
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("返回结果:"+info);
+                Toast.makeText(CirleDetailsActivity.this,"已退出该群!",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+                pd.dismiss();
+            }
+        });
+    }
+
+    private void postAddGuanZhu(String groupId){
+        String apptoken = PrefUtils.getString(this, "apptoken", "");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("op","joinGroup");
+        request.add("apptoken",apptoken);
+        request.add("uid","null");
+        request.add("groupNos",groupId);
+        requestQueue.add(POST_ADDGUANZHU_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                pd = new ProgressDialog(CirleDetailsActivity.this);
+                pd.show();
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("返回结果:"+info);
+                Toast.makeText(CirleDetailsActivity.this,"已加入该群!",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+                pd.dismiss();
+            }
+        });
     }
 }

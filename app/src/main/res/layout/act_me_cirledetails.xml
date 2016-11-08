@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <include
-        android:id="@+id/include"
-        layout="@layout/details_title"/>
-    <ListView
-        android:id="@+id/lv_cirledetails"
+    >
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include
+            android:id="@+id/include"
+            layout="@layout/details_title"/>
+        <ListView
+            android:id="@+id/lv_cirledetails"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_cirle_edit"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:src="@mipmap/icon_consult_publish"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="38dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="31dp" />
+</RelativeLayout>

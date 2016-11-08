@@ -1,6 +1,7 @@
 package com.player.mothercollege.me.details;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,8 +20,10 @@ import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.MoreCirleBean;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
+import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
 import com.yolanda.nohttp.NoHttp;
+import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
@@ -34,6 +38,7 @@ import java.util.List;
  */
 public class MoreCirleListActivity extends BaseActivity{
 
+    private static final int POST_INJOIN_DATA = 001;
     private RequestQueue requestQueue;
     private ListView lv_title,lv_content;
     private ProgressDialog pd;
@@ -176,7 +181,8 @@ public class MoreCirleListActivity extends BaseActivity{
                 holder.iv_head = (ImageView) view.findViewById(R.id.iv_head);
                 holder.tv_content_title = (TextView) view.findViewById(R.id.tv_content_title);
                 holder.tv_viewCount = (TextView) view.findViewById(R.id.tv_viewCount);
-                holder.btn_join = (Button) view.findViewById(R.id.btn_join);
+                holder.btn_join = (Button) view.findViewById(R.id.btn_more_join);
+                holder.rl_morecirle = (RelativeLayout) view.findViewById(R.id.rl_morecirle);
                 view.setTag(holder);
             }else {
                 view = convertView;
@@ -195,6 +201,25 @@ public class MoreCirleListActivity extends BaseActivity{
                 //我没有加入的群
                 holder.btn_join.setBackgroundResource(R.mipmap.icon_2_join);
             }
+            //点击加入按钮显示已加入 有holder不能用
+            final String groupId = groupsList.get(position).getGroupId();
+            holder.btn_join.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    holder.btn_join.setBackgroundResource(R.mipmap.icon_join);
+                    netWork(groupId);
+                }
+            });
+            //点击进入圈子详情
+            holder.rl_morecirle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //点击进入圈子
+                    Intent intent = new Intent(MoreCirleListActivity.this,CirleDetailsActivity.class);
+                    intent.putExtra("groupId",groupId);
+                    startActivity(intent);
+                }
+            });
             return view;
         }
     }
@@ -203,5 +228,38 @@ public class MoreCirleListActivity extends BaseActivity{
         private ImageView iv_head;
         private TextView tv_content_title,tv_viewCount;
         private Button btn_join;
+        private RelativeLayout rl_morecirle;
+    }
+
+    private void netWork(String groupId){
+        String apptoken = PrefUtils.getString(MoreCirleListActivity.this, "apptoken", "");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","joinGroup");
+        request.add("uid","null");
+        request.add("groupNos",groupId);
+        requestQueue.add(POST_INJOIN_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                pd = new ProgressDialog(MoreCirleListActivity.this);
+                pd.show();
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("是否加入成功:"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+                pd.dismiss();
+            }
+        });
     }
 }

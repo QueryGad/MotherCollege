@@ -20,20 +20,18 @@
             android:textSize="16sp"
             android:textColor="#000"
             android:text="你可能感兴趣的圈子"/>
-        <Button
-            android:id="@+id/btn_maybecirle_alljoin"
-            android:layout_marginRight="10dp"
-            android:layout_width="56dp"
-            android:layout_height="23dp"
-            android:background="@mipmap/icon_cirle_no_join"/>
     </LinearLayout>
-
+    <RelativeLayout
+        android:id="@+id/rl_click"
+        android:layout_below="@+id/ll_maybecirle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/iv_maybecirle_icon"
         android:layout_width="41dp"
         android:layout_height="41dp"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/ll_maybecirle"
+
         android:src="@mipmap/head_group"/>
     <TextView
         android:id="@+id/tv_maybecirle_name"
@@ -42,7 +40,6 @@
         android:text="群名称"
         android:layout_toRightOf="@id/iv_maybecirle_icon"
         android:layout_marginTop="13dp"
-        android:layout_below="@id/ll_maybecirle"
         android:layout_marginLeft="10dp"
         android:textColor="#000"
         android:textSize="14sp"/>
@@ -71,15 +68,15 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
-        android:layout_below="@id/ll_maybecirle"
         android:background="@mipmap/icon_2_join"/>
+    </RelativeLayout>
     <Button
         android:id="@+id/btn_moreCirle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="更多推荐圈子>>"
         android:layout_marginTop="5dp"
-        android:layout_below="@id/tv_maybecirle_num"
+        android:layout_below="@id/rl_click"
         android:textColor="#f00"
         android:background="#0000"/>
 </RelativeLayout>

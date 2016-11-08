@@ -33,6 +33,7 @@
             android:layout_below="@id/tv_name"
             android:layout_toRightOf="@id/iv_head"
             android:layout_marginLeft="5dp"
+            android:textColor="#000"
             android:text="5分钟"/>
         <TextView
             android:id="@+id/tv_address"
@@ -46,6 +47,7 @@
             android:layout_toLeftOf="@id/tv_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#000"
             android:layout_marginTop="15dp"
             android:text="来自"/>
         <TextView
@@ -62,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:textColor="#000"
             android:text="内容"
             android:layout_below="@id/tv_title"/>
     </RelativeLayout>
@@ -90,6 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="3dp"
             android:layout_marginLeft="3dp"
+            android:textColor="#000"
             android:text="0"/>
         <ImageView
             android:layout_width="15dp"
@@ -99,6 +103,7 @@
             android:id="@+id/tv_person_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#000"
             android:layout_marginRight="3dp"
             android:layout_marginLeft="3dp"
             android:text="0"/>

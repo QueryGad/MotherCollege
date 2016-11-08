@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="时间"
+        android:textColor="#000"
         android:layout_alignParentRight="true"
         android:layout_marginTop="15dp"
         android:layout_marginRight="10dp"
@@ -27,6 +28,7 @@
         android:layout_below="@id/tv_fastinquiry_title"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="15dp"
+        android:textColor="#000"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <ImageView
@@ -42,6 +44,7 @@
         android:layout_below="@id/tv_fastinquiry_desc"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="8dp"
+        android:textColor="#000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"/>
@@ -66,6 +69,7 @@
             android:layout_below="@id/tv_fastinquiry_daname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#000"
             android:text="回答内容"/>
     </RelativeLayout>
     <LinearLayout
