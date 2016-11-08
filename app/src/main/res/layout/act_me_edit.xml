@@ -289,7 +289,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:text="XXX"
+                    android:text=""
                     android:textSize="18sp" />
 
                 <ImageView

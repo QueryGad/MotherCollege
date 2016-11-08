@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 import com.player.mothercollege.R;
@@ -35,9 +34,6 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 import com.yolanda.nohttp.rest.StringRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 
@@ -76,19 +72,15 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void toggleToOn(SwitchView view) {
             //打开状态
+            view.toggleSwitch(true);
             postData("0","1");
         }
 
         @Override
         public void toggleToOff(SwitchView view) {
            //关闭状态
+            view.toggleSwitch(false);
             postData("1","0");
-        }
-    };
-    private View.OnClickListener SwitchButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            boolean isOpened = sv_phone.isOpened();
         }
     };
 
@@ -135,7 +127,6 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         ll_me_data_style.setOnClickListener(this);
         ll_me_data_address.setOnClickListener(this);
         sv_phone.setOnStateChangedListener(SwitchButtonStateListener);
-        sv_phone.setOnClickListener(SwitchButtonClickListener);
     }
 
     @Override
@@ -175,7 +166,6 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 sex_man.setOnClickListener(this);
                 builder.setView(view);
                 alertDialog = builder.show();
-                alertDialog.setCanceledOnTouchOutside(false);
                 break;
             //修改个性签名
             case R.id.ll_me_data_style:
@@ -369,22 +359,6 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("提交结果"+info);
-                try {
-                    JSONObject json = new JSONObject(info);
-                    String resultCode = json.getString("resultCode");
-                    int resultInt = Integer.parseInt(resultCode);
-                    if (resultInt==1001){
-                        Toast.makeText(EditActivity.this,"ctype 不在内定的参数范围.",Toast.LENGTH_SHORT).show();
-                    }else if (resultInt==1002){
-                        Toast.makeText(EditActivity.this,"提交的参数值不在规定的格式内或为空",Toast.LENGTH_SHORT).show();
-                    }else if (resultInt==5001){
-                        Toast.makeText(EditActivity.this,"服务器内部错误",Toast.LENGTH_SHORT).show();
-                    }else if (resultInt==1){
-                        Toast.makeText(EditActivity.this,"修改成功!",Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
 
             @Override
