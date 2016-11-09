@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/include"
         android:padding="10dp"
-        android:textSize="20sp"
+        android:textSize="17sp"
         android:textColor="#000"
         android:text="标题"/>
     <LinearLayout
@@ -38,7 +38,7 @@
         android:id="@+id/view_activitydetails_1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="7dp"
         android:layout_below="@id/ll_activitydetails_time"
         android:background="@color/bg_content"/>
     <LinearLayout
@@ -65,7 +65,7 @@
         android:id="@+id/view_activitydetails_2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="7dp"
         android:layout_below="@id/ll_activitydetails_place"
         android:background="@color/bg_content"/>
     <LinearLayout
@@ -92,7 +92,7 @@
         android:id="@+id/view_activitydetails_3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="7dp"
         android:layout_below="@id/ll_activitydetails_num"
         android:background="@color/bg_content"/>
 

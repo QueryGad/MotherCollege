@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="问题标题"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textColor="#000"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"/>
@@ -29,6 +29,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="15dp"
         android:textColor="#666"
+        android:textSize="14sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <ImageView
@@ -57,7 +58,7 @@
         android:padding="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_content"
+        android:background="@color/bg_title"
         android:id="@+id/rl_fastinquiry_da">
         <TextView
             android:id="@+id/tv_fastinquiry_daname"
@@ -70,7 +71,8 @@
             android:layout_below="@id/tv_fastinquiry_daname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000"
+            android:textColor="#666"
+            android:textSize="14sp"
             android:text="回答内容"/>
     </RelativeLayout>
     <LinearLayout

@@ -21,6 +21,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.PersonDynamicBean;
 import com.player.mothercollege.me.HeadIconActivity;
+import com.player.mothercollege.utils.DateUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.ScreenUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
@@ -93,7 +94,8 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
         glideRequest.load(trendsBean.getUicon())
                 .transform(new GlideCircleTransform(PersonDetailsActivity.this)).into(iv_invit_head);
         tv_invit_name.setText(trendsBean.getUniceName());
-        tv_invit_time.setText("发布时间:"+trendsBean.getDatetime());
+        String datetime = trendsBean.getDatetime();
+        tv_invit_time.setText("发布时间:"+ DateUtils.getStandardDate(datetime));
         tv_invit_viewCount.setText("浏览人数:"+trendsBean.getViewCount());
         tv_invit_zan.setText(trendsBean.getZlikes().size()+"");
         tv_invit_comment.setText(trendsBean.getReviews().size()+"");

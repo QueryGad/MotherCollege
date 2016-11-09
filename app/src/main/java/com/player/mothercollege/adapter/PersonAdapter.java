@@ -17,6 +17,7 @@ import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.PersonDynamicBean;
 import com.player.mothercollege.me.details.PersonDetailsActivity;
+import com.player.mothercollege.utils.DateUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.ScreenUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
@@ -80,7 +81,8 @@ public class PersonAdapter extends BaseAdapter{
         glideRequest.load(lists.get(position).getUicon())
                 .transform(new GlideCircleTransform(context)).into(ph.iv_head);
         ph.tv_name.setText(lists.get(position).getTitle());
-        ph.tv_time.setText(lists.get(position).getDatetime());
+        String datetime = lists.get(position).getDatetime();
+        ph.tv_time.setText(DateUtils.getStandardDate(datetime));
         ph.tv_address.setText(lists.get(position).getFrom());
         if (lists.get(position).getTitle()==""){
             ph.tv_title.setVisibility(View.GONE);
