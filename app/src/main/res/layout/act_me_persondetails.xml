@@ -74,6 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_invit_time"
         android:text="内容"
+        android:textColor="#333"
         android:padding="10dp" />
     <com.lzy.ninegrid.NineGridView
         android:id="@+id/nineGrid"

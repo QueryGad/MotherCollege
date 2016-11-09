@@ -12,7 +12,7 @@
    <View
        android:layout_width="match_parent"
        android:layout_height="1dp"
-       android:background="#333"/>
+       android:background="#ddd"/>
    <com.player.mothercollege.view.MyFragmentTabHost
        android:id="@+id/frg_tabhost"
        android:layout_width="match_parent"

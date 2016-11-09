@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="时间"
-        android:textColor="#000"
+        android:textColor="#666"
         android:layout_alignParentRight="true"
         android:layout_marginTop="15dp"
         android:layout_marginRight="10dp"
@@ -28,13 +28,14 @@
         android:layout_below="@id/tv_fastinquiry_title"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="15dp"
-        android:textColor="#000"
+        android:textColor="#666"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <ImageView
         android:id="@+id/iv_fast_conmment"
         android:layout_width="20dp"
         android:layout_height="18dp"
+        android:layout_marginTop="1dp"
         android:src="@mipmap/icon_discuss_small"
         android:layout_below="@+id/tv_fastinquiry_desc"
         android:layout_toLeftOf="@+id/tv_fastinquiry_conmment" />

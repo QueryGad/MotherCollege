@@ -3,6 +3,7 @@
     android:id="@+id/ll_person"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="14dp"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,14 +34,14 @@
             android:layout_below="@id/tv_name"
             android:layout_toRightOf="@id/iv_head"
             android:layout_marginLeft="5dp"
-            android:textColor="#000"
+            android:textColor="#666"
             android:text="5分钟"/>
         <TextView
             android:id="@+id/tv_address"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="3dp"
             android:textColor="#7ECFF3"
             android:text="---"/>
         <TextView
@@ -48,14 +49,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="3dp"
             android:text="来自"/>
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:text="标题"
             android:textColor="#000"
             android:layout_below="@id/iv_head"/>
@@ -63,8 +64,9 @@
             android:id="@+id/tv_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="#000"
+            android:layout_marginTop="10dp"
+            android:textColor="#666"
+            android:textSize="14sp"
             android:text="内容"
             android:layout_below="@id/tv_title"/>
     </RelativeLayout>
