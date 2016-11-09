@@ -35,7 +35,7 @@
             android:layout_toRightOf="@id/iv_head"
             android:layout_marginLeft="5dp"
             android:textColor="#666"
-            android:text="5分钟"/>
+            android:text="0分钟"/>
         <TextView
             android:id="@+id/tv_address"
             android:layout_alignParentRight="true"

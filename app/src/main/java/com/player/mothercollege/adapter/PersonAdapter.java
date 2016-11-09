@@ -80,7 +80,7 @@ public class PersonAdapter extends BaseAdapter{
         glideRequest = Glide.with(context);
         glideRequest.load(lists.get(position).getUicon())
                 .transform(new GlideCircleTransform(context)).into(ph.iv_head);
-        ph.tv_name.setText(lists.get(position).getTitle());
+        ph.tv_name.setText(lists.get(position).getUniceName());
         String datetime = lists.get(position).getDatetime();
         ph.tv_time.setText(DateUtils.getStandardDate(datetime));
         ph.tv_address.setText(lists.get(position).getFrom());

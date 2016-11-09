@@ -85,9 +85,10 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void initData() {
-        if (trendsBean.getTitle()==""){
+        if (trendsBean.getTitle().equals("")){
             tv_invit_title.setVisibility(View.GONE);
         }else {
+            tv_invit_title.setVisibility(View.VISIBLE);
             tv_invit_title.setText(trendsBean.getTitle());
         }
         glideRequest = Glide.with(PersonDetailsActivity.this);
