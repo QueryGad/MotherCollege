@@ -219,6 +219,7 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
             case R.id.iv_cirle_edit:
                 //进入编辑页面上传文章与图片
                 Intent intent = new Intent(CirleDetailsActivity.this,CirlePostMessageActivity.class);
+                intent.putExtra("groupId",groupId);
                 startActivity(intent);
                 break;
         }

@@ -30,6 +30,15 @@
         <activity android:name=".activity.GuideActicity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.MainActivity" android:screenOrientation="portrait"
             android:theme="@style/Theme.PageIndicatorDefaults"/>
+        <activity
+            android:theme="@style/customTheme"
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            />
+
+        <activity
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            />
         //学院
         <activity android:name=".college.details.ReadBookItemActivity" android:screenOrientation="portrait"/>//读书章节
         <activity android:name=".college.details.BzzbDeatilsActivity" android:screenOrientation="portrait"/>//本周直播详情页面
