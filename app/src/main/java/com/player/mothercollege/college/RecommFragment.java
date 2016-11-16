@@ -181,19 +181,19 @@ public class RecommFragment extends Fragment {
         String cacheJson = CacheUtils.getCache(getActivity(), ConfigUtils.COLLEGE_URL + "tj");
         if (!TextUtils.isEmpty(cacheJson)){
             parseJson(cacheJson);
-        }else {
-            initHttp();
         }
+        initHttp();
 
     }
 
     private void initHttp() {
         //获取公钥
         apptoken = PrefUtils.getString(getActivity(),"apptoken","");
+        String uid = PrefUtils.getString(getActivity(), "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("op","tj");
         request.add("apptoken",apptoken);
-        request.add("uid","null");
+        request.add("uid",uid);
         requestQueue.add(GET_RECOMM_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

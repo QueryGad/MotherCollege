@@ -7,15 +7,16 @@ import java.util.List;
  */
 public class ReadBookBean {
     /**
-     * books : [{"bookID":"b238445","bookName":"天真的父母","pages":[{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/4.png","isnew":"true","pageIndex":1,"sid":"s43984","title":"章节1","viewCount":"34"},{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/1.png","isnew":"true","pageIndex":2,"sid":"s43984","title":"章节2","viewCount":"34"}]},{"bookID":"b238445","bookName":"亲子成长计划","pages":[{"date":"2017-09-13","editor":"周正","img":"http://121.42.31.133:8201/m/img/2.png","isnew":"true","pageIndex":1,"sid":"s43984","title":"章节1","viewCount":"34"},{"date":"2017-09-13","editor":"周正","img":"http://121.42.31.133:8201/m/img/2.png","isnew":"true","pageIndex":2,"sid":"s43984","title":"章节2","viewCount":"334"}]}]
-     * endNo : 9
+     * books : [{"bookID":"bk1611070001","bookInfo":"阿斯蒂芬撒旦法","bookName":"让他成为你的骄傲","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120001","title":"章节二","viewCount":"89"}]},{"bookID":"bk1611090003","bookInfo":"爱的色放","bookName":"克制冲动","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120004","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":2,"sid":"bkp1611120005","title":"章节二","viewCount":"89"}]},{"bookID":"bk1611090004","bookInfo":"爱的色放","bookName":"成功需要舍得","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120006","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":2,"sid":"bkp1611120007","title":"章节二","viewCount":"89"}]},{"bookID":"bk1611090005","bookInfo":"爱的色放","bookName":"我家孩子也可以","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120008","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":2,"sid":"bkp1611120028","title":"章节二","viewCount":"89"}]},{"bookID":"bk1611090006","bookInfo":"爱的色放","bookName":"都懂女人心","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120009","title":"章节二","viewCount":"89"}]},{"bookID":"bk1611090007","bookInfo":"爱的色放","bookName":"学会换位","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120010","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":2,"sid":"bkp1611120011","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":3,"sid":"bkp1611120012","title":"章节二","viewCount":"89"}]},{"bookID":"bk1611090008","bookInfo":"爱的色放","bookName":"错觉影响感情","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120013","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":2,"sid":"bkp1611120014","title":"章节二","viewCount":"89"}]},{"bookID":"bk1611090009","bookInfo":"爱的色放","bookName":"女人艺术","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120015","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":2,"sid":"bkp1611120016","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":3,"sid":"bkp1611120027","title":"章节二","viewCount":"89"}]},{"bookID":"bk1611090010","bookInfo":"爱的色放","bookName":"育儿注意十项","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120017","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":2,"sid":"bkp1611120018","title":"章节二","viewCount":"89"}]},{"bookID":"bk1611090011","bookInfo":"爱的色放","bookName":"学会和他相处","pages":[{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120019","title":"章节二","viewCount":"89"},{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":2,"sid":"bkp1611120020","title":"章节二","viewCount":"89"}]}]
+     * endNo : 10
      */
 
     private int endNo;
     /**
-     * bookID : b238445
-     * bookName : 天真的父母
-     * pages : [{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/4.png","isnew":"true","pageIndex":1,"sid":"s43984","title":"章节1","viewCount":"34"},{"date":"2017-09-13","editor":"张三","img":"http://121.42.31.133:8201/m/img/1.png","isnew":"true","pageIndex":2,"sid":"s43984","title":"章节2","viewCount":"34"}]
+     * bookID : bk1611070001
+     * bookInfo : 阿斯蒂芬撒旦法
+     * bookName : 让他成为你的骄傲
+     * pages : [{"date":"2016/11/9 0:00:00","editor":"魏国峰","img":"http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg","isnew":"false","pageIndex":1,"sid":"bkp1611120001","title":"章节二","viewCount":"89"}]
      */
 
     private List<BooksBean> books;
@@ -38,16 +39,17 @@ public class ReadBookBean {
 
     public static class BooksBean {
         private String bookID;
+        private String bookInfo;
         private String bookName;
         /**
-         * date : 2017-09-13
-         * editor : 张三
-         * img : http://121.42.31.133:8201/m/img/4.png
-         * isnew : true
+         * date : 2016/11/9 0:00:00
+         * editor : 魏国峰
+         * img : http://121.42.31.133:8201/upload/image/20161112/20161112182136_3052.jpg
+         * isnew : false
          * pageIndex : 1
-         * sid : s43984
-         * title : 章节1
-         * viewCount : 34
+         * sid : bkp1611120001
+         * title : 章节二
+         * viewCount : 89
          */
 
         private List<PagesBean> pages;
@@ -58,6 +60,14 @@ public class ReadBookBean {
 
         public void setBookID(String bookID) {
             this.bookID = bookID;
+        }
+
+        public String getBookInfo() {
+            return bookInfo;
+        }
+
+        public void setBookInfo(String bookInfo) {
+            this.bookInfo = bookInfo;
         }
 
         public String getBookName() {

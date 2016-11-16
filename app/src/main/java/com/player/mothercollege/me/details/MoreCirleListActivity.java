@@ -80,9 +80,9 @@ public class MoreCirleListActivity extends BaseActivity{
     }
 
     private void netWork() {
-
+        String uid = PrefUtils.getString(MoreCirleListActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL);
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("apptoken","sefsefa");
         request.add("op","moreGroup");
         requestQueue.add(001, request, new OnResponseListener<String>() {
@@ -233,10 +233,11 @@ public class MoreCirleListActivity extends BaseActivity{
 
     private void netWork(String groupId){
         String apptoken = PrefUtils.getString(MoreCirleListActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(MoreCirleListActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","joinGroup");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("groupNos",groupId);
         requestQueue.add(POST_INJOIN_DATA, request, new OnResponseListener<String>() {
             @Override

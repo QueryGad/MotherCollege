@@ -67,10 +67,11 @@ public class VideoFragment extends Fragment{
 
     private void netWork() {
         String apptoken = PrefUtils.getString(getActivity(),"apptoken","");
+        String uid = PrefUtils.getString(getActivity(), "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("op","zb");
         request.add("apptoken",apptoken);
-        request.add("uid","null");
+        request.add("uid",uid);
         requestQueue.add(GET_VIDEO_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

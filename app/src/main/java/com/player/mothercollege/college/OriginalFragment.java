@@ -65,10 +65,11 @@ public class OriginalFragment extends Fragment{
 
     private void netWork() {
         String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
+        String uid = PrefUtils.getString(getActivity(), "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("op","yc");
         request.add("apptoken",apptoken);
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("lastIndex","0");
         requestQueue.add(GET_ORIGINAL_DATA, request, new OnResponseListener<String>() {
             @Override

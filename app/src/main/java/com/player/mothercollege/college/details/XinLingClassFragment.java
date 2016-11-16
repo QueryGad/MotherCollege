@@ -62,10 +62,11 @@ public class XinLingClassFragment extends Fragment{
     private void netWork() {
 
         String apptoken = PrefUtils.getString(getActivity(),"apptoken","");
+        String uid = PrefUtils.getString(getActivity(), "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL);
         request.add("op","class");
         request.add("apptoken",apptoken);
-        request.add("udi","null");
+        request.add("udi",uid);
         requestQueue.add(GET_CLASS_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

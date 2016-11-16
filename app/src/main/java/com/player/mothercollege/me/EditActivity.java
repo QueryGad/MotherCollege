@@ -301,10 +301,11 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 .valueOf(System.currentTimeMillis()));
         PrefUtils.setString(EditActivity.this,"imagePath",imagePath);
         String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(EditActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","changeUserInfo");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("ctype",uicon);
         request.add("cvalue",imagePath);
         requestQueue.add(POST_IMAGEPATH_STATE, request, new OnResponseListener<String>() {
@@ -361,10 +362,11 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     //手机号是否公开
     private void postData(String ctype,String cvalue){
         String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(EditActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","changeUserInfo");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("ctype",ctype);
         request.add("cvalue",cvalue);
         requestQueue.add(POST_PHONE_STATE, request, new OnResponseListener<String>() {

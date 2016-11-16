@@ -23,7 +23,6 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.ReadBookDetailsBean;
 import com.player.mothercollege.me.HeadIconActivity;
-import com.player.mothercollege.me.details.PersonDetailsActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -103,10 +102,11 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
 
     private void netWork() {
         String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("op","getStuInfo");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("stype","1");
         request.add("sid",sid);
         requestQueue.add(GET_TEXTDETAILS_DATA, request, new OnResponseListener<String>() {

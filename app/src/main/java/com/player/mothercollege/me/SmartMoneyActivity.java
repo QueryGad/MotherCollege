@@ -83,9 +83,10 @@ public class SmartMoneyActivity extends BaseActivity implements View.OnClickList
 
     private void netWork() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(SmartMoneyActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","zhbinfo");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("apptoken",apptoken);
         requestQueue.add(GET_SMARTMONEY_DATA, request, new OnResponseListener<String>() {
             @Override

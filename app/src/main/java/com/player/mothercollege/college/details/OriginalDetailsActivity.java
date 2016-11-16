@@ -102,10 +102,11 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
 
     private void netWork() {
         String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("op","getStuInfo");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("stype","2");
         request.add("sid",sid);
         requestQueue.add(GET_TEXTDETAILS_DATA, request, new OnResponseListener<String>() {

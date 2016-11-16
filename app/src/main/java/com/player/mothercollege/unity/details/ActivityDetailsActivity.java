@@ -94,9 +94,10 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
 
     private void netWork() {
         String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
         request.add("aid",aid+"");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("apptoken",apptoken);
         request.add("op","activeInfo");
         requestQueue.add(GET_ACTIVITYDITAILS, request, new OnResponseListener<String>() {

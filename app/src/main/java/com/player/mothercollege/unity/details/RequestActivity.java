@@ -83,10 +83,11 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
 
     private void postData(String qtitle,String qustion) {
         String apptoken = PrefUtils.getString(RequestActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(RequestActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postQustion");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("qtitle",qtitle);
         request.add("qustion",qustion);
         requestQueue.add(POST_REQUEST_DATA, request, new OnResponseListener<String>() {

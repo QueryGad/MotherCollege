@@ -97,9 +97,10 @@ public class SmartMakeOverActivity extends BaseActivity implements View.OnClickL
 
     private void netWork(String number, String phone, String liuyan) {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(SmartMakeOverActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","givezhb");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("apptoken",apptoken);
         request.add("receiveid",phone);
         request.add("desc",liuyan);

@@ -57,10 +57,11 @@ public class HotArticleFragment extends Fragment{
 
     private void netWork() {
         String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
+        String uid = PrefUtils.getString(getActivity(), "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("op","retie");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("lastIndex","0");
         requestQueue.add(GET_HOTARTICLE_DATA, request, new OnResponseListener<String>() {
             @Override

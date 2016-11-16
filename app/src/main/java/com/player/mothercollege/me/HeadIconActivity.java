@@ -78,9 +78,10 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
 
     private void netWork2() {
         String apptoken = PrefUtils.getString(HeadIconActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(HeadIconActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","tiezilist");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("apptoken",apptoken);
         request.add("lastindex","0");
         requestQueue.add(GET_DYNAMIC_DATA, request, new OnResponseListener<String>() {
@@ -111,9 +112,10 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
 
     private void netWork1() {
         String apptoken = PrefUtils.getString(HeadIconActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(HeadIconActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","userinfo");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("apptoken",apptoken);
         requestQueue.add(GET_HEADICON_DATA, request, new OnResponseListener<String>() {
             @Override

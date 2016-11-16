@@ -2,6 +2,7 @@ package com.player.mothercollege.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 
 import com.player.mothercollege.R;
 import com.player.mothercollege.adapter.GuidePagerAdapter;
+import com.player.mothercollege.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ public class GuideActicity extends Activity{
 
     private ViewPager vp;
     private Button start;
+    private SharedPreferences sp;
     private List<Integer> lists = new ArrayList<>();
     private ViewPager.OnPageChangeListener GuidePageListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -30,9 +33,18 @@ public class GuideActicity extends Activity{
                 start.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(GuideActicity.this,MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        boolean isRegist = sp.getBoolean("isRegist", true);
+                        if (isRegist){
+                            Intent intent = new Intent(GuideActicity.this, LoginActivity.class);
+                            startActivity(intent);
+                            sp.edit().putBoolean("isRegist", false).commit();
+                            finish();
+                        }else {
+                            Intent intent = new Intent(GuideActicity.this,MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
                     }
                 });
             }else {
@@ -55,6 +67,7 @@ public class GuideActicity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
+        sp = getSharedPreferences("isRegistSP",MODE_PRIVATE);
         initView();
         initData();
     }

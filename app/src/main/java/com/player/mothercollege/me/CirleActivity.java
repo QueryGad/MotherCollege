@@ -65,10 +65,11 @@ public class CirleActivity extends BaseActivity implements View.OnClickListener 
 
     private void netWork() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(CirleActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("op","myGroup");
-        request.add("uid","null");
+        request.add("uid",uid);
         requestQueue.add(GET_CIRLE_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

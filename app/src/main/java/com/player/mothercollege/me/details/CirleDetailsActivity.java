@@ -80,9 +80,10 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void netWorkTitle() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("groupNo",groupId);
         request.add("op","GroupInfo");
         requestQueue.add(GET_CIRLEDETAILSTITLE_DATA, request, new OnResponseListener<String>() {
@@ -182,6 +183,7 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
                     iv_cirle_hasjoin.setImageResource(R.mipmap.icon_2_join);
                     iv_cirle_edit.setVisibility(View.GONE);
                     postCanleGuanZhu(groupId);
+
                 }
             });
         }else {
@@ -260,10 +262,11 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void postAddGuanZhu(String groupId){
         String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(CirleDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("op","joinGroup");
         request.add("apptoken",apptoken);
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("groupNos",groupId);
         requestQueue.add(POST_ADDGUANZHU_DATA, request, new OnResponseListener<String>() {
             @Override

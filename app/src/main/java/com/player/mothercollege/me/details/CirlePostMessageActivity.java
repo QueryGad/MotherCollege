@@ -1,6 +1,7 @@
 package com.player.mothercollege.me.details;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -56,6 +57,7 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
     private int currentClickId = -1;
     private String groupId;
     private RequestQueue requestQueue;
+    private ProgressDialog pd;
 
     @Override
     public void setContentView() {
@@ -179,6 +181,7 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
                     title = "";
                 }
                 postMessage(title,content);
+
                 break;
         }
 
@@ -206,10 +209,11 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
             imgs =  img+"^";
         }
         String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostTrend");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("gid",groupId);
         request.add("title",title);
         request.add("content",content);
@@ -217,14 +221,17 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
         requestQueue.add(POST_MESSAGE_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-
+                pd = new ProgressDialog(CirlePostMessageActivity.this);
+                pd.show();
             }
 
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("帖子上传是否成功:"+info);
-                //todo
+                pd.dismiss();
+                //操作逻辑 上传成功后关闭编辑页面，刷新圈子显示发布
+                finish();
             }
 
             @Override

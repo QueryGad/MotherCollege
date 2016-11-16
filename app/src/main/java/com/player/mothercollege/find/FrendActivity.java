@@ -77,9 +77,10 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
 
     private void netWork() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(FrendActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.FIND_URL, RequestMethod.GET);
         request.add("op","yqhy");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("apptoken",apptoken);
         requestQueue.add(GET_QR_DATA, request, new OnResponseListener<String>() {
             @Override

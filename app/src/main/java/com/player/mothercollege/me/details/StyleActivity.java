@@ -90,11 +90,12 @@ public class StyleActivity extends BaseActivity implements View.OnClickListener 
 
     private void postData(String content) {
         String apptoken = PrefUtils.getString(StyleActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(StyleActivity.this, "uid", "null");
         String style = PrefUtils.getString(StyleActivity.this, "style", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","changeUserInfo");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("ctype",style);
         request.add("cvalue",content);
         requestQueue.add(POST_STYLE_DATA, request, new OnResponseListener<String>() {

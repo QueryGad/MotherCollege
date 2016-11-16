@@ -93,10 +93,11 @@ public class AlterNameActivity extends BaseActivity implements View.OnClickListe
 
     private void postData(String newName) {
         String apptoken = PrefUtils.getString(AlterNameActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(AlterNameActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","changeUserInfo");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("ctype",uniceName);
         request.add("cvalue",newName);
         requestQueue.add(POST_ALTERNAME_DATA, request, new OnResponseListener<String>() {

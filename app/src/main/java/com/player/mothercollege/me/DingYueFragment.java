@@ -71,9 +71,10 @@ public class DingYueFragment extends Fragment{
 
     private void netWork() {
         String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
+        String uid = PrefUtils.getString(getActivity(), "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("op","mysubscriber");
         request.add("lastindex","0");
         requestQueue.add(GET_DINGYUE_DATA, request, new OnResponseListener<String>() {
