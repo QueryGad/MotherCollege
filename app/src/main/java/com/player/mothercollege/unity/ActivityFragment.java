@@ -3,19 +3,20 @@ package com.player.mothercollege.unity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
-import com.player.mothercollege.adapter.ActivityAdapter;
-import com.player.mothercollege.bean.ActivityAddressBean;
-import com.player.mothercollege.bean.ActivityBean;
-import com.player.mothercollege.utils.ConfigUtils;
-import com.player.mothercollege.utils.MyLog;
-import com.player.mothercollege.utils.PrefUtils;
+import com.player.mothercollege.adapter.ActiveAdapter;
+import com.player.mothercollege.bean.ActiveBean;
+import com.player.mothercollege.bean.CityBean;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -23,21 +24,32 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/10/25.
- * 活动页面
+ * Created by Administrator on 2016/11/16.
  */
 public class ActivityFragment extends Fragment{
 
-    private static final int GET_ACTIVITY_DATA = 001;
-    private static final int GET_ACTIV_DATA = 002;
+    private ListView lv_activty;
     private View view;
-    private ListView lv_unity_activity;
     private RequestQueue requestQueue;
-    private List<ActivityAddressBean.CitysBean> citysList = new ArrayList<>();
+    private Spinner spinner;
+    private AdapterView.OnItemSelectedListener MyOnItemListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            parent.setVisibility(View.VISIBLE);
+            String key = keyList[position];
+            netWorkActivity(key);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+    private String[] cityList;
+    private String[] keyList;
 
 
     @Nullable
@@ -51,52 +63,20 @@ public class ActivityFragment extends Fragment{
     }
 
     private void initView() {
-        lv_unity_activity = (ListView) view.findViewById(R.id.lv_unity_activity);
+        lv_activty = (ListView) view.findViewById(R.id.lv_activty);
+        spinner = (Spinner) view.findViewById(R.id.spinner);
     }
 
     private void initData() {
-        netWorkAddress();
-        netWorkActivity();
+        netWorkCity();
     }
 
-    private void netWorkActivity() {
-        String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
-        Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
-        request.add("op","active");
-        request.add("lastIndex","0");
-        request.add("city","");//空表示全部显示
-        request.add("apptoken",apptoken);
-        requestQueue.add(GET_ACTIV_DATA, request, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
-
-            }
-
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                String info = response.get();
-                MyLog.testLog("活动页面"+info);
-                parseJsonActivity(info);
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-
-            }
-
-            @Override
-            public void onFinish(int what) {
-
-            }
-        });
-    }
-
-    private void netWorkAddress() {
-        String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
-        Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
+    private void netWorkCity() {
+        String url = "http://121.42.31.133:8201/m/api/business/sns.aspx";
+        Request<String> request = NoHttp.createStringRequest(url, RequestMethod.GET);
+        request.add("apptoken","apptoken");
         request.add("op","cityItem");
-        request.add("apptoken",apptoken);
-        requestQueue.add(GET_ACTIVITY_DATA, request, new OnResponseListener<String>() {
+        requestQueue.add(001, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
 
@@ -105,8 +85,8 @@ public class ActivityFragment extends Fragment{
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
-                MyLog.testLog("活动地址:"+info);
-                parseJsonAddress(info);
+                Log.e("========",info);
+                parseJsonCity(info);
             }
 
             @Override
@@ -121,28 +101,67 @@ public class ActivityFragment extends Fragment{
         });
     }
 
-    private void parseJsonAddress(String info){
+    private void parseJsonCity(String info){
         Gson gson = new Gson();
-        ActivityAddressBean activityAddressBean = gson.fromJson(info, ActivityAddressBean.class);
-        citysList = activityAddressBean.getCitys();
+        CityBean cityBean = gson.fromJson(info, CityBean.class);
+        List<CityBean.CitysBean> citysList = cityBean.getCitys();
+        cityList = new String[citysList.size()+1];
+        keyList = new String[citysList.size()+1];
+        cityList[0] = "全部";
+        keyList[0] = "";
         for (int i=0;i<citysList.size();i++){
-            String city = citysList.get(i).getCity();
-            String key = citysList.get(i).getKey();
+            CityBean.CitysBean citysBean = citysList.get(i);
+            String city = citysBean.getCity();
+            cityList[i+1]=city;
+            String key = citysBean.getKey();
+            keyList[i+1]=key;
         }
+        ArrayAdapter<String> arrAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, cityList);
+        spinner.setAdapter(arrAdapter);
+        spinner.setOnItemSelectedListener(MyOnItemListener);
     }
 
-    private void parseJsonActivity(String info){
+
+
+    private void netWorkActivity(String key) {
+        String url = "http://121.42.31.133:8201/m/api/business/sns.aspx";
+        Request<String> request = NoHttp.createStringRequest(url, RequestMethod.GET);
+        request.add("op","active");
+        request.add("apptoken","apptoken");
+        request.add("lastIndex","0");
+        request.add("city",key);
+        requestQueue.add(002, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                Log.e("活动",info);
+                parseJsonActive(info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    private void parseJsonActive(String info){
         Gson gson = new Gson();
-        ActivityBean activityBean = gson.fromJson(info, ActivityBean.class);
-        int lastIndex = activityBean.getLastIndex();//刷新下标
-        List<ActivityBean.ActivesBean> activesList = activityBean.getActives();
-        initActivityData(activesList);
+        ActiveBean activeBean = gson.fromJson(info, ActiveBean.class);
+        int lastIndex = activeBean.getLastIndex(); //下拉刷新控件
+        List<ActiveBean.ActivesBean> activesLists = activeBean.getActives();
+        ActiveAdapter adapter = new ActiveAdapter(getActivity(),activesLists);
+        lv_activty.setAdapter(adapter);
     }
-
-    private void initActivityData(List activesList) {
-        ActivityAdapter adapter = new ActivityAdapter(getActivity(),activesList,citysList);
-        lv_unity_activity.setAdapter(adapter);
-    }
-
 
 }

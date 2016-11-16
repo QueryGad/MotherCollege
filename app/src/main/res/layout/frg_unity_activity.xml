@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
     <ListView
-        android:id="@+id/lv_unity_activity"
+        android:id="@+id/lv_activty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@color/transprant"
         android:divider="#ccc"
         android:dividerHeight="0.5dp"
         android:listSelector="@color/transprant"/>
-</LinearLayout>
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"/>
+</RelativeLayout>

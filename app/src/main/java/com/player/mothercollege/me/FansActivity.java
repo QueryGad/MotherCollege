@@ -1,12 +1,12 @@
 package com.player.mothercollege.me;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
@@ -44,7 +44,9 @@ public class FansActivity extends BaseActivity implements View.OnClickListener {
     private FansAdapter.OnItemClickListener FansItemListener = new FansAdapter.OnItemClickListener() {
         @Override
         public void onClick(View v, int position, FansBean.UsersBean data) {
-            Toast.makeText(FansActivity.this,position+"",Toast.LENGTH_SHORT).show();
+            //点击头像进入他人主页
+            Intent intent = new Intent(FansActivity.this, HeadIconActivity.class);
+            startActivity(intent);
         }
     };
 
