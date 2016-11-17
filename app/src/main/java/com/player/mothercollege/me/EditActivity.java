@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
@@ -24,11 +25,10 @@ import com.player.mothercollege.me.details.AddressActivity;
 import com.player.mothercollege.me.details.AlterNameActivity;
 import com.player.mothercollege.me.details.StyleActivity;
 import com.player.mothercollege.utils.ConfigUtils;
-import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.MyUtils;
 import com.player.mothercollege.utils.PrefUtils;
-import com.squareup.picasso.Picasso;
+import com.player.mothercollege.view.GlideCircleTransform;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -119,9 +119,12 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
 
         tv_details_title.setText("个人资料");
         //进行数据回显
-        Picasso.with(EditActivity.this).load(uicon)
-                .resize(DensityUtils.dip2px(EditActivity.this,86),DensityUtils.dip2px(EditActivity.this,86))
-                .centerCrop().into(iv_personal_icon);
+//        Picasso.with(EditActivity.this).load(uicon)
+//                .resize(DensityUtils.dip2px(EditActivity.this,86),DensityUtils.dip2px(EditActivity.this,86))
+//                .centerCrop().into(iv_personal_icon);
+        glideRequest = Glide.with(this);
+        glideRequest.load(uicon)
+                .transform(new GlideCircleTransform(this)).into(iv_personal_icon);
         tv_me_data_name.setText(uniceName);
     }
 
