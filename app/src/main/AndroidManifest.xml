@@ -149,6 +149,7 @@
         <activity android:name=".me.SettingActivity" android:screenOrientation="portrait"/>//设置
         <activity android:name=".me.details.AlterNameActivity" android:screenOrientation="portrait"/>//修改昵称
         <activity android:name=".me.details.AddressActivity" android:screenOrientation="portrait"/>//收货地址
+        <activity android:name=".me.details.PickerActivity" android:screenOrientation="portrait"/>//新建收货地址
         <activity android:name=".me.details.StyleActivity" android:screenOrientation="portrait"/>//个性签名
         <activity android:name=".me.details.SmartDetailsActivity" android:screenOrientation="portrait"/>//智慧币明细
         <activity android:name=".me.details.SmartPayActivity" android:screenOrientation="portrait"/>//充值
@@ -161,6 +162,7 @@
         <activity android:name=".me.details.CirleArticleDetailsActivity" android:screenOrientation="portrait"/>//圈子中帖子详情
         <activity android:name=".me.details.MoreCirleListActivity" android:screenOrientation="portrait"/>//推荐更多圈子列表
         <activity android:name=".me.details.CirlePostMessageActivity" android:screenOrientation="portrait"/>//发帖页面
+
     </application>
 
 </manifest>

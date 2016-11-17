@@ -58,6 +58,7 @@ dependencies {
     compile 'me.iwf.photopicker:PhotoPicker:0.9.0@aar'
     compile 'com.android.support:design:+'
     compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.bigkoo:pickerview:2.1.0'
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile files('libs/libammsdk.jar')

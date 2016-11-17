@@ -229,9 +229,10 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void postCanleGuanZhu(String groupId){
         String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("op","exitGroup");
         request.add("groupNo",groupId);
         requestQueue.add(POST_CANLEGUANZHU_DATA, request, new OnResponseListener<String>() {
