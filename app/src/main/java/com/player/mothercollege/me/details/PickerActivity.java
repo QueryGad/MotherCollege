@@ -1,10 +1,11 @@
 package com.player.mothercollege.me.details;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.ProvinceBean;
 import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
@@ -42,6 +44,7 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
     private AlertDialog dialog;
     private RequestQueue requestQueue;
     private OptionsPickerView pvOptions;
+    private ProgressDialog pd;
     //  省份
     ArrayList<ProvinceBean> provinceBeanList = new ArrayList<>();
     //  城市
@@ -173,6 +176,9 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
                 netWork(name,phone,details);
                 break;
             case R.id.tv_address_picker:  //三级联动
+
+                ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE))
+                        .hideSoftInputFromWindow(PickerActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 pvOptions.show();
                 break;
 
@@ -236,28 +242,42 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
         request.add("linkphone",phone);
         request.add("linkname",name);
         request.add("ad1",sheng);
-        Log.e("========",sheng);
+        MyLog.testLog("省"+sheng);
         request.add("ad2",shi);
-        Log.e("========",shi);
         request.add("ad3",xian);
-        Log.e("========",xian);
         request.add("add_ext",details);
         request.add("isdefault",moren);
         requestQueue.add(POST_ADDRESS_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-
+                 pd = new ProgressDialog(PickerActivity.this);
+                 pd.show();
             }
 
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
-                Log.e("========",info);
+                MyLog.testLog("收货地址:"+info);
+                try {
+                    JSONObject json = new JSONObject(info);
+                    boolean isSuccess = json.getBoolean("isSuccess");
+                    MyLog.testLog("上传是否成功:"+isSuccess);
+                    if (isSuccess){
+                        Toast.makeText(PickerActivity.this,"添加收货地址成功!",Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
+                        finish();
+                    }else {
+                        Toast.makeText(PickerActivity.this,"添加收货地址失败!",Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
-            @Override
+           @Override
             public void onFailed(int what, Response<String> response) {
-
+               pd.dismiss();
             }
 
             @Override
