@@ -56,6 +56,7 @@ public class AlterNameActivity extends BaseActivity implements View.OnClickListe
         //数据回显
         MyLog.testLog("拿到昵称"+ uniceName);
         et_me_alter_content.setText(uniceName);
+        et_me_alter_content.setSelection(uniceName.length());
     }
 
     @Override

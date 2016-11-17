@@ -120,11 +120,12 @@
                         android:textSize="18sp" />
 
                     <TextView
+                        android:id="@+id/tv_me_data_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="13dp"
                         android:padding="9.5dp"
-                        android:text="11111"
+                        android:text=""
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -186,7 +187,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="7dp"
-                    android:text="男"
+                    android:text=""
                     android:textSize="18sp" />
 
                 <ImageView

@@ -80,7 +80,7 @@ public class AttActivity extends BaseActivity implements View.OnClickListener {
 
     private void netWork() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(AttActivity.this, "uid", "null");
+        String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","myfollow");
         request.add("uid",uid);

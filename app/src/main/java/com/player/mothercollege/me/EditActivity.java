@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +20,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
+import com.player.mothercollege.bean.PersonHead;
 import com.player.mothercollege.me.details.AddressActivity;
 import com.player.mothercollege.me.details.AlterNameActivity;
 import com.player.mothercollege.me.details.StyleActivity;
+import com.player.mothercollege.utils.CacheUtils;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.MyUtils;
@@ -51,7 +55,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int POST_PHONE_STATE =001 ;
     private static final int POST_IMAGEPATH_STATE = 002;
-    private ProgressDialog pd;
+    private static final int GET_BASEINFO_DATA = 003;
     private Button btn_back;
     private TextView tv_details_title;
     private LinearLayout ll_me_data_name;
@@ -61,10 +65,12 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     private TextView tv_me_data_name;
     private TextView tv_me_data_sex;
     private TextView tv_me_data_style;
+    private TextView tv_me_data_phone;
     private AlertDialog alertDialog;
     private int sex_index ;
     private RequestManager glideRequest;
     private SwitchView sv_phone;
+    private ProgressDialog pd;
 
     //修改用户头像
     protected static final int CHOOSE_PICTURE = 0;
@@ -114,6 +120,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         tv_me_data_name = (TextView) findViewById(R.id.tv_me_data_name);
         tv_me_data_sex = (TextView) findViewById(R.id.tv_me_data_sex);
         tv_me_data_style = (TextView) findViewById(R.id.tv_me_data_style);
+        tv_me_data_phone = (TextView) findViewById(R.id.tv_me_data_phone);
 
         sv_phone = (SwitchView) findViewById(R.id.sv_phone);
 
@@ -141,7 +148,73 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void initData() {
+        String cacheJson = CacheUtils.getCache(EditActivity.this, ConfigUtils.COLLEGE_URL + "xgzl");
+        if (!TextUtils.isEmpty(cacheJson)){
+            parseJson(cacheJson);
+        }
+        netWork();
+    }
 
+    private void netWork() {
+        String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
+        request.add("op","userinfo");
+        request.add("apptoken",apptoken);
+        request.add("uid",uid);
+        requestQueue.add(GET_BASEINFO_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                parseJson(info);
+                CacheUtils.saveCache(EditActivity.this,ConfigUtils.COLLEGE_URL + "xgzl",info);
+
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    private void parseJson(String info){
+        Gson gson = new Gson();
+        PersonHead personHeadBean = gson.fromJson(info, PersonHead.class);
+        String uicon = personHeadBean.getUicon(); //头像
+        String niceName = personHeadBean.getNiceName();//昵称
+        String phone = personHeadBean.getPhone();//手机号
+        boolean isShowPhone = personHeadBean.isIsShowPhone();//是否显示手机号
+        String autograph = personHeadBean.getAutograph();//个性签名
+        int sex = personHeadBean.getSex();//性别
+
+        glideRequest = Glide.with(this);
+        glideRequest.load(uicon)
+                .transform(new GlideCircleTransform(this)).into(iv_personal_icon);
+        tv_me_data_name.setText(niceName);
+        tv_me_data_phone.setText(phone);
+        tv_me_data_style.setText(autograph);
+
+        if (sex==0){
+            tv_me_data_sex.setText("女");
+        }else if (sex==1){
+            tv_me_data_sex.setText("男");
+        }else {
+            tv_me_data_sex.setText("未公开");
+        }
+        if (isShowPhone){
+            sv_phone.isOpened();
+        }
     }
 
     @Override
