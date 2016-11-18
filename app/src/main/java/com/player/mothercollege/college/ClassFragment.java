@@ -1,38 +1,35 @@
 package com.player.mothercollege.college;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.ClassBean;
+import com.player.mothercollege.college.details.BzzbDeatilsActivity;
 import com.player.mothercollege.college.details.FuMuClassFragment;
 import com.player.mothercollege.college.details.FuQiClassFragment;
 import com.player.mothercollege.college.details.XinLingClassFragment;
 import com.player.mothercollege.utils.ConfigUtils;
-import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
-import com.player.mothercollege.utils.ScreenUtils;
-import com.squareup.picasso.Picasso;
+import com.player.mothercollege.view.GlideImageLoader;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,22 +44,7 @@ public class ClassFragment extends Fragment{
     private static final int GET_CLASS_DATA = 001;
     private static final int DELYER_CLASS_BANDER = 002 ;
     //轮播图
-    private ViewPager vp_class_head;
-    private LinearLayout ll_class_dot;
-    private List<ImageView> ImageList = new ArrayList<>();
-    private List<ImageView> dots = new ArrayList<>();
-    private int lastPosition;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case DELYER_CLASS_BANDER:
-                    vp_class_head.setCurrentItem(vp_class_head.getCurrentItem()+1);
-                    handler.sendEmptyMessageDelayed(DELYER_CLASS_BANDER, 2000);
-                    break;
-            }
-        }
-    };
+    private Banner banner;
     //课堂
     private FrameLayout fl_class;
     private RadioGroup rg_college_class;
@@ -72,27 +54,8 @@ public class ClassFragment extends Fragment{
     private FuQiClassFragment fuqiFragment;
     private XinLingClassFragment xinlingFragment;
     private RequestQueue requestQueue;
-    private List<ClassBean.BanerBean> banerList = new ArrayList<>();
-    private ViewPager.OnPageChangeListener OnClassBanderListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    private List<ClassBean.BanerBean> banerBean = new ArrayList<>();
 
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-             //切换点
-            position = position % ImageList.size();
-            ll_class_dot.getChildAt(lastPosition).setBackgroundResource(R.mipmap.icon_recommend_banner_nomal);
-            ll_class_dot.getChildAt(position).setBackgroundResource(R.mipmap.icon_recommend_banner_sel);
-            lastPosition = position;
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-    };
     private RadioGroup.OnCheckedChangeListener ClassCheckListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -109,6 +72,13 @@ public class ClassFragment extends Fragment{
             }
         }
     };
+    private OnBannerClickListener ClassBannerListener = new OnBannerClickListener() {
+        @Override
+        public void OnBannerClick(int position) {
+            Intent intent = new Intent(getActivity(), BzzbDeatilsActivity.class);
+            startActivity(intent);
+        }
+    };
 
 
     @Nullable
@@ -123,8 +93,8 @@ public class ClassFragment extends Fragment{
 
     private void initView() {
         //轮播图
-        vp_class_head = (ViewPager) view.findViewById(R.id.vp_class_head);
-        ll_class_dot = (LinearLayout) view.findViewById(R.id.ll_class_dot);
+        banner = (Banner) view.findViewById(R.id.banner_class);
+
         //课堂
         rg_college_class = (RadioGroup) view.findViewById(R.id.rg_college_class);
         rb_fumu_class = (RadioButton) view.findViewById(R.id.rb_fumu_class);
@@ -185,88 +155,28 @@ public class ClassFragment extends Fragment{
     private void parseJson(String info){
         Gson gson = new Gson();
         ClassBean classBean = gson.fromJson(info, ClassBean.class);
-        banerList = classBean.getBaner();
+        banerBean = classBean.getBaner();
         //添加轮播图数据
         initBaner();
     }
 
+    private List<String> banerList = new ArrayList<>();
+
     private void initBaner() {
-        ImageList.clear();
-
-        if (banerList.size() == 2) {
-            for (int i = 0; i < banerList.size() + 2; i++) {
-                ImageView iv = new ImageView(getActivity());
-                Picasso.with(getActivity()).load(banerList.get((i >= 2) ? i - 2 : i).getImg())
-                        .resize(ScreenUtils.getWidth(getActivity()), DensityUtils.dip2px(getActivity(), 96))
-                        .centerCrop().into(iv);
-                ImageList.add(iv);
-            }
-        } else {
-
-            for (int i = 0; i < banerList.size(); i++) {
-                ImageView iv = new ImageView(getActivity());
-                Picasso.with(getActivity()).load(banerList.get(i).getImg())
-                        .resize(ScreenUtils.getWidth(getActivity()), DensityUtils.dip2px(getActivity(), 96))
-                        .centerCrop().into(iv);
-                ImageList.add(iv);
-            }
+        banerList.clear();
+        for (int i=0;i<banerBean.size();i++){
+            String img = banerBean.get(i).getImg();
+            banerList.add(img);
         }
-        //添加点
-        //添加下方点
-        addPoints();
-        //设置界面改变监听
-        vp_class_head.setOnPageChangeListener(OnClassBanderListener);
-        ClassBanderAdapter adapter = new ClassBanderAdapter();
-        vp_class_head.setAdapter(adapter);
-        handler.removeCallbacksAndMessages(null);
-        handler.sendEmptyMessageDelayed(DELYER_CLASS_BANDER,2000);
-    }
+        //设置图片加载器
+        banner.setImageLoader(new GlideImageLoader());
+        //设置图片集合
+        banner.setImages(banerList);
 
-    private void addPoints() {
-        ll_class_dot.removeAllViews();
-        dots.clear();
-        for (int i=0;i<banerList.size();i++){
-            //创建点，添加进线性布局
-            ImageView iv = new ImageView(getActivity());
-//            iv.setImageResource(R.mipmap.icon_recommend_banner_nomal);
-            //第0个不可用（红色）
-            if (i==0){
-                iv.setBackgroundResource(R.mipmap.icon_recommend_banner_sel);
-            }else {
-                iv.setBackgroundResource(R.mipmap.icon_recommend_banner_nomal);
-            }
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-2,-2);
-            params.leftMargin = 20;
-            ll_class_dot.addView(iv,params);
-            dots.add(iv);
-        }
-    }
+        banner.setIndicatorGravity(BannerConfig.CENTER);
 
-    private class ClassBanderAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return Integer.MAX_VALUE;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            position = position % ImageList.size();
-            View view = ImageList.get(position);
-            if (((ViewGroup)view.getParent())!=null){
-                ((ViewGroup)view.getParent()).removeAllViews();}
-            container.addView(view);
-            return view;
-        }
+        banner.setOnBannerClickListener(ClassBannerListener);
+        //banner设置方法全部调用完毕时最后调用
+        banner.start();
     }
 }

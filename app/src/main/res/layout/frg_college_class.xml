@@ -2,34 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_content"
     android:orientation="vertical">
-    <FrameLayout
+    <com.youth.banner.Banner
+        android:id="@+id/banner_class"
         android:layout_width="match_parent"
-        android:layout_height="96dp" >
+        android:layout_height="96dp"
+        app:indicator_width="25dp"
+        app:indicator_height="4.5dp"
+        android:layout_margin="8dp"
+        app:indicator_drawable_selected="@mipmap/icon_recommend_banner_sel"
+        app:indicator_drawable_unselected="@mipmap/icon_recommend_banner_nomal"/>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_class_head"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="18dp"
-            android:layout_gravity="bottom"
-            android:gravity="center"
-            android:orientation="horizontal" >
-            <LinearLayout
-                android:id="@+id/ll_class_dot"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal" >
-            </LinearLayout>
-        </RelativeLayout>
-    </FrameLayout>
     <RadioGroup
         android:id="@+id/rg_college_class"
         android:layout_width="match_parent"
