@@ -96,6 +96,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         }
     };
     private String uicon;
+    private String autograph;
 
     @Override
     public void setContentView() {
@@ -195,7 +196,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         String niceName = personHeadBean.getNiceName();//昵称
         String phone = personHeadBean.getPhone();//手机号
         boolean isShowPhone = personHeadBean.isIsShowPhone();//是否显示手机号
-        String autograph = personHeadBean.getAutograph();//个性签名
+        //个性签名
+        autograph = personHeadBean.getAutograph();
         int sex = personHeadBean.getSex();//性别
 
         glideRequest = Glide.with(this);
@@ -253,6 +255,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
             //修改个性签名
             case R.id.ll_me_data_style:
                 Intent intent2 = new Intent(EditActivity.this,StyleActivity.class);
+                intent2.putExtra("autograph",autograph);
                 startActivityForResult(intent2,005);
                 break;
             case R.id.sex_secret:

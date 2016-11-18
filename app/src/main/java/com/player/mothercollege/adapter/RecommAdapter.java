@@ -1,6 +1,7 @@
 package com.player.mothercollege.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/10/26.
+ * Created by Administrator on 2016/11/18.
  */
 public class RecommAdapter extends BaseAdapter{
 
@@ -46,35 +47,73 @@ public class RecommAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //服务器传回8个数据，前端需要分成四组
-
         View view = null;
-        RecommHolder rh = null;
+        RecommHolder holder = null;
         if (convertView==null){
             view = View.inflate(context, R.layout.item_college_recomm,null);
-            rh = new RecommHolder();
-            rh.iv_recomm_one = (ImageView) view.findViewById(R.id.iv_recomm_one);
-            rh.tv_recomm_title_one = (TextView) view.findViewById(R.id.tv_recomm_title_one);
-            rh.tv_recomm_editor_one = (TextView) view.findViewById(R.id.tv_recomm_editor_one);
-            rh.tv_recomm_viewCount_one = (TextView) view.findViewById(R.id.tv_recomm_viewCount_one);
-            view.setTag(rh);
+            holder = new RecommHolder();
+            holder.iv_recomm_title = (ImageView) view.findViewById(R.id.iv_recomm_title);
+            holder.iv_recomm = (ImageView) view.findViewById(R.id.iv_recomm);
+            holder.tv_recomm_type = (TextView) view.findViewById(R.id.tv_recomm_type);
+            holder.tv_recomm_title = (TextView) view.findViewById(R.id.tv_recomm_title);
+            holder.tv_recomm_date = (TextView) view.findViewById(R.id.tv_recomm_date);
+            holder.tv_recomm_money = (TextView) view.findViewById(R.id.tv_recomm_money);
+            holder.tv_recomm_editor = (TextView) view.findViewById(R.id.tv_recomm_editor);
+            holder.tv_recomm_viewCount = (TextView) view.findViewById(R.id.tv_recomm_viewCount);
+            view.setTag(holder);
         }else {
             view = convertView;
-            rh = (RecommHolder) view.getTag();
+            holder = (RecommHolder) view.getTag();
         }
+        String type = lists.get(position).getType();
+        //分类
+        type = jsonType(type, holder);
         Picasso.with(context).load(lists.get(position).getImg())
                 .resize(DensityUtils.dip2px(context,116f),DensityUtils.dip2px(context,63.5f))
-                .centerCrop().into(rh.iv_recomm_one);
-        rh.tv_recomm_title_one.setText(lists.get(position).getTitle());
-        rh.tv_recomm_editor_one.setText(lists.get(position).getEditor());
-        rh.tv_recomm_viewCount_one.setText(lists.get(position).getViewCount());
+                .centerCrop().into(holder.iv_recomm);
+        holder.tv_recomm_title.setText(lists.get(position).getTitle());
+        holder.tv_recomm_date.setText(lists.get(position).getDate());
+        String aState = lists.get(position).getAState();
+        if (aState.equals("0")){
+            holder.tv_recomm_money.setVisibility(View.GONE);
+        }else if (aState.equals("1")){
+            holder.tv_recomm_money.setText("限免");
+        }else if (aState.equals("2")){
+            holder.tv_recomm_money.setText("收费");
+        }
+        holder.tv_recomm_editor.setText(lists.get(position).getEditor());
+        holder.tv_recomm_editor.setTextColor(Color.RED);
+        holder.tv_recomm_viewCount.setText(lists.get(position).getViewCount()+"人已看");
         return view;
     }
 
-    class RecommHolder{
-        public ImageView iv_recomm_title,iv_recomm_one,iv_recomm_two;
-        public TextView tv_recomm_title,tv_recomm_title_one,tv_recomm_title_two,tv_recomm_xm_one,tv_recomm_xm_two,
-                tv_recomm_editor_one,tv_recomm_editor_two,tv_recomm_viewCount_one,tv_recomm_viewCount_two;
+    private String jsonType(String type, RecommHolder holder) {
+        //切割type
+        type = type.substring(0,2);
+        if (type.equals("a0")){
+            //读书
+            holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_readbook);
+            holder.tv_recomm_type.setText("读书");
+        }else if (type.equals("a1")){
+            //点播
+            holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_zhibo);
+            holder.tv_recomm_type.setText("直播");
+        }else if (type.equals("a2")){
+            //课堂
+            holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_class);
+            holder.tv_recomm_type.setText("课堂");
+        }else if (type.equals("a3")){
+            //原创
+            holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_yuanchuang);
+            holder.tv_recomm_type.setText("原创");
+        }
 
+        return type;
+    }
+
+
+    class RecommHolder{
+        private ImageView iv_recomm_title,iv_recomm;
+        private TextView tv_recomm_type,tv_recomm_title,tv_recomm_date,tv_recomm_money,tv_recomm_editor,tv_recomm_viewCount;
     }
 }

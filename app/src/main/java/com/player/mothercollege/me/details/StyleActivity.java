@@ -50,8 +50,8 @@ public class StyleActivity extends BaseActivity implements View.OnClickListener 
         et_me_style_content = (EditText) findViewById(R.id.et_me_style_content);
 
         //数据回显
-        String style = PrefUtils.getString(StyleActivity.this, "style", "");
-        et_me_style_content.setText(style);
+        String autograph = PrefUtils.getString(StyleActivity.this, "autograph", "");
+        et_me_style_content.setText(autograph);
     }
 
     @Override
