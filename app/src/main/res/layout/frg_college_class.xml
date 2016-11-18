@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg_content"
     android:orientation="vertical">
     <com.youth.banner.Banner
         android:id="@+id/banner_class"
@@ -21,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="33dp"
         android:gravity="center"
+        android:background="@color/white"
         android:orientation="horizontal">
         <RadioButton
             android:id="@+id/rb_fumu_class"

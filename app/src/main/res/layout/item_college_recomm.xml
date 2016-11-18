@@ -24,6 +24,7 @@
             android:textSize="17sp"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/ll_college_recomm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"

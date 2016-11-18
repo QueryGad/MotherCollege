@@ -23,6 +23,7 @@ import com.player.mothercollege.bean.PersonDynamicBean;
 import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.DateUtils;
 import com.player.mothercollege.utils.DensityUtils;
+import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.ScreenUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
 
@@ -80,7 +81,6 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
     @Override
     public void initListeners() {
         btn_back.setOnClickListener(this);
-        iv_invit_right.setOnClickListener(this);
     }
 
     @Override
@@ -164,9 +164,7 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
             case R.id.btn_back:
                 finish();
                 break;
-            case R.id.iv_invit_right:
-                //点击移动
-                break;
+
         }
     }
 
@@ -224,6 +222,7 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
             glideRequest = Glide.with(PersonDetailsActivity.this);
             glideRequest.load(trendsBean.getZlikes().get(position).getUicon())
                     .transform(new GlideCircleTransform(PersonDetailsActivity.this)).into(iv_person_zan);
+            MyLog.testLog("点击头像"+trendsBean.getZlikes().get(position).getUicon());
             iv_person_zan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

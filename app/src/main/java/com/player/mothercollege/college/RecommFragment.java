@@ -14,6 +14,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.adapter.RecommAdapter;
 import com.player.mothercollege.bean.RecommBean;
 import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideImageLoader;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
@@ -23,6 +24,7 @@ import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,12 @@ public class RecommFragment extends Fragment {
     private ListView lv_recomm;
     private RequestQueue requestQueue;
     private List<RecommBean.BanerBean> banerBean;
+    private OnBannerClickListener RecommBannerListener = new OnBannerClickListener() {
+        @Override
+        public void OnBannerClick(int position) {
+
+        }
+    };
 
     @Nullable
     @Override
@@ -58,9 +66,11 @@ public class RecommFragment extends Fragment {
     }
 
     private void netWork() {
+        String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
+        String uid = PrefUtils.getString(getActivity(), "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
-        request.add("apptoken","sdfae");
-        request.add("uid","null");
+        request.add("apptoken",apptoken);
+        request.add("uid",uid);
         request.add("op","tj");
         requestQueue.add(GET_RECOMM_DATA, request, new OnResponseListener<String>() {
             @Override
@@ -114,6 +124,8 @@ public class RecommFragment extends Fragment {
         banner.setImages(banerList);
 
         banner.setIndicatorGravity(BannerConfig.CENTER);
+
+        banner.setOnBannerClickListener(RecommBannerListener);
 
         //banner设置方法全部调用完毕时最后调用
         banner.start();
