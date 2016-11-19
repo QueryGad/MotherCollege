@@ -142,7 +142,8 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         tv_textdetails_viewCount.setText("浏览人数"+ readBookDetailsBean.getViewCount());
         tv_textdetails_zan.setText(readBookDetailsBean.getZlist().size()+"");
         tv_textdetails_comment.setText(readBookDetailsBean.getReviewCount());
-        initH5();
+        String content = readBookDetailsBean.getContent();
+        initH5(content);
         haveNoComment();
 
         int length = DensityUtils.dip2px(ReadBookDetailsActivity.this,15);
@@ -163,11 +164,11 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         gr_textdetails_head.setAdapter(adapter);
     }
 
-    private void initH5() {
+    private void initH5(String content) {
         WebSettings settings = web_textdetails.getSettings();
         settings.setJavaScriptEnabled(true);
         web_textdetails.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        web_textdetails.loadUrl("http://www.baidu.com");
+        web_textdetails.loadUrl(content);
         web_textdetails.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {

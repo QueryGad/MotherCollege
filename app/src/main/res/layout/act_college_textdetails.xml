@@ -2,9 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginRight="10dp"
+
     >
     <include
         android:id="@+id/include"
@@ -15,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_below="@id/include"
         android:textSize="16sp"
         android:textColor="#000"
@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_textdetails_title"
         android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:text="发布时间"/>
     <TextView
         android:id="@+id/tv_textdetails_viewCount"
@@ -33,19 +35,25 @@
         android:text="浏览人数"
         android:layout_alignTop="@+id/tv_textdetails_time"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_alignParentEnd="true" />
     <WebView
         android:id="@+id/web_textdetails"
         android:layout_width="match_parent"
         android:layout_marginTop="26dp"
         android:layout_below="@id/tv_textdetails_time"
-        android:layout_height="210dp"/>
+        android:layout_height="wrap_content"/>
     <LinearLayout
         android:id="@+id/ll_textdetails_comment"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_below="@id/web_textdetails"
         android:gravity="center_vertical|right"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -132,6 +140,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="3dp"
+        android:background="@color/bg_content"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -231,21 +240,21 @@
             android:layout_below="@+id/ll_invit_c"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="10dp"
             android:src="@mipmap/icon_kiss"
-            android:visibility="gone" />
+            android:visibility="gone"
+             />
 
         <TextView
             android:id="@+id/tv_textdetails_nocomment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/iv_persondetails_nocomment"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="35dp"
+            android:gravity="center"
+            android:layout_marginTop="95dp"
             android:text="留下想法再走吧！"
             android:textColor="#000"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:visibility="gone"/>
 
         <ListView
             android:id="@+id/lv_textdetails"

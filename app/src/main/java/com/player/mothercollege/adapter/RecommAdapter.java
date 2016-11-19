@@ -94,6 +94,7 @@ public class RecommAdapter extends BaseAdapter{
         return view;
     }
 
+    private int flag =0;
     private String jsonType(String type, RecommHolder holder, final String sid) {
         //切割type
         type = type.substring(0,2);
