@@ -101,7 +101,7 @@
         android:padding="10dp"
         android:layout_below="@id/view_activitydetails_3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="200dp"/>
     <LinearLayout
         android:id="@+id/ll_activitydetails_z"
         android:layout_width="match_parent"

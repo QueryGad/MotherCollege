@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -39,9 +38,6 @@ import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 
@@ -379,13 +375,14 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 .getExternalStorageDirectory().getAbsolutePath(), String
                 .valueOf(System.currentTimeMillis()));
         PrefUtils.setString(EditActivity.this,"imagePath",imagePath);
+        MyLog.testLog("图片路径:"+imagePath);
         String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
         String uid = PrefUtils.getString(EditActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","changeUserInfo");
         request.add("uid",uid);
-        request.add("ctype",uicon);
+        request.add("ctype","1");
         request.add("cvalue",imagePath);
         requestQueue.add(POST_IMAGEPATH_STATE, request, new OnResponseListener<String>() {
             @Override
@@ -398,22 +395,6 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("提交结果"+info);
-                try {
-                    JSONObject json = new JSONObject(info);
-                    String resultCode = json.getString("resultCode");
-                    int resultInt = Integer.parseInt(resultCode);
-                    if (resultInt==1001){
-                        Toast.makeText(EditActivity.this,"ctype 不在内定的参数范围.",Toast.LENGTH_SHORT).show();
-                    }else if (resultInt==1002){
-                        Toast.makeText(EditActivity.this,"提交的参数值不在规定的格式内或为空",Toast.LENGTH_SHORT).show();
-                    }else if (resultInt==5001){
-                        Toast.makeText(EditActivity.this,"服务器内部错误",Toast.LENGTH_SHORT).show();
-                    }else if (resultInt==1){
-                        Toast.makeText(EditActivity.this,"修改成功!",Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
             }
 
