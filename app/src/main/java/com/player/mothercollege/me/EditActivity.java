@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.PersonHead;
+import com.player.mothercollege.login.ForGetActivity;
 import com.player.mothercollege.me.details.AddressActivity;
 import com.player.mothercollege.me.details.AlterNameActivity;
 import com.player.mothercollege.me.details.StyleActivity;
@@ -58,6 +59,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout ll_me_data_sex;
     private LinearLayout ll_me_data_style;
     private LinearLayout ll_me_data_address;
+    private LinearLayout ll_me_data_pwd;
     private TextView tv_me_data_name;
     private TextView tv_me_data_sex;
     private TextView tv_me_data_style;
@@ -113,6 +115,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         ll_me_data_sex = (LinearLayout) findViewById(R.id.ll_me_data_sex);
         ll_me_data_style = (LinearLayout) findViewById(R.id.ll_me_data_style);
         ll_me_data_address = (LinearLayout) findViewById(R.id.ll_me_data_address);
+        ll_me_data_pwd = (LinearLayout) findViewById(R.id.ll_me_data_pwd);
 
         tv_me_data_name = (TextView) findViewById(R.id.tv_me_data_name);
         tv_me_data_sex = (TextView) findViewById(R.id.tv_me_data_sex);
@@ -140,6 +143,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         ll_me_data_sex.setOnClickListener(this);
         ll_me_data_style.setOnClickListener(this);
         ll_me_data_address.setOnClickListener(this);
+        ll_me_data_pwd.setOnClickListener(this);
         sv_phone.setOnStateChangedListener(SwitchButtonStateListener);
     }
 
@@ -271,6 +275,10 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 sex_index = 2;
                 PrefUtils.setInt(this,"sex_index",2);
                 alertDialog.dismiss();
+                break;
+            case R.id.ll_me_data_pwd:
+                Intent intent4 = new Intent(EditActivity.this, ForGetActivity.class);
+                startActivity(intent4);
                 break;
 
         }
