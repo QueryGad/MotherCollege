@@ -116,6 +116,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","userinfo");
         request.add("uid",uid);
+        request.add("toUid",uid);
         request.add("apptoken",apptoken);
         requestQueue.add(GET_HEADICON_DATA, request, new OnResponseListener<String>() {
             @Override

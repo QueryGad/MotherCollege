@@ -79,8 +79,8 @@ public class FansActivity extends BaseActivity implements View.OnClickListener {
 
     private void netWork() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
-        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         String uid = PrefUtils.getString(FansActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","myfans");
         request.add("uid",uid);
         request.add("lastIndex","0");

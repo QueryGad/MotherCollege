@@ -163,6 +163,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         request.add("op","userinfo");
         request.add("apptoken",apptoken);
         request.add("uid",uid);
+        request.add("toUid",uid);
         requestQueue.add(GET_BASEINFO_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

@@ -16,6 +16,7 @@ import com.player.mothercollege.college.details.BzzbDeatilsActivity;
 import com.player.mothercollege.college.details.OriginalDetailsActivity;
 import com.player.mothercollege.college.details.ReadBookDetailsActivity;
 import com.player.mothercollege.utils.DensityUtils;
+import com.player.mothercollege.utils.MyLog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -100,6 +101,7 @@ public class RecommAdapter extends BaseAdapter{
         type = type.substring(0,2);
         if (type.equals("a0")){
             //读书
+            MyLog.testLog("type:"+type);
             holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_readbook);
             holder.tv_recomm_type.setText("读书");
             holder.ll_college_recomm.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +111,7 @@ public class RecommAdapter extends BaseAdapter{
                     Intent intent = new Intent(context,ReadBookDetailsActivity.class);
                     intent.putExtra("sid",sid);
                     context.startActivity(intent);
+                    
                 }
             });
         }else if (type.equals("a1")){
