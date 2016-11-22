@@ -75,7 +75,8 @@ public class RecommAdapter extends BaseAdapter{
         String type = lists.get(position).getType();
         String sid = lists.get(position).getSid();
         //分类
-        type = jsonType(type, holder,sid);
+        type = jsonType(type, holder,sid,position);
+
         Picasso.with(context).load(lists.get(position).getImg())
                 .resize(DensityUtils.dip2px(context,116f),DensityUtils.dip2px(context,63.5f))
                 .centerCrop().into(holder.iv_recomm);
@@ -96,14 +97,20 @@ public class RecommAdapter extends BaseAdapter{
     }
 
     private int flag =0;
-    private String jsonType(String type, RecommHolder holder, final String sid) {
+    private String jsonType(String type, RecommHolder holder, final String sid,int position) {
         //切割type
         type = type.substring(0,2);
         if (type.equals("a0")){
             //读书
             MyLog.testLog("type:"+type);
-            holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_readbook);
-            holder.tv_recomm_type.setText("读书");
+            if (position==0){
+                holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_readbook);
+                holder.tv_recomm_type.setText("读书");
+            }else {
+                holder.iv_recomm_title.setVisibility(View.GONE);
+                holder.tv_recomm_type.setVisibility(View.GONE);
+            }
+
             holder.ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -111,13 +118,19 @@ public class RecommAdapter extends BaseAdapter{
                     Intent intent = new Intent(context,ReadBookDetailsActivity.class);
                     intent.putExtra("sid",sid);
                     context.startActivity(intent);
-                    
+
                 }
             });
         }else if (type.equals("a1")){
             //点播
-            holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_zhibo);
-            holder.tv_recomm_type.setText("直播");
+            if (position==2){
+                holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_zhibo);
+                holder.tv_recomm_type.setText("直播");
+            }else {
+                holder.iv_recomm_title.setVisibility(View.GONE);
+                holder.tv_recomm_type.setVisibility(View.GONE);
+            }
+
             holder.ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -129,8 +142,14 @@ public class RecommAdapter extends BaseAdapter{
             });
         }else if (type.equals("a2")){
             //课堂
-            holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_class);
-            holder.tv_recomm_type.setText("课堂");
+            if (position==4){
+                holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_class);
+                holder.tv_recomm_type.setText("课堂");
+            }else {
+                holder.iv_recomm_title.setVisibility(View.GONE);
+                holder.tv_recomm_type.setVisibility(View.GONE);
+            }
+
             holder.ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -142,8 +161,14 @@ public class RecommAdapter extends BaseAdapter{
             });
         }else if (type.equals("a3")){
             //原创
-            holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_yuanchuang);
-            holder.tv_recomm_type.setText("原创");
+            if (position==6){
+                holder.iv_recomm_title.setImageResource(R.mipmap.ic_college_yuanchuang);
+                holder.tv_recomm_type.setText("原创");
+            }else {
+                holder.iv_recomm_title.setVisibility(View.GONE);
+                holder.tv_recomm_type.setVisibility(View.GONE);
+            }
+
             holder.ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
