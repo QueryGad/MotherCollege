@@ -63,4 +63,5 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile files('libs/libammsdk.jar')
     compile 'com.youth.banner:banner:1.4.2'
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

@@ -33,7 +33,6 @@ public class MainActivity extends BaseActivity{
     @Override
     public void setContentView() {
        setContentView(R.layout.activity_main);
-
     }
 
     @Override
@@ -83,4 +82,5 @@ public class MainActivity extends BaseActivity{
     public void initData() {
 
     }
+
 }
