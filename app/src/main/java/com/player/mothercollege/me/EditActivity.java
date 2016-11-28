@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -33,6 +34,7 @@ import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.MyUtils;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
+import com.yolanda.nohttp.FileBinary;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -53,6 +55,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     private static final int POST_PHONE_STATE =001 ;
     private static final int POST_IMAGEPATH_STATE = 002;
     private static final int GET_BASEINFO_DATA = 003;
+    private static final int POST_UP = 004;
     private Button btn_back;
     private TextView tv_details_title;
     private LinearLayout ll_me_data_name;
@@ -374,19 +377,53 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    private AsyncTask asyncTask;
     private void uploadPic(Bitmap bitmap) {
         // 上传至服务器
         // ... 可以在这里把Bitmap转换成file，然后得到file的url，做文件上传操作
         // 注意这里得到的图片已经是圆形图片了
         // bitmap是没有做个圆形处理的，但已经被裁剪了
 
-        String imagePath = MyUtils.savePhoto(bitmap, Environment
+
+        final String imagePath = MyUtils.savePhoto(bitmap, Environment
                 .getExternalStorageDirectory().getAbsolutePath(), String
                 .valueOf(System.currentTimeMillis()));
         PrefUtils.setString(EditActivity.this,"imagePath",imagePath);
-        MyLog.testLog("图片路径:"+imagePath);
-        String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
+
+        final String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
         String uid = PrefUtils.getString(EditActivity.this, "uid", "null");
+        MyLog.testLog("imagePath:"+imagePath);
+
+        //先调图片上传接口
+        Request<String> request1 = NoHttp.createStringRequest(ConfigUtils.POST_PHOTO, RequestMethod.POST);
+        request1.add("apptoken",apptoken);
+        request1.add("imgFile",new FileBinary(new File(imagePath)));
+        request1.add("filetype","image");
+        request1.add("optype","101");
+        requestQueue.add(POST_UP, request1, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+
+        //再调修改头像接口
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","changeUserInfo");

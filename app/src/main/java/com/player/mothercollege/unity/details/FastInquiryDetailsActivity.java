@@ -1,11 +1,11 @@
 package com.player.mothercollege.unity.details;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -15,6 +15,7 @@ import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.FastDetailsAdapter;
 import com.player.mothercollege.bean.FastDetailsBean;
 import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.DateUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
@@ -124,7 +125,8 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
         glideRequest.load(fastDetailsBean.getUicon())
                 .transform(new GlideCircleTransform(FastInquiryDetailsActivity.this)).into(iv_fastdetails_me);
         tv_fastdetails_mename.setText(fastDetailsBean.getUnicename());
-        tv_fastdetails_metime.setText(fastDetailsBean.getDate());
+        String time = fastDetailsBean.getDate();
+        tv_fastdetails_metime.setText(DateUtils.getStandardDate(time));
         tv_fastdetails_viewCount.setText("浏览人数:"+fastDetailsBean.getViewCount());
         tv_fastdetails_questContent.setText(fastDetailsBean.getQusition());
         tv_fastdetails_num.setText(fastDetailsBean.getAnswer().size()+"条回答");
@@ -138,7 +140,9 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
                 finish();
                 break;
             case R.id.btn_fastdetails_answer://我来回答
-                Toast.makeText(FastInquiryDetailsActivity.this,"我要回答",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(FastInquiryDetailsActivity.this,MyAnswerActivity.class);
+                intent.putExtra("qid",qid);
+                startActivity(intent);
                 break;
         }
     }

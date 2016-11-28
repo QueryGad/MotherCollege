@@ -13,7 +13,9 @@ import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.player.mothercollege.R;
+import com.player.mothercollege.bean.ApptokenBean;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.MyUtils;
@@ -170,7 +172,10 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onSucceed(int what, Response<String> response) {
-                String apptoken = response.get();
+                String info = response.get();
+                Gson gson = new Gson();
+                ApptokenBean apptokenBean = gson.fromJson(info, ApptokenBean.class);
+                String apptoken = apptokenBean.getApptoken();
                 PrefUtils.setString(SplashActivity.this,"apptoken",apptoken);
                 MyLog.testLog("apptoken:"+apptoken);
             }

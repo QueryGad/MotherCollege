@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.player.mothercollege.R;
+import com.player.mothercollege.utils.DateUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
 
 import java.util.ArrayList;
@@ -65,7 +66,8 @@ public class FastDetailsAdapter extends BaseAdapter{
         glideRequest.load(lists.get(position).getUicon())
                 .transform(new GlideCircleTransform(context)).into(holder.iv_fastdetails_other);
         holder.tv_fastdetails_name.setText(lists.get(position).getUnicename());
-        holder.tv_fastdetails_time.setText(lists.get(position).getDate());
+        String time = lists.get(position).getDate();
+        holder.tv_fastdetails_time.setText(DateUtils.getStandardDate(time));
         holder.tv_fastdetails_content.setText(lists.get(position).getAnswer());
         return view;
     }

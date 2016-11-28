@@ -121,9 +121,11 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
             }
 
             for (int i = 0;i<photos.size();i++){
-                postImageArr.clear();
+//                postImageArr.clear();
                 String photoLocation = photos.get(i).toString();  //所选图片路径
-                String png = photoLocation.substring(photoLocation.length() - 3);//图片后缀名
+
+                String png = photoLocation.substring(photoLocation.lastIndexOf("."));
+                png = png.substring(1,png.length());
                 String location = ImagePostUtils.imageBASE64(photoLocation);//转换为64位编码格式的图片路径
                 String postImage = png+"|"+location;
                 postImageArr.add(postImage);
@@ -203,17 +205,29 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
     }
 
     private  void postMessage(String title,String content){
-        String imgs = null;
+        String imgs="";
         for (int i =0;i<postImageArr.size();i++){
             String img = postImageArr.get(i);
-            imgs =  img+"^";
+//            MyLog.testLog("单张图片:"+img);
+//            if (i==0){
+//                imgs = postImageArr.get(0);
+//            }else if (i>0){
+                imgs = imgs+(img+"^");
+//            }
+
         }
+
+        if (imgs!=null&&imgs.length()>0){
+            imgs = imgs.substring(0, imgs.length() - 1);
+        }
+        MyLog.testLog("最后:"+imgs);
         String apptoken = PrefUtils.getString(this, "apptoken", "");
         String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostTrend");
         request.add("uid",uid);
+//        request.add("uid","u1611130003");
         request.add("gid",groupId);
         request.add("title",title);
         request.add("content",content);
@@ -229,6 +243,7 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("帖子上传是否成功:"+info);
+                Toast.makeText(CirlePostMessageActivity.this,"发帖成功!",Toast.LENGTH_SHORT).show();
                 pd.dismiss();
                 //操作逻辑 上传成功后关闭编辑页面，刷新圈子显示发布
                 finish();

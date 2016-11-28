@@ -1,5 +1,6 @@
 package com.player.mothercollege.college;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +14,9 @@ import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.adapter.RecommAdapter;
 import com.player.mothercollege.bean.RecommBean;
+import com.player.mothercollege.college.details.BzzbDeatilsActivity;
 import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideImageLoader;
 import com.yolanda.nohttp.NoHttp;
@@ -38,11 +41,26 @@ public class RecommFragment extends Fragment {
     private View view;
     private ListView lv_recomm;
     private RequestQueue requestQueue;
-    private List<RecommBean.BanerBean> banerBean;
+    private List<RecommBean.BanerBean> banerBean = new ArrayList<>();
+    private List<Integer> rtypes = new ArrayList<>();
+    private List<String> sidBanner = new ArrayList<>();
     private OnBannerClickListener RecommBannerListener = new OnBannerClickListener() {
         @Override
         public void OnBannerClick(int position) {
-
+            int rtype = rtypes.get(position-1);
+            MyLog.testLog("rtype"+rtype);
+            String sid = sidBanner.get(position-1);
+            if (rtype==11||rtype==12){
+                //跳转直播页面 跳转课程
+                Intent intent1 = new Intent(getActivity(), BzzbDeatilsActivity.class);
+                intent1.putExtra("sid",sid);
+                startActivity(intent1);
+            }else if (rtype==13||rtype==14){
+                //读书  原创
+                Intent intent2 = new Intent(getActivity(), BzzbDeatilsActivity.class);
+                intent2.putExtra("sid",sid);
+                startActivity(intent2);
+            }
         }
     };
 
@@ -112,9 +130,15 @@ public class RecommFragment extends Fragment {
 
     private void initBaner() {
         banerList.clear();
+        rtypes.clear();
+        sidBanner.clear();
         for (int i=0;i<banerBean.size();i++){
             String img = banerBean.get(i).getImg();
             banerList.add(img);
+            String sid = banerBean.get(i).getSid();
+            sidBanner.add(sid);
+            int rtype = banerBean.get(i).getRtype();
+            rtypes.add(rtype);
         }
         View banerView = View.inflate(getActivity(),R.layout.head_college_recomm,null);
         Banner banner = (Banner) banerView.findViewById(R.id.banner);

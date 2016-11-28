@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.FastBean;
 import com.player.mothercollege.unity.details.FastInquiryDetailsActivity;
+import com.player.mothercollege.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,8 @@ public class FastInquiryAdapter extends BaseAdapter{
         }
 
         flh.tv_fastinquiry_title.setText(lists.get(position).getTitle());
-        flh.tv_fastinquiry_time.setText(lists.get(position).getDate());
+        String time = lists.get(position).getDate();
+        flh.tv_fastinquiry_time.setText(DateUtils.getStandardDate(time));
         flh.tv_fastinquiry_desc.setText(lists.get(position).getQusition());
         flh.tv_fastinquiry_conmment.setText(lists.size()+"");
         flh.tv_fastinquiry_daname.setText(lists.get(position).getUnicename()+":");

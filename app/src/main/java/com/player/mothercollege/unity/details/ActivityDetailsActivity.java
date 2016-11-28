@@ -1,5 +1,8 @@
 package com.player.mothercollege.unity.details;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +11,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -40,6 +45,7 @@ import java.util.List;
 public class ActivityDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int GET_ACTIVITYDITAILS = 001;
+    private static final int POST_APPLAY_DATA = 002;
     private Button btn_back;
     private TextView tv_details_title,tv_activitydetails_title,tv_activitydetails_time
             ,tv_activitydetails_address,tv_activitydetails_num
@@ -52,6 +58,9 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private RequestManager glideRequest;
     private int aid;
     private ActivityDetailsBean activityDetailsBean;
+    private ImageView iv_activitydetails_baoming;
+    private AlertDialog alertDialog;
+    private ProgressDialog pd;
 
     @Override
     public void setContentView() {
@@ -78,6 +87,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         gr_activitydetails_head = (GridView) findViewById(R.id.gr_activitydetails_head);
         iv_activitydetails_nocomment = (ImageView) findViewById(R.id.iv_activitydetails_nocomment);
         lv_activitydetails = (ListView) findViewById(R.id.lv_activitydetails);
+        iv_activitydetails_baoming = (ImageView) findViewById(R.id.iv_activitydetails_baoming);
 
         tv_details_title.setText("活动详情");
     }
@@ -85,6 +95,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     public void initListeners() {
         btn_back.setOnClickListener(this);
+        iv_activitydetails_baoming.setOnClickListener(this);
     }
 
     @Override
@@ -201,8 +212,79 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
             case R.id.btn_back:
                 finish();
                 break;
+            case R.id.iv_activitydetails_baoming:   //报名
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                View view = View.inflate(this,R.layout.alert_apply,null);
+                final EditText et_applay_name = (EditText) view.findViewById(R.id.et_applay_name);
+                final EditText et_applay_phone = (EditText) view.findViewById(R.id.et_applay_phone);
+                final EditText et_applay_join = (EditText) view.findViewById(R.id.et_applay_join);
+                final EditText et_applay_qq = (EditText) view.findViewById(R.id.et_applay_qq);
+                Button btn_applay_ok = (Button) view.findViewById(R.id.btn_applay_ok);
+                btn_applay_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String name = et_applay_name.getText().toString().trim();
+                        String phone = et_applay_phone.getText().toString().trim();
+                        String join = et_applay_join.getText().toString().trim();
+                        String qq = et_applay_qq.getText().toString().trim();
+                        if (TextUtils.isEmpty(name)||TextUtils.isEmpty(phone)||TextUtils.isEmpty(join)){
+                            Toast.makeText(ActivityDetailsActivity.this,"请补全您的个人信息!",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (TextUtils.isEmpty(qq)){
+                            qq = "null";
+                        }
+                        applayNetWork(name,phone,join,qq);
+                    }
+                });
+                builder.setView(view);
+                alertDialog = builder.show();
+//                alertDialog.setCancelable(false);
+                break;
         }
     }
+
+    private void applayNetWork(String name,String phone,String join,String qq) {
+        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
+        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.POST);
+        request.add("op","singUpActive");
+        request.add("apptoken",apptoken);
+        request.add("uid",uid);
+        request.add("aid",aid+"");
+        request.add("name",name);
+        request.add("phoneNo",phone);
+        request.add("joinCount",join);
+        request.add("qq",qq);
+        requestQueue.add(POST_APPLAY_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                pd = new ProgressDialog(ActivityDetailsActivity.this);
+                pd.show();
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("报名:"+info);
+                pd.dismiss();
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                pd.dismiss();
+                MyLog.testLog("onFailed");
+            }
+
+            @Override
+            public void onFinish(int what) {
+                pd.dismiss();
+                MyLog.testLog("onFinish");
+            }
+        });
+
+    }
+
 
     class DetailsConmmentAdapter extends BaseAdapter{
 
