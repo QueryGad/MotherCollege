@@ -16,7 +16,7 @@ import com.lzy.ninegrid.NineGridView;
 import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.PersonDynamicBean;
-import com.player.mothercollege.me.details.PersonDetailsActivity;
+import com.player.mothercollege.unity.details.HotArticleDetailsActivity;
 import com.player.mothercollege.utils.DateUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.ScreenUtils;
@@ -112,12 +112,12 @@ public class PersonAdapter extends BaseAdapter{
         ph.nineGrid.setGridSpacing(DensityUtils.dip2px(context,5));
         ph.nineGrid.setAdapter(new NineGridViewClickAdapter(context,imageInfo));
         //点击进入详情页面
-        final String uid = lists.get(position).getUid();
+        final String tid = lists.get(position).getTid();
         ph.ll_person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,PersonDetailsActivity.class);
-                intent.putExtra("tid",uid);
+                Intent intent = new Intent(context,HotArticleDetailsActivity.class);
+                intent.putExtra("tid",tid);
                 context.startActivity(intent);
             }
         });

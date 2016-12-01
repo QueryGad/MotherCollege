@@ -6,27 +6,30 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/10/26.
  */
-public class PersonDynamicBean implements Serializable{
+public class PersonDynamicBean {
     /**
-     * lastIndex : 6
-     * trends : [{"uid":"null1","ttype":1,"uicon":"http://121.42.31.133:8201/m/face/faA019[1].bmp","uniceName":"简单爱","datetime":"2016-10-31 14:26","title":"","content":"假作真时真亦假，真作假时假也真。真真假假难分解，假者自假真自真。回忆事情般般假，借假修真破迷津。由来富贵三更梦，何必楚楚苦用心。","from":"官方","uvipType":1,"pics":["http://121.42.31.133:8201/m/img/8.png"],"reviews":[{"uid":"SF3494","content":"你家宝宝真可爱","index":"0","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA053[1].bmp","unicename":"a~~Girls","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"这次活动感谢你的参与","index":"1","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA019[1].bmp","unicename":"柠檬香味","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"还是忍着点吧！","index":"2","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA066[1].bmp","unicename":"a~~Girls","date":"2016-11-09-03 22:09"}],"zlikes":[{"zindex":0,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA021[1].bmp","unicename":"a~~Girls"},{"zindex":1,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA053[1].bmp","unicename":"吊儿郎当"},{"zindex":2,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA089[1].bmp","unicename":"起航.."}],"viewCount":73},{"uid":"null1","ttype":1,"uicon":"http://121.42.31.133:8201/m/face/faA053[1].bmp","uniceName":"简单爱","datetime":"2016-10-31 14:26","title":"听张阿姨讲青春","content":"进入社会之后，才看清很多事，原来只要说出口的秘密，总有一天会人尽皆知，原来你忘不掉的人，可能对方早就想不起你了，原来给别人说的心里话，最后会变成笑话。闹过的情绪，自以为是的坚持都会败给现实，嘲笑自己多幼稚，有些事，不必说，有些人，不用等，若无能为力，那就顺其自然。","from":"圈子","uvipType":1,"pics":["http://121.42.31.133:8201/m/img/4.png"],"reviews":[{"uid":"SF3494","content":"哈哈","index":"0","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA065[1].bmp","unicename":"Agnes","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"还是忍着点吧！","index":"1","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA060[1].bmp","unicename":"听雨人生","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"我能联系到他，你私聊我","index":"2","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA041[1].bmp","unicename":"柠檬香味","date":"2016-11-09-03 22:09"}],"zlikes":[{"zindex":0,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA044[1].bmp","unicename":"中桃小鹿"},{"zindex":1,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA044[1].bmp","unicename":"吊儿郎当"},{"zindex":2,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA023[1].bmp","unicename":"Agnes"}],"viewCount":326},{"uid":"null1","ttype":1,"uicon":"http://121.42.31.133:8201/m/face/faA054[1].bmp","uniceName":"宝东","datetime":"2016-10-31 14:26","title":"","content":"总有那么一个地方，一个人，让你心动，留恋不已。总有那么一个人，一句对不起，让你心痛，刻骨铭心\u2026","from":"郑州","uvipType":1,"pics":["http://121.42.31.133:8201/m/img/3.png"],"reviews":[{"uid":"SF3494","content":"还是忍着点吧！","index":"0","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA069[1].bmp","unicename":"听雨人生","date":"2016-11-09-03 22:09"}],"zlikes":[{"zindex":0,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA009[1].bmp","unicename":"a~~Girls"},{"zindex":1,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA071[1].bmp","unicename":"a~~Girls"}],"viewCount":710},{"uid":"null1","ttype":1,"uicon":"http://121.42.31.133:8201/m/face/faA076[1].bmp","uniceName":"中桃小鹿","datetime":"2016-10-31 14:26","title":"","content":"上善若水： 做人如水，你高，我便退去，决不淹没你的优长；你低，我便涌来，决不暴露你的缺陷；你动，我便随行，决不撇下你的孤单；你静，我便长守，决不打扰你的安宁；你热，我便沸腾，决不妨碍你的热情；你冷，我便凝固，决不漠视你的寒冷。上善若水，从善如流，如水人生，随缘从众。","from":"圈子","uvipType":1,"pics":["http://121.42.31.133:8201/m/img/1.png","http://121.42.31.133:8201/m/img/8.png","http://121.42.31.133:8201/m/img/3.png"],"reviews":[{"uid":"SF3494","content":"你做的很好","index":"0","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA058[1].bmp","unicename":"听雨人生","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"你家宝宝真可爱","index":"1","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA098[1].bmp","unicename":"中桃小鹿","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"为什么只有我一个人在","index":"2","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA085[1].bmp","unicename":"宝东","date":"2016-11-09-03 22:09"}],"zlikes":[{"zindex":0,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA071[1].bmp","unicename":"Agnes"},{"zindex":1,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA018[1].bmp","unicename":"宝东"}],"viewCount":710},{"uid":"null1","ttype":1,"uicon":"http://121.42.31.133:8201/m/face/faA060[1].bmp","uniceName":"吊儿郎当","datetime":"2016-10-31 14:26","title":"第一期课程官方总结","content":"不要那么相信回忆，里面的那个人，不一定同样想你。所谓爱，就是当感觉、热情、浪漫统统拿掉之后，你仍然珍惜对方。不要总是估量自己在别人心中的地位，活在别人的眼神里，就等于失去了自我。走自己的路，做最好的自己。","from":"官方","uvipType":1,"pics":["http://121.42.31.133:8201/m/img/8.png","http://121.42.31.133:8201/m/img/5.png"],"reviews":[{"uid":"SF3494","content":"请问你的孩子多大了","index":"0","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA068[1].bmp","unicename":"柠檬香味","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"你家宝宝真可爱","index":"1","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA008[1].bmp","unicename":"a~~Girls","date":"2016-11-09-03 22:09"}],"zlikes":[{"zindex":0,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA061[1].bmp","unicename":"快乐就好"}],"viewCount":454},{"uid":"null1","ttype":1,"uicon":"http://121.42.31.133:8201/m/face/faA026[1].bmp","uniceName":"中桃小鹿","datetime":"2016-10-31 14:26","title":"","content":"你不要把自己的事情掏心掏肺地告诉别人，你知不知道，有些人，面前心连心，背后动脑筋。","from":"郑州","uvipType":0,"pics":["http://121.42.31.133:8201/m/img/4.png"],"reviews":[{"uid":"SF3494","content":"你写的东西正是我需要的","index":"0","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA068[1].bmp","unicename":"快乐就好","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"这次活动感谢你的参与","index":"1","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA033[1].bmp","unicename":"起航..","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"我能联系到他，你私聊我","index":"2","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA031[1].bmp","unicename":"柠檬香味","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"正能量~攒","index":"3","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA050[1].bmp","unicename":"听雨人生","date":"2016-11-09-03 22:09"}],"zlikes":[{"zindex":0,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA062[1].bmp","unicename":"柠檬香味"}],"viewCount":561}]
+     * lastIndex : 10
+     * trends : [{"content":"我在写内容","datetime":"2016-12-01 15:54:24","from":"90后的空间","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161201/20161201155423_87700.png"],"reviews":[],"tid":"89","title":"我是标题","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":31,"zlikes":[]},{"content":"你好啊","datetime":"2016-11-25 18:47:02","from":"家有宝宝","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125184702_42040.png","http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125184702_54541.png","http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125184702_68602.png"],"reviews":[],"tid":"64","title":"你好","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":0,"zlikes":[]},{"content":"我要做第一次测试！","datetime":"2016-11-25 15:09:08","from":"家有宝宝","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125150907_68050.jpg","http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125150907_99301.png","http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125150908_00862.jpg"],"reviews":[],"tid":"55","title":"我是安卓","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":0,"zlikes":[]},{"content":"被窝","datetime":"2016-11-25 10:54:16","from":"家有宝宝","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125105416_46550.png","http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125105416_79361.png","http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125105416_93422.png","http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125105416_94983.jpg"],"reviews":[],"tid":"42","title":"老爷子","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":0,"zlikes":[]},{"content":"控制","datetime":"2016-11-25 10:22:42","from":"家有宝宝","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125102242_19790.png"],"reviews":[],"tid":"41","title":"","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":0,"zlikes":[]},{"content":"俺有","datetime":"2016-11-25 10:16:35","from":"家有宝宝","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125101635_57160.jpg"],"reviews":[],"tid":"40","title":"Knoxville","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":0,"zlikes":[]},{"content":"mood","datetime":"2016-11-25 10:03:12","from":"家有宝宝","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125100312_14720.png"],"reviews":[],"tid":"39","title":"","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":0,"zlikes":[]},{"content":"alumni","datetime":"2016-11-25 10:02:23","from":"家有宝宝","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125100223_78780.jpg"],"reviews":[],"tid":"38","title":"","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":0,"zlikes":[]},{"content":"李玉婷","datetime":"2016-11-25 10:01:43","from":"家有宝宝","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125100143_60030.png"],"reviews":[],"tid":"37","title":"","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":0,"zlikes":[]},{"content":"恶魔与","datetime":"2016-11-25 09:53:33","from":"家有宝宝","hasKeep":false,"hasLike":false,"pics":["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161125/20161125095333_44410.png"],"reviews":[],"tid":"36","title":"","ttype":1,"uicon":"http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png","uid":"U00000001","uniceName":"哈阿啊","uvipType":0,"viewCount":0,"zlikes":[]}]
      */
 
     private int lastIndex;
     /**
-     * uid : null1
+     * content : 我在写内容
+     * datetime : 2016-12-01 15:54:24
+     * from : 90后的空间
+     * hasKeep : false
+     * hasLike : false
+     * pics : ["http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserTrends/20161201/20161201155423_87700.png"]
+     * reviews : []
+     * tid : 89
+     * title : 我是标题
      * ttype : 1
-     * uicon : http://121.42.31.133:8201/m/face/faA019[1].bmp
-     * uniceName : 简单爱
-     * datetime : 2016-10-31 14:26
-     * title :
-     * content : 假作真时真亦假，真作假时假也真。真真假假难分解，假者自假真自真。回忆事情般般假，借假修真破迷津。由来富贵三更梦，何必楚楚苦用心。
-     * from : 官方
-     * uvipType : 1
-     * pics : ["http://121.42.31.133:8201/m/img/8.png"]
-     * reviews : [{"uid":"SF3494","content":"你家宝宝真可爱","index":"0","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA053[1].bmp","unicename":"a~~Girls","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"这次活动感谢你的参与","index":"1","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA019[1].bmp","unicename":"柠檬香味","date":"2016-11-09-03 22:09"},{"uid":"SF3494","content":"还是忍着点吧！","index":"2","rid":4354,"rbodyID":0,"uicon":"http://121.42.31.133:8201/m/face/faA066[1].bmp","unicename":"a~~Girls","date":"2016-11-09-03 22:09"}]
-     * zlikes : [{"zindex":0,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA021[1].bmp","unicename":"a~~Girls"},{"zindex":1,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA053[1].bmp","unicename":"吊儿郎当"},{"zindex":2,"uid":"u48344","uicon":"http://121.42.31.133:8201/m/face/faA089[1].bmp","unicename":"起航.."}]
-     * viewCount : 73
+     * uicon : http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png
+     * uid : U00000001
+     * uniceName : 哈阿啊
+     * uvipType : 0
+     * viewCount : 31
+     * zlikes : []
      */
 
     private List<TrendsBean> trends;
@@ -47,45 +50,78 @@ public class PersonDynamicBean implements Serializable{
         this.trends = trends;
     }
 
-    public static class TrendsBean implements Serializable{
-        private String uid;
+    public static class TrendsBean {
+        private String content;
+        private String datetime;
+        private String from;
+        private boolean hasKeep;
+        private boolean hasLike;
+        private String tid;
+        private String title;
         private int ttype;
         private String uicon;
+        private String uid;
         private String uniceName;
-        private String datetime;
-        private String title;
-        private String content;
-        private String from;
         private int uvipType;
         private int viewCount;
         private List<String> pics;
-        /**
-         * uid : SF3494
-         * content : 你家宝宝真可爱
-         * index : 0
-         * rid : 4354
-         * rbodyID : 0
-         * uicon : http://121.42.31.133:8201/m/face/faA053[1].bmp
-         * unicename : a~~Girls
-         * date : 2016-11-09-03 22:09
-         */
-
         private List<ReviewsBean> reviews;
-        /**
-         * zindex : 0
-         * uid : u48344
-         * uicon : http://121.42.31.133:8201/m/face/faA021[1].bmp
-         * unicename : a~~Girls
-         */
-
         private List<ZlikesBean> zlikes;
 
-        public String getUid() {
-            return uid;
+        public String getContent() {
+            return content;
         }
 
-        public void setUid(String uid) {
-            this.uid = uid;
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getDatetime() {
+            return datetime;
+        }
+
+        public void setDatetime(String datetime) {
+            this.datetime = datetime;
+        }
+
+        public String getFrom() {
+            return from;
+        }
+
+        public void setFrom(String from) {
+            this.from = from;
+        }
+
+        public boolean isHasKeep() {
+            return hasKeep;
+        }
+
+        public void setHasKeep(boolean hasKeep) {
+            this.hasKeep = hasKeep;
+        }
+
+        public boolean isHasLike() {
+            return hasLike;
+        }
+
+        public void setHasLike(boolean hasLike) {
+            this.hasLike = hasLike;
+        }
+
+        public String getTid() {
+            return tid;
+        }
+
+        public void setTid(String tid) {
+            this.tid = tid;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
         }
 
         public int getTtype() {
@@ -104,44 +140,20 @@ public class PersonDynamicBean implements Serializable{
             this.uicon = uicon;
         }
 
+        public String getUid() {
+            return uid;
+        }
+
+        public void setUid(String uid) {
+            this.uid = uid;
+        }
+
         public String getUniceName() {
             return uniceName;
         }
 
         public void setUniceName(String uniceName) {
             this.uniceName = uniceName;
-        }
-
-        public String getDatetime() {
-            return datetime;
-        }
-
-        public void setDatetime(String datetime) {
-            this.datetime = datetime;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public String getFrom() {
-            return from;
-        }
-
-        public void setFrom(String from) {
-            this.from = from;
         }
 
         public int getUvipType() {
@@ -184,7 +196,7 @@ public class PersonDynamicBean implements Serializable{
             this.zlikes = zlikes;
         }
 
-        public static class ReviewsBean implements Serializable{
+        public static class ReviewsBean implements Serializable {
             private String uid;
             private String content;
             private String index;
@@ -298,4 +310,5 @@ public class PersonDynamicBean implements Serializable{
             }
         }
     }
+
 }
