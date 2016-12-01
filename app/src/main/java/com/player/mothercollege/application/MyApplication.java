@@ -8,10 +8,13 @@ import android.widget.ImageView;
 import com.lzy.ninegrid.NineGridView;
 import com.player.mothercollege.R;
 import com.squareup.picasso.Picasso;
+import com.tencent.smtt.sdk.QbSdk;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.yolanda.nohttp.NoHttp;
+
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by Administrator on 2016/10/24.
@@ -31,6 +34,17 @@ public class MyApplication extends Application{
         NineGridView.setImageLoader(new PicassoImageLoader());
         UMShareAPI.get(this);
         Config.REDIRECT_URL = "http://sns.whalecloud.com/sina2/callback";
+        initX5();
+        initJPush();
+    }
+
+    private void initJPush() {
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+    }
+
+    private void initX5() {
+        QbSdk.initX5Environment(this,null);
     }
 
     /** Picasso 加载 */

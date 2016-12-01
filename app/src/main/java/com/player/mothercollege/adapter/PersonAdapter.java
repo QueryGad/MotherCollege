@@ -112,12 +112,12 @@ public class PersonAdapter extends BaseAdapter{
         ph.nineGrid.setGridSpacing(DensityUtils.dip2px(context,5));
         ph.nineGrid.setAdapter(new NineGridViewClickAdapter(context,imageInfo));
         //点击进入详情页面
+        final String uid = lists.get(position).getUid();
         ph.ll_person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,PersonDetailsActivity.class);
-                PersonDynamicBean.TrendsBean trendsBean = lists.get(position);
-                intent.putExtra("trendsBean",trendsBean);
+                intent.putExtra("tid",uid);
                 context.startActivity(intent);
             }
         });

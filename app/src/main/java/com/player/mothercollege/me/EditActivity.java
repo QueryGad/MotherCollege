@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.PersonHead;
+import com.player.mothercollege.bean.PostPhotoBean;
 import com.player.mothercollege.login.ForGetActivity;
 import com.player.mothercollege.me.details.AddressActivity;
 import com.player.mothercollege.me.details.AlterNameActivity;
@@ -204,9 +205,14 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         autograph = personHeadBean.getAutograph();
         int sex = personHeadBean.getSex();//性别
 
-        glideRequest = Glide.with(this);
-        glideRequest.load(uicon)
-                .transform(new GlideCircleTransform(this)).into(iv_personal_icon);
+        if (uicon==null){
+            iv_personal_icon.setImageResource(R.mipmap.head_me_nor);
+        }else {
+            glideRequest = Glide.with(this);
+            glideRequest.load(uicon)
+                    .transform(new GlideCircleTransform(this)).into(iv_personal_icon);
+        }
+
         tv_me_data_name.setText(niceName);
         tv_me_data_phone.setText(phone);
         tv_me_data_style.setText(autograph);
@@ -391,7 +397,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         PrefUtils.setString(EditActivity.this,"imagePath",imagePath);
 
         final String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(EditActivity.this, "uid", "null");
+        final String uid = PrefUtils.getString(EditActivity.this, "uid", "null");
         MyLog.testLog("imagePath:"+imagePath);
 
         //先调图片上传接口
@@ -400,6 +406,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         request1.add("imgFile",new FileBinary(new File(imagePath)));
         request1.add("filetype","image");
         request1.add("optype","101");
+        request1.add("uid",uid);
         requestQueue.add(POST_UP, request1, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -409,7 +416,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
-
+                MyLog.testLog("上传图片接口:"+info);
+                parseJsonPostPhoto(info,apptoken,uid);
             }
 
             @Override
@@ -423,37 +431,48 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
             }
         });
 
-        //再调修改头像接口
-        Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
-        request.add("apptoken",apptoken);
-        request.add("op","changeUserInfo");
-        request.add("uid",uid);
-        request.add("ctype","1");
-        request.add("cvalue",imagePath);
-        requestQueue.add(POST_IMAGEPATH_STATE, request, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
-                pd = new ProgressDialog(EditActivity.this);
-                pd.show();
-            }
 
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                String info = response.get();
-                MyLog.testLog("提交结果"+info);
+    }
 
-            }
+    private void parseJsonPostPhoto(String info,String apptoken,String uid) {
+        Gson gson = new Gson();
+        PostPhotoBean postPhotoBean = gson.fromJson(info, PostPhotoBean.class);
+        String dbUrl = postPhotoBean.getDbUrl();
+        String displayUrl = postPhotoBean.getDisplayUrl();
+        boolean success = postPhotoBean.isSuccess();
+        if (success){
+            //再调修改头像接口
+            Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
+            request.add("apptoken",apptoken);
+            request.add("op","changeUserInfo");
+            request.add("uid",uid);
+            request.add("ctype","1");
+            request.add("cvalue",dbUrl);
+            requestQueue.add(POST_IMAGEPATH_STATE, request, new OnResponseListener<String>() {
+                @Override
+                public void onStart(int what) {
+                    pd = new ProgressDialog(EditActivity.this);
+                    pd.show();
+                }
 
-            @Override
-            public void onFailed(int what, Response<String> response) {
+                @Override
+                public void onSucceed(int what, Response<String> response) {
+                    String info = response.get();
+                    MyLog.testLog("提交结果"+info);
 
-            }
+                }
 
-            @Override
-            public void onFinish(int what) {
-                 pd.dismiss();
-            }
-        });
+                @Override
+                public void onFailed(int what, Response<String> response) {
+
+                }
+
+                @Override
+                public void onFinish(int what) {
+                    pd.dismiss();
+                }
+            });
+        }
     }
 
     private String StrToBinstr(String imagePath) {

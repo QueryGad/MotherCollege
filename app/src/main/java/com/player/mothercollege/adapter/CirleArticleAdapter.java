@@ -17,7 +17,7 @@ import com.lzy.ninegrid.NineGridView;
 import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.CirleArticleBean;
-import com.player.mothercollege.me.details.CirleArticleDetailsActivity;
+import com.player.mothercollege.unity.details.HotArticleDetailsActivity;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.utils.ScreenUtils;
@@ -126,13 +126,13 @@ public class CirleArticleAdapter extends BaseAdapter{
                 Toast.makeText(context,"我把我的帖子删了",Toast.LENGTH_SHORT).show();
             }
         });
+        final String tid = lists.get(position).getTid();
         //点击进入详情页面
         holder.ll_cirlearticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,CirleArticleDetailsActivity.class);
-                CirleArticleBean.TrendsBean trendsBean = lists.get(position);
-                intent.putExtra("trendsBean",trendsBean);
+                Intent intent = new Intent(context,HotArticleDetailsActivity.class);
+                intent.putExtra("tid",tid);
                 context.startActivity(intent);
             }
         });

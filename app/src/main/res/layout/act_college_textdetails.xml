@@ -39,7 +39,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_alignParentEnd="true" />
-    <WebView
+    <com.tencent.smtt.sdk.WebView
         android:id="@+id/web_textdetails"
         android:layout_width="match_parent"
         android:layout_marginTop="26dp"
@@ -194,7 +194,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="23dp"
-                android:src="@drawable/tab_selector_favour" />
+                android:src="@mipmap/tab_favour" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -214,7 +214,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="23dp"
-                android:src="@drawable/tab_selector_collect" />
+                android:src="@mipmap/tab_collect" />
 
             <TextView
                 android:layout_width="wrap_content"

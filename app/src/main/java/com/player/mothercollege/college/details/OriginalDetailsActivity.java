@@ -1,18 +1,22 @@
 package com.player.mothercollege.college.details;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +32,9 @@ import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -60,6 +67,9 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     public void setContentView() {
        setContentView(R.layout.act_college_textdetails);
         requestQueue = NoHttp.newRequestQueue();
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);//（这个对宿主没什么影响，建议声明）
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE|WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     @Override
@@ -89,10 +99,46 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     public void initListeners() {
         btn_back.setOnClickListener(this);
-        ll_textdeatials_share.setOnClickListener(this);
+        ll_textdeatials_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showShareDialog();
+            }
+        });
         ll_textdeatials_comment.setOnClickListener(this);
         ll_textdeatials_zan.setOnClickListener(this);
         ll_textdeatials_collect.setOnClickListener(this);
+    }
+
+    private Dialog dialog;
+
+    private void showShareDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_share, null);
+        // 设置style 控制默认dialog带来的边距问题 
+        dialog = new Dialog(this, R.style.common_dialog);
+        dialog.setContentView(view);
+        dialog.show();
+        RelativeLayout pengyou = (RelativeLayout) view.findViewById(R.id.view_share_pengyou);
+        RelativeLayout wechat = (RelativeLayout) view.findViewById(R.id.view_share_wechat);
+        RelativeLayout sina = (RelativeLayout) view.findViewById(R.id.view_share_sina);
+        RelativeLayout space = (RelativeLayout) view.findViewById(R.id.view_share_space);
+        RelativeLayout qq = (RelativeLayout) view.findViewById(R.id.view_share_qq);
+        RelativeLayout frend = (RelativeLayout) view.findViewById(R.id.view_share_frend);
+        Button btn_canle = (Button) view.findViewById(R.id.btn_canle);
+        pengyou.setOnClickListener(this);
+        wechat.setOnClickListener(this);
+        sina.setOnClickListener(this);
+        space.setOnClickListener(this);
+        qq.setOnClickListener(this);
+        frend.setOnClickListener(this);
+        btn_canle.setOnClickListener(this);
+        // 设置相关位置，一定要在 show()之后  
+        Window window = dialog.getWindow();
+        window.getDecorView().setPadding(0,0,0,0);
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.gravity = Gravity.BOTTOM;
+        window.setAttributes(params);
     }
 
     @Override
@@ -142,7 +188,10 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
         tv_textdetails_viewCount.setText("浏览人数"+ readBookDetailsBean.getViewCount());
         tv_textdetails_zan.setText(readBookDetailsBean.getZlist().size()+"");
         tv_textdetails_comment.setText(readBookDetailsBean.getReviewCount());
-        initH5();
+        String hasLike = readBookDetailsBean.getHasLike();
+        orHasLike(hasLike);
+        String content = readBookDetailsBean.getContent();
+        initH5(content);
         haveNoComment();
 
         int length = DensityUtils.dip2px(OriginalDetailsActivity.this,15);
@@ -163,11 +212,21 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
         gr_textdetails_head.setAdapter(adapter);
     }
 
-    private void initH5() {
+    private void orHasLike(String hasLike) {
+        if (hasLike.equals("true")){
+            //已点赞
+
+        }else {
+            //未点赞
+
+        }
+    }
+
+    private void initH5(String content) {
         WebSettings settings = web_textdetails.getSettings();
         settings.setJavaScriptEnabled(true);
         web_textdetails.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        web_textdetails.loadUrl("http://www.baidu.com");
+        web_textdetails.loadUrl(content);
         web_textdetails.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -199,9 +258,6 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
             case R.id.btn_back:
                 finish();
                 break;
-            case R.id.ll_textdeatials_share:
-                Toast.makeText(OriginalDetailsActivity.this,"分享",Toast.LENGTH_SHORT).show();
-                break;
             case R.id.ll_textdeatials_comment:
                 Toast.makeText(OriginalDetailsActivity.this,"评论",Toast.LENGTH_SHORT).show();
                 break;
@@ -210,6 +266,27 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.ll_textdeatials_collect:
                 Toast.makeText(OriginalDetailsActivity.this,"收藏",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.view_share_pengyou:
+                Toast.makeText(OriginalDetailsActivity.this,"朋友圈",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.view_share_wechat:
+                Toast.makeText(OriginalDetailsActivity.this,"微信",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.view_share_sina:
+                Toast.makeText(OriginalDetailsActivity.this,"新浪",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.view_share_space:
+                Toast.makeText(OriginalDetailsActivity.this,"QQ空间",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.view_share_qq:
+                Toast.makeText(OriginalDetailsActivity.this,"QQ",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.view_share_frend:
+                Toast.makeText(OriginalDetailsActivity.this,"母亲大学堂",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_canle:
+                dialog.dismiss();
                 break;
         }
     }

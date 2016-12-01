@@ -126,5 +126,9 @@
         <item name="actionBarSize">@dimen/actionBarSize</item>
         <item name="colorPrimaryDark">#F33C3E</item>
     </style>
+    <style name="common_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
 </resources>

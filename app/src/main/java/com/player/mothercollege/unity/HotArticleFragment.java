@@ -58,7 +58,6 @@ public class HotArticleFragment extends Fragment{
     private void netWork() {
         String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
         String uid = PrefUtils.getString(getActivity(), "uid", "null");
-        MyLog.testLog("uid:"+uid);
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("op","retie");
