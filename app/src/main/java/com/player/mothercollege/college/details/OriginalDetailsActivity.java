@@ -62,6 +62,7 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     private WebView web_textdetails;
     private ListView lv_details;
     private String content;
+    private ImageView iv_persondeatials_zan;
 
     @Override
     public void setContentView() {
@@ -81,6 +82,8 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
         ll_textdeatials_comment = (LinearLayout) findViewById(R.id.ll_persondeatials_comment);
         ll_textdeatials_zan = (LinearLayout) findViewById(R.id.ll_persondeatials_zan);
         ll_textdeatials_collect = (LinearLayout) findViewById(R.id.ll_persondeatials_collect);
+
+        iv_persondeatials_zan = (ImageView) findViewById(R.id.iv_persondeatials_zan);
 
         tv_details_title.setText("详情");
     }
@@ -172,6 +175,12 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     private void parseJson(String info){
         Gson gson = new Gson();
         readBookDetailsBean = gson.fromJson(info, ReadBookDetailsBean.class);
+        String hasLike = readBookDetailsBean.getHasLike();
+        if (hasLike.equals("true")){
+            iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
+        }else {
+            iv_persondeatials_zan.setImageResource(R.mipmap.tab_favour);
+        }
         initHead();
         OriginalReveiwAdapter adapter = new OriginalReveiwAdapter(OriginalDetailsActivity.this,readBookDetailsBean.getReveiw());
         lv_details.setAdapter(adapter);
@@ -230,7 +239,7 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
-
+    private boolean orZan=true;
 
     @Override
     public void onClick(View v) {
@@ -242,7 +251,15 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                 Toast.makeText(OriginalDetailsActivity.this,"评论",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.ll_persondeatials_zan:
-                Toast.makeText(OriginalDetailsActivity.this,"赞",Toast.LENGTH_SHORT).show();
+                if (orZan){
+                    iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
+                    Toast.makeText(OriginalDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
+                    orZan = false;
+                }else {
+                    iv_persondeatials_zan.setImageResource(R.mipmap.tab_favour);
+                    Toast.makeText(OriginalDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                    orZan = true;
+                }
                 break;
             case R.id.ll_persondeatials_collect:
                 Toast.makeText(OriginalDetailsActivity.this,"收藏",Toast.LENGTH_SHORT).show();
