@@ -2,7 +2,6 @@ package com.player.mothercollege.college.details;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,6 +24,7 @@ import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
+import com.player.mothercollege.adapter.OriginalReveiwAdapter;
 import com.player.mothercollege.bean.ReadBookDetailsBean;
 import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.ConfigUtils;
@@ -35,14 +35,16 @@ import com.player.mothercollege.view.GlideCircleTransform;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.utils.Log;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
-
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/11/2.
@@ -51,25 +53,20 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
 
     private static final int GET_TEXTDETAILS_DATA = 001;
     private Button btn_back;
-    private TextView tv_details_title,tv_textdetails_title,tv_textdetails_time,
-            tv_textdetails_viewCount,tv_textdetails_nocomment,tv_textdetails_zan,tv_textdetails_comment;
-    private WebView web_textdetails;
-    private GridView gr_textdetails_head;
-    private ListView lv_textdetails;
-    private ImageView iv_textdetails_nocomment;
+    private TextView tv_details_title;
     private LinearLayout ll_textdeatials_share,ll_textdeatials_comment,ll_textdeatials_zan,ll_textdeatials_collect;
     private String sid;
     private RequestQueue requestQueue;
     private ReadBookDetailsBean readBookDetailsBean;
     private RequestManager glideRequest;
+    private WebView web_textdetails;
+    private ListView lv_details;
+    private String content;
 
     @Override
     public void setContentView() {
        setContentView(R.layout.act_college_textdetails);
         requestQueue = NoHttp.newRequestQueue();
-        getWindow().setFormat(PixelFormat.TRANSLUCENT);//（这个对宿主没什么影响，建议声明）
-        getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE|WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     @Override
@@ -78,20 +75,12 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
 
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
-        tv_textdetails_title = (TextView) findViewById(R.id.tv_textdetails_title);
-        tv_textdetails_time = (TextView) findViewById(R.id.tv_textdetails_time);
-        tv_textdetails_viewCount = (TextView) findViewById(R.id.tv_textdetails_viewCount);
-        tv_textdetails_nocomment = (TextView) findViewById(R.id.tv_textdetails_nocomment);
-        tv_textdetails_zan = (TextView) findViewById(R.id.tv_textdetails_zan);
-        tv_textdetails_comment = (TextView) findViewById(R.id.tv_textdetails_comment);
-        web_textdetails = (WebView) findViewById(R.id.web_textdetails);
-        gr_textdetails_head = (GridView) findViewById(R.id.gr_textdetails_head);
-        lv_textdetails = (ListView) findViewById(R.id.lv_textdetails);
-        iv_textdetails_nocomment = (ImageView) findViewById(R.id.iv_textdetails_nocomment);
-        ll_textdeatials_share = (LinearLayout) findViewById(R.id.ll_textdeatials_share);
-        ll_textdeatials_comment = (LinearLayout) findViewById(R.id.ll_textdeatials_comment);
-        ll_textdeatials_zan = (LinearLayout) findViewById(R.id.ll_textdeatials_zan);
-        ll_textdeatials_collect = (LinearLayout) findViewById(R.id.ll_textdeatials_collect);
+        lv_details = (ListView) findViewById(R.id.lv_details);
+
+        ll_textdeatials_share = (LinearLayout) findViewById(R.id.ll_persondeatials_share);
+        ll_textdeatials_comment = (LinearLayout) findViewById(R.id.ll_persondeatials_comment);
+        ll_textdeatials_zan = (LinearLayout) findViewById(R.id.ll_persondeatials_zan);
+        ll_textdeatials_collect = (LinearLayout) findViewById(R.id.ll_persondeatials_collect);
 
         tv_details_title.setText("详情");
     }
@@ -183,16 +172,28 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     private void parseJson(String info){
         Gson gson = new Gson();
         readBookDetailsBean = gson.fromJson(info, ReadBookDetailsBean.class);
+        initHead();
+        OriginalReveiwAdapter adapter = new OriginalReveiwAdapter(OriginalDetailsActivity.this,readBookDetailsBean.getReveiw());
+        lv_details.setAdapter(adapter);
+    }
+
+    private void initHead() {
+        View view = View.inflate(OriginalDetailsActivity.this,R.layout.head_college_original,null);
+        TextView tv_textdetails_title = (TextView) view.findViewById(R.id.tv_textdetails_title);
+        TextView tv_textdetails_time = (TextView) view.findViewById(R.id.tv_textdetails_time);
+        TextView tv_textdetails_viewCount = (TextView) view.findViewById(R.id.tv_textdetails_viewCount);
+        TextView tv_textdetails_zan = (TextView) view.findViewById(R.id.tv_textdetails_zan);
+        TextView tv_textdetails_comment = (TextView) view.findViewById(R.id.tv_textdetails_comment);
+        GridView gr_textdetails_head = (GridView) view.findViewById(R.id.gr_textdetails_head);
+        web_textdetails = (WebView) view.findViewById(R.id.web_textdetails);
+
         tv_textdetails_title.setText(readBookDetailsBean.getTitle());
-        tv_textdetails_time.setText("发布时间:"+ readBookDetailsBean.getDate());
-        tv_textdetails_viewCount.setText("浏览人数"+ readBookDetailsBean.getViewCount());
+        tv_textdetails_time.setText("发布时间:"+readBookDetailsBean.getDate());
+        tv_textdetails_viewCount.setText("浏览人数:"+readBookDetailsBean.getViewCount());
         tv_textdetails_zan.setText(readBookDetailsBean.getZlist().size()+"");
-        tv_textdetails_comment.setText(readBookDetailsBean.getReviewCount());
-        String hasLike = readBookDetailsBean.getHasLike();
-        orHasLike(hasLike);
-        String content = readBookDetailsBean.getContent();
+        tv_textdetails_comment.setText(readBookDetailsBean.getReveiw().size()+"");
+        content = readBookDetailsBean.getContent();
         initH5(content);
-        haveNoComment();
 
         int length = DensityUtils.dip2px(OriginalDetailsActivity.this,15);
         DisplayMetrics dm = new DisplayMetrics();
@@ -210,20 +211,13 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
 
         TextDetailsAdapter adapter = new TextDetailsAdapter();
         gr_textdetails_head.setAdapter(adapter);
+
+        lv_details.addHeaderView(view);
     }
 
-    private void orHasLike(String hasLike) {
-        if (hasLike.equals("true")){
-            //已点赞
-
-        }else {
-            //未点赞
-
-        }
-    }
 
     private void initH5(String content) {
-        WebSettings settings = web_textdetails.getSettings();
+    WebSettings settings = web_textdetails.getSettings();
         settings.setJavaScriptEnabled(true);
         web_textdetails.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         web_textdetails.loadUrl(content);
@@ -236,20 +230,6 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
-    private void haveNoComment() {
-        List<ReadBookDetailsBean.ReveiwBean> reveiwList = readBookDetailsBean.getReveiw();
-        if (reveiwList.size()==0){
-            iv_textdetails_nocomment.setVisibility(View.VISIBLE);
-            tv_textdetails_nocomment.setVisibility(View.VISIBLE);
-            lv_textdetails.setVisibility(View.GONE);
-        }else {
-            iv_textdetails_nocomment.setVisibility(View.GONE);
-            tv_textdetails_nocomment.setVisibility(View.GONE);
-            lv_textdetails.setVisibility(View.VISIBLE);
-            DetailsConmmentAdapter adapter = new DetailsConmmentAdapter();
-            lv_textdetails.setAdapter(adapter);
-        }
-    }
 
 
     @Override
@@ -258,29 +238,44 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
             case R.id.btn_back:
                 finish();
                 break;
-            case R.id.ll_textdeatials_comment:
+            case R.id.ll_persondeatials_comment:
                 Toast.makeText(OriginalDetailsActivity.this,"评论",Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.ll_textdeatials_zan:
+            case R.id.ll_persondeatials_zan:
                 Toast.makeText(OriginalDetailsActivity.this,"赞",Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.ll_textdeatials_collect:
+            case R.id.ll_persondeatials_collect:
                 Toast.makeText(OriginalDetailsActivity.this,"收藏",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.view_share_pengyou:
-                Toast.makeText(OriginalDetailsActivity.this,"朋友圈",Toast.LENGTH_SHORT).show();
+                new ShareAction(OriginalDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
                 break;
             case R.id.view_share_wechat:
-                Toast.makeText(OriginalDetailsActivity.this,"微信",Toast.LENGTH_SHORT).show();
+                new ShareAction(OriginalDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
                 break;
             case R.id.view_share_sina:
-                Toast.makeText(OriginalDetailsActivity.this,"新浪",Toast.LENGTH_SHORT).show();
+                new ShareAction(OriginalDetailsActivity.this).setPlatform(SHARE_MEDIA.SINA)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
                 break;
             case R.id.view_share_space:
-                Toast.makeText(OriginalDetailsActivity.this,"QQ空间",Toast.LENGTH_SHORT).show();
+                new ShareAction(OriginalDetailsActivity.this).setPlatform(SHARE_MEDIA.QZONE)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
                 break;
             case R.id.view_share_qq:
-                Toast.makeText(OriginalDetailsActivity.this,"QQ",Toast.LENGTH_SHORT).show();
+                new ShareAction(OriginalDetailsActivity.this).setPlatform(SHARE_MEDIA.QQ)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
                 break;
             case R.id.view_share_frend:
                 Toast.makeText(OriginalDetailsActivity.this,"母亲大学堂",Toast.LENGTH_SHORT).show();
@@ -290,6 +285,29 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                 break;
         }
     }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Log.d("plat","platform"+platform);
+
+            Toast.makeText(OriginalDetailsActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(OriginalDetailsActivity.this,platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
+            if(t!=null){
+                Log.d("throw","throw:"+t.getMessage());
+            }
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(OriginalDetailsActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     class TextDetailsAdapter extends BaseAdapter{
 
