@@ -1,8 +1,11 @@
 package com.player.mothercollege.college.details;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -10,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,6 +52,9 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/11/2.
  */
@@ -57,6 +65,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     private static final int POST_CANLE_ZAN = 003;
     private static final int POST_COLLECT = 004;
     private static final int POST_CANLE_COLLECT = 005;
+    private static final int POST_SELF_COMMENT = 006;
     private Button btn_back;
     private TextView tv_details_title;
     private LinearLayout ll_textdeatials_share,ll_textdeatials_comment,ll_textdeatials_zan,ll_textdeatials_collect;
@@ -68,6 +77,12 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     private ListView lv_details;
     private String content;
     private ImageView iv_persondeatials_zan,iv_persondeatials_collect;
+
+    private TextView hide_down;
+    private EditText comment_content;
+    private Button comment_send;
+    private RelativeLayout rl_comment;
+    private LinearLayout ll_persondeatials_line;
 
     @Override
     public void setContentView() {
@@ -81,7 +96,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     public void initViews() {
         sid = getIntent().getStringExtra("sid");
-
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
         lv_details = (ListView) findViewById(R.id.lv_details);
@@ -93,6 +107,12 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
 
         iv_persondeatials_zan = (ImageView) findViewById(R.id.iv_persondeatials_zan);
         iv_persondeatials_collect = (ImageView) findViewById(R.id.iv_persondeatials_collect);
+
+        hide_down = (TextView) findViewById(R.id.hide_down);
+        comment_content = (EditText) findViewById(R.id.comment_content);
+        comment_send = (Button) findViewById(R.id.comment_send);
+        rl_comment = (RelativeLayout) findViewById(R.id.rl_comment);
+        ll_persondeatials_line = (LinearLayout) findViewById(R.id.ll_persondeatials_line);
 
         tv_details_title.setText("详情");
     }
@@ -109,6 +129,8 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         ll_textdeatials_comment.setOnClickListener(this);
         ll_textdeatials_zan.setOnClickListener(this);
         ll_textdeatials_collect.setOnClickListener(this);
+        hide_down.setOnClickListener(this);
+        comment_send.setOnClickListener(this);
     }
 
 
@@ -237,8 +259,24 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
             case R.id.btn_back:
                 finish();
                 break;
-            case R.id.ll_persondeatials_comment:
-                Toast.makeText(ReadBookDetailsActivity.this,"评论",Toast.LENGTH_SHORT).show();
+            case R.id.ll_persondeatials_comment://评论
+                // 弹出输入法
+                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                // 显示评论框
+                ll_persondeatials_line.setVisibility(View.GONE);
+                rl_comment.setVisibility(View.VISIBLE);
+                break;
+            case R.id.hide_down:
+                // 隐藏评论框
+                ll_persondeatials_line.setVisibility(View.VISIBLE);
+                rl_comment.setVisibility(View.GONE);
+                // 隐藏输入法，然后暂存当前输入框的内容，方便下次使用
+                InputMethodManager im = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                im.hideSoftInputFromWindow(comment_content.getWindowToken(), 0);
+                break;
+            case R.id.comment_send:
+                sendComment();
                 break;
             case R.id.ll_persondeatials_zan:
                 if (orZan){
@@ -306,6 +344,70 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
 //        dialog.dismiss();
     }
 
+    private void sendComment() {
+        String self_comment = comment_content.getText().toString().trim();
+        if (TextUtils.isEmpty(self_comment)){
+            Toast.makeText(getApplicationContext(), "评论不能为空！", Toast.LENGTH_SHORT).show();
+        }else {
+            postComment(self_comment);
+        }
+    }
+
+    private ProgressDialog pd;
+    private void postComment(String self_comment) {
+        String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","PostReview");
+        request.add("btype","13");
+        request.add("rid",sid);
+        request.add("uid",uid);
+        request.add("rcontent",self_comment);
+        requestQueue.add(POST_SELF_COMMENT, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                pd = new ProgressDialog(ReadBookDetailsActivity.this);
+                pd.show();
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                try {
+                    JSONObject json = new JSONObject(info);
+                    boolean isSuccess = json.getBoolean("isSuccess");
+                    if (isSuccess){
+                        pd.dismiss();
+                        comment_content.setText("");
+                        // 隐藏评论框
+                        ll_persondeatials_line.setVisibility(View.VISIBLE);
+                        rl_comment.setVisibility(View.GONE);
+                        // 隐藏输入法，然后暂存当前输入框的内容，方便下次使用
+                        InputMethodManager im = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        im.hideSoftInputFromWindow(comment_content.getWindowToken(), 0);
+                        Toast.makeText(ReadBookDetailsActivity.this,"评论成功!",Toast.LENGTH_SHORT).show();
+                    }else {
+                        pd.dismiss();
+                        Toast.makeText(ReadBookDetailsActivity.this,"评论失败，请稍候重试!",Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                pd.dismiss();
+            }
+
+            @Override
+            public void onFinish(int what) {
+                pd.dismiss();
+            }
+        });
+    }
+
     private void canleCollect() {
         String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
         String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
@@ -314,6 +416,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         request.add("op","PostUnKeep");
         request.add("btype","13");
         request.add("rid",sid);
+        MyLog.testLog("sid:"+sid);
         request.add("uid",uid);
         requestQueue.add(POST_CANLE_COLLECT, request, new OnResponseListener<String>() {
             @Override

@@ -3,6 +3,7 @@ package com.player.mothercollege.unity.details;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +50,9 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -61,6 +66,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private static final int POST_ZAN = 004;
     private static final int POST_COLLECT = 005;
     private static final int POST_CANLE_COLLECT = 006;
+    private static final int POST_SELF_COMMENT = 007;
     private Button btn_back;
     private TextView tv_details_title;
     private ListView lv_activitydetails;
@@ -69,11 +75,16 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private int aid;
     private ActivityDetailsBean activityDetailsBean;
     private AlertDialog alertDialog;
-    private ProgressDialog pd;
 
     private LinearLayout ll_activitydeatials_share,ll_activitydeatials_comment,ll_activitydeatials_zan,ll_activitydeatials_collect;
     private ImageView iv_activeydetails_zan,iv_activitydetails_baoming,iv_activitydeatials_collect;
     private String content;
+
+    private TextView hide_down;
+    private EditText comment_content;
+    private Button comment_send;
+    private RelativeLayout rl_comment;
+    private LinearLayout ll_activitydeatials_line;
 
     @Override
     public void setContentView() {
@@ -96,6 +107,12 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         ll_activitydeatials_zan = (LinearLayout) findViewById(R.id.ll_activitydeatials_zan);
         ll_activitydeatials_collect = (LinearLayout) findViewById(R.id.ll_activitydeatials_collect);
 
+        hide_down = (TextView) findViewById(R.id.hide_down);
+        comment_content = (EditText) findViewById(R.id.comment_content);
+        comment_send = (Button) findViewById(R.id.comment_send);
+        rl_comment = (RelativeLayout) findViewById(R.id.rl_comment);
+        ll_activitydeatials_line = (LinearLayout) findViewById(R.id.ll_activitydeatials_line);
+
         tv_details_title.setText("活动详情");
     }
 
@@ -112,6 +129,8 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         ll_activitydeatials_comment.setOnClickListener(this);
         ll_activitydeatials_zan.setOnClickListener(this);
         ll_activitydeatials_collect.setOnClickListener(this);
+        hide_down.setOnClickListener(this);
+        comment_send.setOnClickListener(this);
     }
 
     private Dialog dialog;
@@ -304,8 +323,24 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                 alertDialog = builder.show();
 //                alertDialog.setCancelable(false);
                 break;
-            case R.id.ll_activitydeatials_comment:
-                Toast.makeText(ActivityDetailsActivity.this,"评论",Toast.LENGTH_SHORT).show();
+            case R.id.ll_activitydeatials_comment://评论
+                // 弹出输入法
+                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                // 显示评论框
+                ll_activitydeatials_line.setVisibility(View.GONE);
+                rl_comment.setVisibility(View.VISIBLE);
+                break;
+            case R.id.hide_down:
+                // 隐藏评论框
+                ll_activitydeatials_line.setVisibility(View.VISIBLE);
+                rl_comment.setVisibility(View.GONE);
+                // 隐藏输入法，然后暂存当前输入框的内容，方便下次使用
+                InputMethodManager im = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                im.hideSoftInputFromWindow(comment_content.getWindowToken(), 0);
+                break;
+            case R.id.comment_send:
+                sendComment();
                 break;
             case R.id.ll_activitydeatials_zan:
                 if (orZan){
@@ -371,6 +406,70 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                 break;
 
         }
+    }
+
+    private void sendComment() {
+        String self_comment = comment_content.getText().toString().trim();
+        if (TextUtils.isEmpty(self_comment)){
+            Toast.makeText(getApplicationContext(), "评论不能为空！", Toast.LENGTH_SHORT).show();
+        }else {
+            postComment(self_comment);
+        }
+    }
+
+    private ProgressDialog pd ;
+    private void postComment(String self_comment) {
+        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","PostReview");
+        request.add("btype","23");
+        request.add("rid",aid+"");
+        request.add("uid",uid);
+        request.add("rcontent",self_comment);
+        requestQueue.add(POST_SELF_COMMENT, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                pd = new ProgressDialog(ActivityDetailsActivity.this);
+                pd.show();
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                try {
+                    JSONObject json = new JSONObject(info);
+                    boolean isSuccess = json.getBoolean("isSuccess");
+                    if (isSuccess){
+                        pd.dismiss();
+                        comment_content.setText("");
+                        // 隐藏评论框
+                        ll_activitydeatials_line.setVisibility(View.VISIBLE);
+                        rl_comment.setVisibility(View.GONE);
+                        // 隐藏输入法，然后暂存当前输入框的内容，方便下次使用
+                        InputMethodManager im = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        im.hideSoftInputFromWindow(comment_content.getWindowToken(), 0);
+                        Toast.makeText(ActivityDetailsActivity.this,"评论成功!",Toast.LENGTH_SHORT).show();
+                    }else {
+                        pd.dismiss();
+                        Toast.makeText(ActivityDetailsActivity.this,"评论失败，请稍候重试!",Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                pd.dismiss();
+            }
+
+            @Override
+            public void onFinish(int what) {
+                pd.dismiss();
+            }
+        });
     }
 
     private void canleCollect() {
