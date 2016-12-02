@@ -12,6 +12,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.bean.FastBean;
 import com.player.mothercollege.unity.details.FastInquiryDetailsActivity;
 import com.player.mothercollege.utils.DateUtils;
+import com.player.mothercollege.utils.MyLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,11 +73,13 @@ public class FastInquiryAdapter extends BaseAdapter{
         flh.tv_fastinquiry_conmment.setText(lists.size()+"");
         flh.tv_fastinquiry_daname.setText(lists.get(position).getUnicename()+":");
         flh.tv_fastinquiry_dacontent.setText(lists.get(position).getAsw_content());
+        final String qid = lists.get(position).getQid();
+        MyLog.testLog("我的qid："+qid);
         flh.rl_item_fastinquiry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,FastInquiryDetailsActivity.class);
-                intent.putExtra("qid",lists.get(position).getQid());
+                intent.putExtra("qid",qid);
                 context.startActivity(intent);
             }
         });

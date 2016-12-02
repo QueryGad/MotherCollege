@@ -39,7 +39,7 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
     private TextView tv_details_title;
     private ListView lv_fastdetails;
     private RequestManager glideRequest;
-    private int qid;
+    private String qid;
     private RequestQueue requestQueue;
     private FastDetailsBean fastDetailsBean;
 
@@ -51,7 +51,7 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
 
     @Override
     public void initViews() {
-        qid = getIntent().getIntExtra("qid", 0);
+        qid = getIntent().getStringExtra("qid");
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
         lv_fastdetails = (ListView) findViewById(R.id.lv_fastdetails);
@@ -75,8 +75,10 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
         String apptoken = PrefUtils.getString(FastInquiryDetailsActivity.this, "apptoken", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
+        MyLog.testLog("apptoken："+apptoken);
         request.add("op","qustioninfo");
         request.add("qid",qid+"");
+        MyLog.testLog("QID："+qid);
         requestQueue.add(GET_FASTDETAILS_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

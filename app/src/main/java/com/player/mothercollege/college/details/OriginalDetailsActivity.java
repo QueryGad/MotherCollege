@@ -52,6 +52,8 @@ import com.yolanda.nohttp.rest.Response;
 public class OriginalDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int GET_TEXTDETAILS_DATA = 001;
+    private static final int POST_CANLE_ZAN = 002;
+    private static final int POST_ZAN = 003;
     private Button btn_back;
     private TextView tv_details_title;
     private LinearLayout ll_textdeatials_share,ll_textdeatials_comment,ll_textdeatials_zan,ll_textdeatials_collect;
@@ -254,10 +256,12 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                 if (orZan){
                     iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
                     Toast.makeText(OriginalDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
+                    postZan();
                     orZan = false;
                 }else {
                     iv_persondeatials_zan.setImageResource(R.mipmap.tab_favour);
                     Toast.makeText(OriginalDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                    canleZan();
                     orZan = true;
                 }
                 break;
@@ -301,6 +305,73 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                 dialog.dismiss();
                 break;
         }
+    }
+
+    private void canleZan() {
+        String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","postUnZLike");
+        request.add("btype","14");
+        request.add("rid",sid);
+        request.add("uid",uid);
+        requestQueue.add(POST_CANLE_ZAN, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("取消赞"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    private void postZan() {
+
+        String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","postZLike");
+        request.add("btype","14");
+        request.add("rid",sid);
+        request.add("uid",uid);
+        requestQueue.add(POST_ZAN, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("点赞:"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     private UMShareListener umShareListener = new UMShareListener() {

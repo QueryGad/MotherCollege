@@ -1,14 +1,16 @@
 package com.player.mothercollege.unity.details;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +27,20 @@ import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
+import com.player.mothercollege.adapter.ActivityReveiwAdapter;
 import com.player.mothercollege.bean.ActivityDetailsBean;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.utils.Log;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -46,21 +57,21 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
 
     private static final int GET_ACTIVITYDITAILS = 001;
     private static final int POST_APPLAY_DATA = 002;
+    private static final int POST_CANLE_ZAN = 003;
+    private static final int POST_ZAN = 004;
     private Button btn_back;
-    private TextView tv_details_title,tv_activitydetails_title,tv_activitydetails_time
-            ,tv_activitydetails_address,tv_activitydetails_num
-            ,tv_invit_zan,tv_invit_comment,tv_activitydetails_nocomment;
-    private WebView webView_activitydetails;
-    private GridView gr_activitydetails_head;
-    private ImageView iv_activitydetails_nocomment;
+    private TextView tv_details_title;
     private ListView lv_activitydetails;
     private RequestQueue requestQueue;
     private RequestManager glideRequest;
     private int aid;
     private ActivityDetailsBean activityDetailsBean;
-    private ImageView iv_activitydetails_baoming;
     private AlertDialog alertDialog;
     private ProgressDialog pd;
+
+    private LinearLayout ll_activitydeatials_share,ll_activitydeatials_comment,ll_activitydeatials_zan,ll_activitydeatials_collect;
+    private ImageView iv_activeydetails_zan,iv_activitydetails_baoming;
+    private String content;
 
     @Override
     public void setContentView() {
@@ -70,24 +81,17 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void initViews() {
-
         aid = getIntent().getIntExtra("aid", 0);
-
-
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
-        tv_activitydetails_title = (TextView) findViewById(R.id.tv_activitydetails_title);
-        tv_activitydetails_time = (TextView) findViewById(R.id.tv_activitydetails_time);
-        tv_activitydetails_address = (TextView) findViewById(R.id.tv_activitydetails_address);
-        tv_activitydetails_num = (TextView) findViewById(R.id.tv_activitydetails_num);
-        webView_activitydetails = (WebView) findViewById(R.id.webView_activitydetails);
-        tv_invit_zan = (TextView) findViewById(R.id.tv_invit_zan);
-        tv_invit_comment = (TextView) findViewById(R.id.tv_invit_comment);
-        tv_activitydetails_nocomment = (TextView) findViewById(R.id.tv_activitydetails_nocomment);
-        gr_activitydetails_head = (GridView) findViewById(R.id.gr_activitydetails_head);
-        iv_activitydetails_nocomment = (ImageView) findViewById(R.id.iv_activitydetails_nocomment);
+
         lv_activitydetails = (ListView) findViewById(R.id.lv_activitydetails);
         iv_activitydetails_baoming = (ImageView) findViewById(R.id.iv_activitydetails_baoming);
+        iv_activeydetails_zan = (ImageView) findViewById(R.id.iv_activeydetails_zan);
+        ll_activitydeatials_share = (LinearLayout) findViewById(R.id.ll_activitydeatials_share);
+        ll_activitydeatials_comment = (LinearLayout) findViewById(R.id.ll_activitydeatials_comment);
+        ll_activitydeatials_zan = (LinearLayout) findViewById(R.id.ll_activitydeatials_zan);
+        ll_activitydeatials_collect = (LinearLayout) findViewById(R.id.ll_activitydeatials_collect);
 
         tv_details_title.setText("活动详情");
     }
@@ -96,6 +100,45 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     public void initListeners() {
         btn_back.setOnClickListener(this);
         iv_activitydetails_baoming.setOnClickListener(this);
+        ll_activitydeatials_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showShareDialog();
+            }
+        });
+        ll_activitydeatials_comment.setOnClickListener(this);
+        ll_activitydeatials_zan.setOnClickListener(this);
+        ll_activitydeatials_collect.setOnClickListener(this);
+    }
+
+    private Dialog dialog;
+    private void showShareDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_share, null);
+        // 设置style 控制默认dialog带来的边距问题 
+        dialog = new Dialog(this, R.style.common_dialog);
+        dialog.setContentView(view);
+        dialog.show();
+        RelativeLayout pengyou = (RelativeLayout) view.findViewById(R.id.view_share_pengyou);
+        RelativeLayout wechat = (RelativeLayout) view.findViewById(R.id.view_share_wechat);
+        RelativeLayout sina = (RelativeLayout) view.findViewById(R.id.view_share_sina);
+        RelativeLayout space = (RelativeLayout) view.findViewById(R.id.view_share_space);
+        RelativeLayout qq = (RelativeLayout) view.findViewById(R.id.view_share_qq);
+        RelativeLayout frend = (RelativeLayout) view.findViewById(R.id.view_share_frend);
+        Button btn_canle = (Button) view.findViewById(R.id.btn_canle);
+        pengyou.setOnClickListener(this);
+        wechat.setOnClickListener(this);
+        sina.setOnClickListener(this);
+        space.setOnClickListener(this);
+        qq.setOnClickListener(this);
+        frend.setOnClickListener(this);
+        btn_canle.setOnClickListener(this);
+        // 设置相关位置，一定要在 show()之后  
+        Window window = dialog.getWindow();
+        window.getDecorView().setPadding(0,0,0,0);
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.gravity = Gravity.BOTTOM;
+        window.setAttributes(params);
     }
 
     @Override
@@ -139,6 +182,29 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private void parseJson(String info){
         Gson gson = new Gson();
         activityDetailsBean = gson.fromJson(info, ActivityDetailsBean.class);
+        boolean isLike = activityDetailsBean.isIsLike();
+        if (isLike){
+            iv_activeydetails_zan.setImageResource(R.mipmap.icon_favour_list);
+        }else {
+            iv_activeydetails_zan.setImageResource(R.mipmap.tab_favour);
+        }
+        content = activityDetailsBean.getContent();
+        initHead();
+        ActivityReveiwAdapter adapter = new ActivityReveiwAdapter(ActivityDetailsActivity.this,activityDetailsBean.getReviews());
+        lv_activitydetails.setAdapter(adapter);
+    }
+
+    private void initHead() {
+        View view = View.inflate(ActivityDetailsActivity.this,R.layout.head_unity_activitydetails,null);
+        TextView tv_activitydetails_title = (TextView) view.findViewById(R.id.tv_activitydetails_title);
+        TextView tv_activitydetails_time = (TextView) view.findViewById(R.id.tv_activitydetails_time);
+        TextView tv_activitydetails_address = (TextView) view.findViewById(R.id.tv_activitydetails_address);
+        TextView tv_activitydetails_num = (TextView) view.findViewById(R.id.tv_activitydetails_num);
+        WebView webView_activitydetails = (WebView) view.findViewById(R.id.webView_activitydetails);
+        TextView tv_invit_zan = (TextView) view.findViewById(R.id.tv_invit_zan);
+        TextView tv_invit_comment = (TextView) view.findViewById(R.id.tv_invit_comment);
+        GridView gr_activitydetails_head = (GridView) view.findViewById(R.id.gr_activitydetails_head);
+
         String title = activityDetailsBean.getTitle(); //活动标题
         String endDate = activityDetailsBean.getEndDate();//活动日期
         String address = activityDetailsBean.getAddress();//活动地址
@@ -148,8 +214,6 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         int likesSize = likesList.size();
         List<ActivityDetailsBean.ReviewsBean> reviewsList = activityDetailsBean.getReviews();
         int reviewsSize = reviewsList.size(); //评论人数
-        netH5();//传入网络地址
-        haveNoComment(reviewsList);
 
         tv_activitydetails_title.setText(title);
         tv_activitydetails_time.setText(endDate);
@@ -157,6 +221,8 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         tv_activitydetails_num.setText("已有"+joinCount+"个人报名");
         tv_invit_zan.setText(likesSize+"");
         tv_invit_comment.setText(reviewsSize+"");
+
+        netH5(content,webView_activitydetails);//传入网络地址
 
         int length = DensityUtils.dip2px(ActivityDetailsActivity.this,15);
         DisplayMetrics dm = new DisplayMetrics();
@@ -174,13 +240,15 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
 
         ActivityDetailsAdapter adapter = new ActivityDetailsAdapter();
         gr_activitydetails_head.setAdapter(adapter);
+
+        lv_activitydetails.addHeaderView(view);
     }
 
-    private void netH5() {
+    private void netH5(String content, WebView webView_activitydetails) {
         WebSettings settings = webView_activitydetails.getSettings();
         settings.setJavaScriptEnabled(true);
         webView_activitydetails.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        webView_activitydetails.loadUrl("http://www.baidu.com");
+        webView_activitydetails.loadUrl(content);
         webView_activitydetails.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -190,21 +258,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
-    private void haveNoComment(List reviewsList) {
-
-        if (reviewsList.size()==0){
-            iv_activitydetails_nocomment.setVisibility(View.VISIBLE);
-            tv_activitydetails_nocomment.setVisibility(View.VISIBLE);
-            lv_activitydetails.setVisibility(View.GONE);
-        }else {
-            iv_activitydetails_nocomment.setVisibility(View.GONE);
-            tv_activitydetails_nocomment.setVisibility(View.GONE);
-            lv_activitydetails.setVisibility(View.VISIBLE);
-            DetailsConmmentAdapter adapter = new DetailsConmmentAdapter();
-            lv_activitydetails.setAdapter(adapter);
-        }
-    }
-
+    private boolean orZan=true;
 
     @Override
     public void onClick(View v) {
@@ -241,7 +295,154 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                 alertDialog = builder.show();
 //                alertDialog.setCancelable(false);
                 break;
+            case R.id.ll_activitydeatials_comment:
+                Toast.makeText(ActivityDetailsActivity.this,"评论",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ll_activitydeatials_zan:
+                if (orZan){
+                    iv_activeydetails_zan.setImageResource(R.mipmap.icon_favour_list);
+                    Toast.makeText(ActivityDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
+                    postZan();
+                    orZan = false;
+                }else {
+                    iv_activeydetails_zan.setImageResource(R.mipmap.tab_favour);
+                    Toast.makeText(ActivityDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                    canleZan();
+                    orZan = true;
+                }
+                break;
+            case R.id.ll_activitydeatials_collect:
+                Toast.makeText(ActivityDetailsActivity.this,"收藏",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.view_share_pengyou:
+                new ShareAction(ActivityDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.view_share_wechat:
+                new ShareAction(ActivityDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.view_share_sina:
+                new ShareAction(ActivityDetailsActivity.this).setPlatform(SHARE_MEDIA.SINA)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.view_share_space:
+                new ShareAction(ActivityDetailsActivity.this).setPlatform(SHARE_MEDIA.QZONE)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.view_share_qq:
+                new ShareAction(ActivityDetailsActivity.this).setPlatform(SHARE_MEDIA.QQ)
+                        .withTargetUrl(content)
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.view_share_frend:
+                Toast.makeText(ActivityDetailsActivity.this,"母亲大学堂",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_canle:
+                dialog.dismiss();
+                break;
+
         }
+    }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Log.d("plat","platform"+platform);
+
+            Toast.makeText(ActivityDetailsActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(ActivityDetailsActivity.this,platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
+            if(t!=null){
+                Log.d("throw","throw:"+t.getMessage());
+            }
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(ActivityDetailsActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private void canleZan() {
+
+        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","postUnZLike");
+        request.add("btype","23");
+        request.add("rid",aid+"");
+        request.add("uid",uid);
+        requestQueue.add(POST_CANLE_ZAN, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("取消赞"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    private void postZan() {
+
+        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","postZLike");
+        request.add("btype","23");
+        request.add("rid",aid+"");
+        request.add("uid",uid);
+        requestQueue.add(POST_ZAN, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("点赞:"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     private void applayNetWork(String name,String phone,String join,String qq) {
