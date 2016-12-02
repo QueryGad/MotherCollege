@@ -24,6 +24,7 @@ public class ReadBookDetailsBean {
     private String content;
     private String reviewCount;
     private String hasLike;
+    private String hasKeep;
     private String hasReview;
     private String date;
     private int viewCount;
@@ -86,6 +87,14 @@ public class ReadBookDetailsBean {
 
     public void setHasLike(String hasLike) {
         this.hasLike = hasLike;
+    }
+
+    public String getHasKeep() {
+        return hasKeep;
+    }
+
+    public void setHasKeep(String hasKeep) {
+        this.hasKeep = hasKeep;
     }
 
     public String getHasReview() {

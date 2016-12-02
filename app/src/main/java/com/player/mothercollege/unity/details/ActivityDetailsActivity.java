@@ -59,6 +59,8 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private static final int POST_APPLAY_DATA = 002;
     private static final int POST_CANLE_ZAN = 003;
     private static final int POST_ZAN = 004;
+    private static final int POST_COLLECT = 005;
+    private static final int POST_CANLE_COLLECT = 006;
     private Button btn_back;
     private TextView tv_details_title;
     private ListView lv_activitydetails;
@@ -70,7 +72,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private ProgressDialog pd;
 
     private LinearLayout ll_activitydeatials_share,ll_activitydeatials_comment,ll_activitydeatials_zan,ll_activitydeatials_collect;
-    private ImageView iv_activeydetails_zan,iv_activitydetails_baoming;
+    private ImageView iv_activeydetails_zan,iv_activitydetails_baoming,iv_activitydeatials_collect;
     private String content;
 
     @Override
@@ -88,6 +90,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         lv_activitydetails = (ListView) findViewById(R.id.lv_activitydetails);
         iv_activitydetails_baoming = (ImageView) findViewById(R.id.iv_activitydetails_baoming);
         iv_activeydetails_zan = (ImageView) findViewById(R.id.iv_activeydetails_zan);
+        iv_activitydeatials_collect = (ImageView) findViewById(R.id.iv_activitydeatials_collect);
         ll_activitydeatials_share = (LinearLayout) findViewById(R.id.ll_activitydeatials_share);
         ll_activitydeatials_comment = (LinearLayout) findViewById(R.id.ll_activitydeatials_comment);
         ll_activitydeatials_zan = (LinearLayout) findViewById(R.id.ll_activitydeatials_zan);
@@ -183,10 +186,16 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         Gson gson = new Gson();
         activityDetailsBean = gson.fromJson(info, ActivityDetailsBean.class);
         boolean isLike = activityDetailsBean.isIsLike();
+        boolean isKeep = activityDetailsBean.isIsKeep();
         if (isLike){
             iv_activeydetails_zan.setImageResource(R.mipmap.icon_favour_list);
         }else {
             iv_activeydetails_zan.setImageResource(R.mipmap.tab_favour);
+        }
+        if (isKeep){
+            iv_activitydeatials_collect.setImageResource(R.mipmap.tab_collected);
+        }else {
+            iv_activitydeatials_collect.setImageResource(R.mipmap.tab_collect);
         }
         content = activityDetailsBean.getContent();
         initHead();
@@ -259,7 +268,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private boolean orZan=true;
-
+    private boolean orCollect = true;
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -312,7 +321,17 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                 }
                 break;
             case R.id.ll_activitydeatials_collect:
-                Toast.makeText(ActivityDetailsActivity.this,"收藏",Toast.LENGTH_SHORT).show();
+                if (orCollect){
+                    iv_activitydeatials_collect.setImageResource(R.mipmap.tab_collected);
+                    Toast.makeText(ActivityDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
+                    postCollect();
+                    orCollect = false;
+                }else {
+                    iv_activitydeatials_collect.setImageResource(R.mipmap.tab_collect);
+                    Toast.makeText(ActivityDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                    canleCollect();
+                    orCollect = true;
+                }
                 break;
             case R.id.view_share_pengyou:
                 new ShareAction(ActivityDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
@@ -352,6 +371,73 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                 break;
 
         }
+    }
+
+    private void canleCollect() {
+
+        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","PostUnKeep");
+        request.add("btype","23");
+        request.add("rid",aid);
+        request.add("uid",uid);
+        requestQueue.add(POST_CANLE_COLLECT, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("取消收藏"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    private void postCollect() {
+        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","postkeep");
+        request.add("btype","23");
+        request.add("rid",aid);
+        request.add("uid",uid);
+        requestQueue.add(POST_COLLECT, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("收藏:"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     private UMShareListener umShareListener = new UMShareListener() {

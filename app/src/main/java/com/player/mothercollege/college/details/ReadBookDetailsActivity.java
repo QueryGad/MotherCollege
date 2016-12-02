@@ -55,6 +55,8 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     private static final int GET_TEXTDETAILS_DATA = 001;
     private static final int POST_ZAN = 002;
     private static final int POST_CANLE_ZAN = 003;
+    private static final int POST_COLLECT = 004;
+    private static final int POST_CANLE_COLLECT = 005;
     private Button btn_back;
     private TextView tv_details_title;
     private LinearLayout ll_textdeatials_share,ll_textdeatials_comment,ll_textdeatials_zan,ll_textdeatials_collect;
@@ -65,7 +67,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     private WebView web_textdetails;
     private ListView lv_details;
     private String content;
-    private ImageView iv_persondeatials_zan;
+    private ImageView iv_persondeatials_zan,iv_persondeatials_collect;
 
     @Override
     public void setContentView() {
@@ -90,6 +92,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         ll_textdeatials_collect = (LinearLayout) findViewById(R.id.ll_persondeatials_collect);
 
         iv_persondeatials_zan = (ImageView) findViewById(R.id.iv_persondeatials_zan);
+        iv_persondeatials_collect = (ImageView) findViewById(R.id.iv_persondeatials_collect);
 
         tv_details_title.setText("详情");
     }
@@ -158,6 +161,14 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         }else {
             iv_persondeatials_zan.setImageResource(R.mipmap.tab_favour);
         }
+
+        String hasKeep = readBookDetailsBean.getHasKeep();
+        if (hasKeep.equals(true)){
+            iv_persondeatials_collect.setImageResource(R.mipmap.tab_collected);
+        }else {
+            iv_persondeatials_collect.setImageResource(R.mipmap.tab_collect);
+        }
+
         initHead();
         OriginalReveiwAdapter adapter = new OriginalReveiwAdapter(ReadBookDetailsActivity.this,readBookDetailsBean.getReveiw());
         lv_details.setAdapter(adapter);
@@ -219,7 +230,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
 
     private Dialog dialog;
     private boolean orZan=true;
-
+    private boolean orCollect = true;
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -243,7 +254,17 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                 }
                 break;
             case R.id.ll_persondeatials_collect:
-                Toast.makeText(ReadBookDetailsActivity.this,"收藏",Toast.LENGTH_SHORT).show();
+                if (orCollect){
+                    iv_persondeatials_collect.setImageResource(R.mipmap.tab_collected);
+                    Toast.makeText(ReadBookDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
+                    postCollect();
+                    orCollect = false;
+                }else {
+                    iv_persondeatials_collect.setImageResource(R.mipmap.tab_collect);
+                    Toast.makeText(ReadBookDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                    canleCollect();
+                    orCollect = true;
+                }
                 break;
             case R.id.view_share_pengyou:
                 new ShareAction(ReadBookDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
@@ -283,6 +304,74 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                 break;
         }
 //        dialog.dismiss();
+    }
+
+    private void canleCollect() {
+        String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","PostUnKeep");
+        request.add("btype","13");
+        request.add("rid",sid);
+        request.add("uid",uid);
+        requestQueue.add(POST_CANLE_COLLECT, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("取消收藏"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    private void postCollect() {
+        String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
+        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","postkeep");
+        request.add("btype","13");
+        request.add("rid",sid);
+        MyLog.testLog("rid:"+sid);
+        request.add("uid",uid);
+        MyLog.testLog("uid:"+uid);
+        requestQueue.add(POST_COLLECT, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("收藏:"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     private void canleZan() {
