@@ -111,6 +111,7 @@ public class RecommBean {
         private String type;
         private String date;
         private String viewCount;
+        private boolean noType;
 
         public String getSid() {
             return sid;
@@ -118,6 +119,14 @@ public class RecommBean {
 
         public void setSid(String sid) {
             this.sid = sid;
+        }
+
+        public boolean getNoType() {
+            return false;
+        }
+
+        public void setNoType(boolean noType) {
+            this.noType = noType;
         }
 
         public String getEditor() {
