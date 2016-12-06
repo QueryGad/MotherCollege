@@ -1,10 +1,17 @@
 package com.player.mothercollege.find;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +28,10 @@ import com.player.mothercollege.utils.CacheUtils;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.utils.Log;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -41,6 +52,7 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
     private TextView tv_details_title,tv_yaoqingma;
     private ImageView iv_find_frend;
     private RequestQueue requestQueue;
+    private String inviteCode;
 
     @Override
     public void setContentView() {
@@ -62,7 +74,43 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void initListeners() {
         btn_back.setOnClickListener(this);
-        btn_share.setOnClickListener(this);
+        btn_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showShareDialog();
+            }
+        });
+    }
+    private Dialog dialog;
+
+    private void showShareDialog() {
+
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_share, null);
+        // 设置style 控制默认dialog带来的边距问题 
+        dialog = new Dialog(this, R.style.common_dialog);
+        dialog.setContentView(view);
+        dialog.show();
+        RelativeLayout pengyou = (RelativeLayout) view.findViewById(R.id.view_share_pengyou);
+        RelativeLayout wechat = (RelativeLayout) view.findViewById(R.id.view_share_wechat);
+        RelativeLayout sina = (RelativeLayout) view.findViewById(R.id.view_share_sina);
+        RelativeLayout space = (RelativeLayout) view.findViewById(R.id.view_share_space);
+        RelativeLayout qq = (RelativeLayout) view.findViewById(R.id.view_share_qq);
+        RelativeLayout frend = (RelativeLayout) view.findViewById(R.id.view_share_frend);
+        Button btn_canle = (Button) view.findViewById(R.id.btn_canle);
+        pengyou.setOnClickListener(this);
+        wechat.setOnClickListener(this);
+        sina.setOnClickListener(this);
+        space.setOnClickListener(this);
+        qq.setOnClickListener(this);
+        frend.setOnClickListener(this);
+        btn_canle.setOnClickListener(this);
+        // 设置相关位置，一定要在 show()之后  
+        Window window = dialog.getWindow();
+        window.getDecorView().setPadding(0,0,0,0);
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.gravity = Gravity.BOTTOM;
+        window.setAttributes(params);
     }
 
     @Override
@@ -111,9 +159,10 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
     private void parseJson(String info){
         Gson gson = new Gson();
         QRBean qrBean = gson.fromJson(info, QRBean.class);
-        String inviteCode = qrBean.getInviteCode();//邀请码
+        //邀请码
+        inviteCode = qrBean.getInviteCode();
         String qrCode = qrBean.getQrCode(); //二维码
-        tv_yaoqingma.setText("您的邀请码:"+inviteCode);
+        tv_yaoqingma.setText("您的邀请码:"+ inviteCode);
         try {
             Bitmap bm = qr_code(qrCode,BarcodeFormat.QR_CODE);
             iv_find_frend.setImageBitmap(bm);
@@ -128,11 +177,65 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
             case R.id.btn_back:
                 finish();
                 break;
-            case R.id.btn_share:
-                Toast.makeText(FrendActivity.this,"第三方分享功能",Toast.LENGTH_SHORT).show();
+            case R.id.view_share_pengyou:
+                new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .setCallback(umShareListener)
+                        .share();
                 break;
+            case R.id.view_share_wechat:
+                new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.WEIXIN)
+                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.view_share_sina:
+                new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.SINA)
+                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.view_share_space:
+                new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.QZONE)
+                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.view_share_qq:
+                new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.QQ)
+                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.view_share_frend:
+                Toast.makeText(FrendActivity.this,"母亲大学堂",Toast.LENGTH_SHORT).show();
+                break;
+
         }
     }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Log.d("plat","platform"+platform);
+
+            Toast.makeText(FrendActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(FrendActivity.this,platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
+            if(t!=null){
+                Log.d("throw","throw:"+t.getMessage());
+            }
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(FrendActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     public Bitmap qr_code(String string, BarcodeFormat format)
             throws WriterException {

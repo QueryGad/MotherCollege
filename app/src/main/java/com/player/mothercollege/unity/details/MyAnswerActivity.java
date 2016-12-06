@@ -35,7 +35,7 @@ public class MyAnswerActivity extends BaseActivity implements View.OnClickListen
     private EditText et_myanswer;
     private AlertDialog alertDialog;
     private RequestQueue requestQueue;
-    private int qid;
+    private String qid;
 
     @Override
     public void setContentView() {
@@ -45,7 +45,8 @@ public class MyAnswerActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void initViews() {
-        qid = getIntent().getIntExtra("qid", 0);
+        qid = getIntent().getStringExtra("qid");
+        MyLog.testLog("qid:"+qid);
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_answer_ok = (TextView) findViewById(R.id.tv_answer_ok);
         et_myanswer = (EditText) findViewById(R.id.et_myanswer);

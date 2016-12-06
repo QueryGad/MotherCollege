@@ -85,7 +85,7 @@ public class ActiveAdapter extends BaseAdapter{
             holder.view_active.setVisibility(View.GONE);
         }
 
-        final int aid = lists.get(position).getAid();
+        final String aid = lists.get(position).getAid();
         holder.iv_active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

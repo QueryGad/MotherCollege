@@ -15,6 +15,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.adapter.RecommAdapter;
 import com.player.mothercollege.bean.RecommBean;
 import com.player.mothercollege.college.details.BzzbDeatilsActivity;
+import com.player.mothercollege.find.MarketActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -60,6 +61,10 @@ public class RecommFragment extends Fragment {
                 Intent intent2 = new Intent(getActivity(), BzzbDeatilsActivity.class);
                 intent2.putExtra("sid",sid);
                 startActivity(intent2);
+            }else if (rtype==00){
+                //商城
+                Intent intent3 = new Intent(getActivity(), MarketActivity.class);
+                startActivity(intent3);
             }
         }
     };

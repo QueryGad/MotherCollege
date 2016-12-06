@@ -23,6 +23,7 @@
             android:text="读书"/>
     </LinearLayout>
     <LinearLayout
+        android:layout_marginTop="7dp"
         android:id="@+id/ll_recomm_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

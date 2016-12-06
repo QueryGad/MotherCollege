@@ -7,18 +7,18 @@ import java.util.List;
  */
 public class ActiveBean {
     /**
-     * lastIndex : 6
-     * Actives : [{"aid":1,"isTop":true,"img":"http://121.42.31.133:8201/m/img/2.png","title":"活动标题，活动标题","city":"郑州","joinCount":999},{"aid":1,"isTop":true,"img":"http://121.42.31.133:8201/m/img/s5.jpg","title":"活动标题，活动标题","city":"郑州","joinCount":999},{"aid":1,"isTop":true,"img":"http://121.42.31.133:8201/m/img/6.png","title":"活动标题，活动标题","city":"郑州","joinCount":999},{"aid":1,"isTop":true,"img":"http://121.42.31.133:8201/m/img/2.png","title":"活动标题，活动标题","city":"郑州","joinCount":999},{"aid":1,"isTop":true,"img":"http://121.42.31.133:8201/m/img/6.png","title":"活动标题，活动标题","city":"郑州","joinCount":999},{"aid":1,"isTop":true,"img":"http://121.42.31.133:8201/m/img/1.png","title":"活动标题，活动标题","city":"郑州","joinCount":999}]
+     * lastIndex : 5
+     * Actives : [{"aid":"ACT1612050001","isTop":true,"img":"http://121.42.31.133:8201/upload/image/20161205/20161205142424_2408.jpg","title":"如何培养孩子的好习惯","city":"郑州","joinCount":0},{"aid":"ACT1612050003","isTop":true,"img":"http://121.42.31.133:8201/upload/image/20161205/20161205144529_2624.jpg","title":"家庭教育讲师班","city":"武汉","joinCount":0},{"aid":"ACT1612010001","isTop":false,"img":"http://121.42.31.133:8201/upload/image/20161201/20161201114712_4902.jpg","title":"郝大鹏老师《好父母成就孩子的一生》","city":"郑州","joinCount":0},{"aid":"ACT1612050002","isTop":false,"img":"http://121.42.31.133:8201/upload/image/20161205/20161205144308_6833.jpg","title":"好父母成就孩子一生","city":"南京","joinCount":0},{"aid":"ACT1612050004","isTop":false,"img":"http://121.42.31.133:8201/upload/image/20161205/20161205145526_9224.jpg","title":"情绪财富","city":"广州","joinCount":0}]
      */
 
     private int lastIndex;
     /**
-     * aid : 1
+     * aid : ACT1612050001
      * isTop : true
-     * img : http://121.42.31.133:8201/m/img/2.png
-     * title : 活动标题，活动标题
+     * img : http://121.42.31.133:8201/upload/image/20161205/20161205142424_2408.jpg
+     * title : 如何培养孩子的好习惯
      * city : 郑州
-     * joinCount : 999
+     * joinCount : 0
      */
 
     private List<ActivesBean> Actives;
@@ -40,18 +40,18 @@ public class ActiveBean {
     }
 
     public static class ActivesBean {
-        private int aid;
+        private String aid;
         private boolean isTop;
         private String img;
         private String title;
         private String city;
         private int joinCount;
 
-        public int getAid() {
+        public String getAid() {
             return aid;
         }
 
-        public void setAid(int aid) {
+        public void setAid(String aid) {
             this.aid = aid;
         }
 

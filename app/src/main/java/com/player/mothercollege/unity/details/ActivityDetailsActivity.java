@@ -72,7 +72,6 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private ListView lv_activitydetails;
     private RequestQueue requestQueue;
     private RequestManager glideRequest;
-    private int aid;
     private ActivityDetailsBean activityDetailsBean;
     private AlertDialog alertDialog;
 
@@ -85,6 +84,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private Button comment_send;
     private RelativeLayout rl_comment;
     private LinearLayout ll_activitydeatials_line;
+    private String aid;
 
     @Override
     public void setContentView() {
@@ -94,7 +94,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void initViews() {
-        aid = getIntent().getIntExtra("aid", 0);
+        aid = getIntent().getStringExtra("aid");
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
 

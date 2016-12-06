@@ -89,6 +89,7 @@ public class RecommAdapter extends BaseAdapter{
         String type = lists.get(position).getType();
         final String sid = lists.get(position).getSid();
         boolean noType = lists.get(position).getNoType();
+        
         //分类
         //切割type
         type = type.substring(0,2);
@@ -96,14 +97,12 @@ public class RecommAdapter extends BaseAdapter{
             if (noType){
                 iv_recomm_title.setVisibility(View.GONE);
                 tv_recomm_type.setVisibility(View.GONE);
-
-                noType = false;
             }else {
                 iv_recomm_title.setVisibility(View.VISIBLE);
                 tv_recomm_type.setVisibility(View.VISIBLE);
                 iv_recomm_title.setImageResource(R.mipmap.ic_college_readbook);
                 tv_recomm_type.setText("读书");
-
+                noType = true;
             }
 
             ll_recomm_view.addView(viewChild);

@@ -24,7 +24,7 @@
                 android:id="@+id/iv_me_icon"
                 android:layout_width="86dp"
                 android:layout_height="86dp"
-                android:src="@mipmap/head_me_nor"/>
+                android:background="@mipmap/head_me_nor"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

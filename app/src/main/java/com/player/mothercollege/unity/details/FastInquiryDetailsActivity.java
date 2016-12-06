@@ -78,6 +78,7 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
         MyLog.testLog("apptoken："+apptoken);
         request.add("op","qustioninfo");
         request.add("qid",qid+"");
+        MyLog.testLog("问答详情qid:"+qid);
         MyLog.testLog("QID："+qid);
         requestQueue.add(GET_FASTDETAILS_DATA, request, new OnResponseListener<String>() {
             @Override

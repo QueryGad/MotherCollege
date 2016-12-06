@@ -26,7 +26,7 @@ public class ActivityDetailsBean {
      */
 
     private String address;
-    private int aid;
+    private String aid;
     private String city;
     private String content;
     private String endDate;
@@ -75,11 +75,11 @@ public class ActivityDetailsBean {
         this.address = address;
     }
 
-    public int getAid() {
+    public String getAid() {
         return aid;
     }
 
-    public void setAid(int aid) {
+    public void setAid(String aid) {
         this.aid = aid;
     }
 
