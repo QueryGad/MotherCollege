@@ -12,8 +12,6 @@
         app:indicator_height="4.5dp"
         app:indicator_drawable_selected="@mipmap/icon_recommend_banner_sel"
         app:indicator_drawable_unselected="@mipmap/icon_recommend_banner_nomal"/>
-
-
     <RadioGroup
         android:id="@+id/rg_college_class"
         android:layout_width="match_parent"

@@ -44,7 +44,6 @@ public class VideoFragment extends Fragment{
     private RequestQueue requestQueue;
     private VideoBean.BzzbBean bzzbBean;
     private VideoBean.SqhgBean sqhgBean;
-    private String sid;
 
     @Nullable
     @Override
@@ -133,6 +132,7 @@ public class VideoFragment extends Fragment{
         editor.setText(sqhgBean.getEditor());
         editor.setTextColor(Color.RED);
         viewCount.setText(sqhgBean.getViewCount());
+        final String sid = sqhgBean.getSid();
         ll_old_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,7 +169,7 @@ public class VideoFragment extends Fragment{
         date.setText(split[0]);
         startTime.setText(split[1]);
         startTime.setTextColor(Color.RED);
-        sid = bzzbBean.getSid();
+        final String sid = bzzbBean.getSid();
         //点击进入详情页面
         ll_bzzb.setOnClickListener(new View.OnClickListener() {
             @Override

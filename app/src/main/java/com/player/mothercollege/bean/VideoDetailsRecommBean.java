@@ -74,7 +74,7 @@ public class VideoDetailsRecommBean {
         private String videoContent;
         private String viewCount;
         private int viewType;
-        private List<?> review;
+        private List<ReveiwBean> review;
 
         public String getDate() {
             return date;
@@ -228,12 +228,89 @@ public class VideoDetailsRecommBean {
             this.viewType = viewType;
         }
 
-        public List<?> getReview() {
+        public List<ReveiwBean> getReview() {
             return review;
         }
 
-        public void setReview(List<?> review) {
+        public void setReview(List<ReveiwBean> review) {
             this.review = review;
         }
+
+        public static class ReveiwBean {
+            private String uid;
+            private String content;
+            private String index;
+            private int rid;
+            private int rbodyID;
+            private String uicon;
+            private String unicename;
+            private String date;
+
+            public String getUid() {
+                return uid;
+            }
+
+            public void setUid(String uid) {
+                this.uid = uid;
+            }
+
+            public String getContent() {
+                return content;
+            }
+
+            public void setContent(String content) {
+                this.content = content;
+            }
+
+            public String getIndex() {
+                return index;
+            }
+
+            public void setIndex(String index) {
+                this.index = index;
+            }
+
+            public int getRid() {
+                return rid;
+            }
+
+            public void setRid(int rid) {
+                this.rid = rid;
+            }
+
+            public int getRbodyID() {
+                return rbodyID;
+            }
+
+            public void setRbodyID(int rbodyID) {
+                this.rbodyID = rbodyID;
+            }
+
+            public String getUicon() {
+                return uicon;
+            }
+
+            public void setUicon(String uicon) {
+                this.uicon = uicon;
+            }
+
+            public String getUnicename() {
+                return unicename;
+            }
+
+            public void setUnicename(String unicename) {
+                this.unicename = unicename;
+            }
+
+            public String getDate() {
+                return date;
+            }
+
+            public void setDate(String date) {
+                this.date = date;
+            }
+        }
     }
+
+
 }

@@ -99,7 +99,7 @@ public class AlterNameActivity extends BaseActivity implements View.OnClickListe
         request.add("apptoken",apptoken);
         request.add("op","changeUserInfo");
         request.add("uid",uid);
-        request.add("ctype","1");
+        request.add("ctype","2");
         request.add("cvalue",newName);
         requestQueue.add(POST_ALTERNAME_DATA, request, new OnResponseListener<String>() {
             @Override
