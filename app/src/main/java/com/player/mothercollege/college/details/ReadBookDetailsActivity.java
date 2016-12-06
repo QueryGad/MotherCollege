@@ -416,7 +416,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         request.add("op","PostUnKeep");
         request.add("btype","13");
         request.add("rid",sid);
-        MyLog.testLog("sid:"+sid);
         request.add("uid",uid);
         requestQueue.add(POST_CANLE_COLLECT, request, new OnResponseListener<String>() {
             @Override
@@ -450,9 +449,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         request.add("op","postkeep");
         request.add("btype","13");
         request.add("rid",sid);
-        MyLog.testLog("rid:"+sid);
         request.add("uid",uid);
-        MyLog.testLog("uid:"+uid);
         requestQueue.add(POST_COLLECT, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
