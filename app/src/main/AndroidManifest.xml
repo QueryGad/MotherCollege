@@ -229,6 +229,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"/>//读书详情页面
         <activity android:name=".college.details.OriginalDetailsActivity" android:screenOrientation="portrait"/>//原创详情页面
+        <activity android:name=".college.details.ClassDetailsActivity" android:screenOrientation="portrait"/>//课堂详情页面
 
         //社区
         <activity android:name=".unity.details.ActivityDetailsActivity" android:screenOrientation="portrait"/>//活动详情页面
@@ -273,6 +274,9 @@
         //圈子中帖子详情
         <activity android:name=".me.details.MoreCirleListActivity" android:screenOrientation="portrait"/>//推荐更多圈子列表
         <activity android:name=".me.details.CirlePostMessageActivity" android:screenOrientation="portrait"/>//发帖页面
+        <activity android:name=".me.details.MyCommentActivity" android:screenOrientation="portrait"/>//我的评论
+        <activity android:name=".me.details.MyZanActivity" android:screenOrientation="portrait"/>//我的赞
+        <activity android:name=".me.details.SystemMessageActivity" android:screenOrientation="portrait"/>//系统消息
 
     </application>
 

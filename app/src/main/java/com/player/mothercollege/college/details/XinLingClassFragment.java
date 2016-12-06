@@ -150,7 +150,7 @@ public class XinLingClassFragment extends Fragment{
                 @Override
                 public void onClick(View v) {
                     String sid = xinLingList.get(position).getSid();
-                    Intent intent = new Intent(getActivity(),BzzbDeatilsActivity.class);
+                    Intent intent = new Intent(getActivity(),ClassDetailsActivity.class);
                     intent.putExtra("sid",sid);
                     startActivity(intent);
                 }

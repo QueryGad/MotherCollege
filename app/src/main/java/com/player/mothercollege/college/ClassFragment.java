@@ -14,7 +14,7 @@ import android.widget.RadioGroup;
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.ClassBean;
-import com.player.mothercollege.college.details.BzzbDeatilsActivity;
+import com.player.mothercollege.college.details.ClassDetailsActivity;
 import com.player.mothercollege.college.details.FuMuClassFragment;
 import com.player.mothercollege.college.details.FuQiClassFragment;
 import com.player.mothercollege.college.details.XinLingClassFragment;
@@ -75,7 +75,7 @@ public class ClassFragment extends Fragment{
     private OnBannerClickListener ClassBannerListener = new OnBannerClickListener() {
         @Override
         public void OnBannerClick(int position) {
-            Intent intent = new Intent(getActivity(), BzzbDeatilsActivity.class);
+            Intent intent = new Intent(getActivity(), ClassDetailsActivity.class);
             startActivity(intent);
         }
     };

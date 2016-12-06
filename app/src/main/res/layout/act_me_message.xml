@@ -14,6 +14,7 @@
        android:background="@color/white"
        android:orientation="vertical">
       <LinearLayout
+          android:id="@+id/ll_me_message_comment"
           android:layout_width="match_parent"
           android:layout_height="45dp"
           android:background="@drawable/press_selector"
@@ -44,6 +45,7 @@
           android:layout_height="0.5dp"
           android:background="#eee"/>
       <LinearLayout
+          android:id="@+id/ll_me_message_zan"
           android:layout_width="match_parent"
           android:layout_height="45dp"
           android:background="@drawable/press_selector"
@@ -74,6 +76,7 @@
           android:layout_height="0.5dp"
           android:background="#eee"/>
       <LinearLayout
+          android:id="@+id/ll_me_message_sys"
           android:layout_width="match_parent"
           android:layout_height="45dp"
           android:background="@drawable/press_selector"
