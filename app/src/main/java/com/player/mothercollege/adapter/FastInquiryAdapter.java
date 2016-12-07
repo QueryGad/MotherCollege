@@ -70,8 +70,13 @@ public class FastInquiryAdapter extends BaseAdapter{
         String time = lists.get(position).getDate();
         flh.tv_fastinquiry_time.setText(DateUtils.getStandardDate(time));
         flh.tv_fastinquiry_desc.setText(lists.get(position).getQusition());
-        flh.tv_fastinquiry_conmment.setText(lists.size()+"");
-        flh.tv_fastinquiry_daname.setText(lists.get(position).getUnicename()+":");
+        flh.tv_fastinquiry_conmment.setText(lists.get(position).getReviewCount()+"");
+
+        if (lists.get(position).getAsw_unicename().equals("")){
+            flh.tv_fastinquiry_daname.setText("");
+        }else {
+            flh.tv_fastinquiry_daname.setText(lists.get(position).getAsw_unicename()+":");
+        }
         flh.tv_fastinquiry_dacontent.setText(lists.get(position).getAsw_content());
         final String qid = lists.get(position).getQid();
         MyLog.testLog("我的qid："+qid);
