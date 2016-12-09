@@ -1,11 +1,13 @@
 package com.player.mothercollege.me.details;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.MessageNullBean;
 import com.player.mothercollege.bean.MyZanBean;
+import com.player.mothercollege.unity.details.HotArticleDetailsActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -41,6 +44,7 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
 
     private static final int GET_MYZAN_DATA = 001;
     private static final int POST_NULL_DATA = 002;
+    private static final int POST_READ_DATA = 003;
     private Button btn_mycomment_null;
     private TextView tv_mycomment_title,tv_mycomment_null;
     private ListView lv_mycomment;
@@ -112,6 +116,50 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
         List<MyZanBean.NoticesBean> noticesList = myZanBean.getNotices();
         adapter = new MyZanAdapter(MyZanActivity.this,noticesList);
         lv_mycomment.setAdapter(adapter);
+        allRead();
+    }
+
+    private void allRead() {
+        //把集合中的nids拿出来
+        String nidd = "";
+        MyLog.testLog("我已读了多少个参数:"+nids.size());
+        for (int i =0;i<nids.size();i++){
+            String nid =  nids.get(i);
+            nidd = nidd+","+nid;
+        }
+        String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("op","removenotice");
+        request.add("apptoken",apptoken);
+        request.add("uid",uid);
+        request.add("optype","1");
+        request.add("nids",nidd);
+        MyLog.testLog("nids:"+nidd);
+        request.add("ntype","3");
+        requestQueue.add(POST_READ_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("已读:"+info);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     @Override
@@ -217,6 +265,7 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
                 holder.tv_myzan_date = (TextView) view.findViewById(R.id.tv_myzan_date);
                 holder.tv_myzan_desc = (TextView) view.findViewById(R.id.tv_myzan_desc);
                 holder.iv_myzan_desc = (ImageView) view.findViewById(R.id.iv_myzan_desc);
+                holder.ll_item_message = (LinearLayout) view.findViewById(R.id.ll_item_message);
                 view.setTag(holder);
             }else {
                 view = convertView;
@@ -230,6 +279,30 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
             String sourceText = lists.get(position).getSourceText();
             String sourcePic = lists.get(position).getSourcePic();
             holder.tv_myzan_desc.setText(sourceText);
+            final String sourceID = lists.get(position).getSourceID();
+            int sourceType = lists.get(position).getSourceType();
+            if (sourceType==21){
+                //帖子
+                holder.ll_item_message.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, HotArticleDetailsActivity.class);
+                        intent.putExtra("tid",sourceID);
+                        startActivity(intent);
+                    }
+                });
+
+            }else {
+                //问题
+                holder.ll_item_message.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, HotArticleDetailsActivity.class);
+                        intent.putExtra("tid",sourceID);
+                        startActivity(intent);
+                    }
+                });
+            }
             int nid = lists.get(position).getNid();
             nids.add(nid+"");
             Picasso.with(context).load(sourcePic)
@@ -243,6 +316,7 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
             private TextView tv_myzan_name,tv_myzan_date;
             private TextView tv_myzan_desc;
             private ImageView iv_myzan_desc;
+            private LinearLayout ll_item_message;
         }
     }
 

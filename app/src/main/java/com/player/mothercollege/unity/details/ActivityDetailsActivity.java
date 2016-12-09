@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.ActivityReveiwAdapter;
+import com.player.mothercollege.bean.ActivityApplyBean;
 import com.player.mothercollege.bean.ActivityDetailsBean;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
@@ -654,18 +655,33 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                 String info = response.get();
                 MyLog.testLog("报名:"+info);
                 pd.dismiss();
+                Gson gson = new Gson();
+                ActivityApplyBean activityApplyBean = gson.fromJson(info, ActivityApplyBean.class);
+                String resultInfo = activityApplyBean.getResultInfo();
+                if (resultInfo.equals("成功")){
+                    Toast.makeText(ActivityDetailsActivity.this,"报名成功",Toast.LENGTH_SHORT).show();
+                    alertDialog.dismiss();
+                }else if (resultInfo.equals("用户已报名")){
+                    Toast.makeText(ActivityDetailsActivity.this,"您已经报过名了!",Toast.LENGTH_SHORT).show();
+                    alertDialog.dismiss();
+                }else {
+                    Toast.makeText(ActivityDetailsActivity.this,resultInfo,Toast.LENGTH_SHORT).show();
+                    alertDialog.dismiss();
+                }
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
                 pd.dismiss();
                 MyLog.testLog("onFailed");
+                alertDialog.dismiss();
             }
 
             @Override
             public void onFinish(int what) {
                 pd.dismiss();
                 MyLog.testLog("onFinish");
+                alertDialog.dismiss();
             }
         });
 
