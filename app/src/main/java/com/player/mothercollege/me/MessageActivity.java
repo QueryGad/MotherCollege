@@ -11,20 +11,25 @@ import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.me.details.MyCommentActivity;
 import com.player.mothercollege.me.details.MyZanActivity;
 import com.player.mothercollege.me.details.SystemMessageActivity;
+import com.yolanda.nohttp.NoHttp;
+import com.yolanda.nohttp.rest.RequestQueue;
 
 /**
  * Created by Administrator on 2016/10/25.
  * 我的消息
  */
-public class MessageActivity extends BaseActivity implements View.OnClickListener {
+public class MessageActivity extends BaseActivity implements View.OnClickListener{
 
     private Button btn_back;
     private TextView tv_details_title;
     private LinearLayout ll_me_message_comment,ll_me_message_zan,ll_me_message_sys;
+    private TextView tv_message_comm_num,tv_message_zan_num,tv_message_sys_num;
+    private RequestQueue requestQueue;
 
     @Override
     public void setContentView() {
         setContentView(R.layout.act_me_message);
+        requestQueue = NoHttp.newRequestQueue();
     }
 
     @Override
@@ -35,7 +40,11 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         ll_me_message_zan = (LinearLayout) findViewById(R.id.ll_me_message_zan);
         ll_me_message_sys = (LinearLayout) findViewById(R.id.ll_me_message_sys);
 
+        tv_message_comm_num = (TextView) findViewById(R.id.tv_message_comm_num);
+        tv_message_zan_num = (TextView) findViewById(R.id.tv_message_zan_num);
+        tv_message_sys_num = (TextView) findViewById(R.id.tv_message_sys_num);
         tv_details_title.setText("我的消息");
+
     }
 
     @Override
@@ -48,7 +57,11 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void initData() {
+        netWork();
+    }
 
+    private void netWork() {
+//        NoHttp.createStringRequest(ConfigUtils.)
     }
 
     @Override
@@ -71,4 +84,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 break;
         }
     }
+
+
 }

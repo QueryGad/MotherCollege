@@ -1,7 +1,6 @@
 package com.player.mothercollege.me;
 
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -75,9 +74,9 @@ public class SmartMoneyActivity extends BaseActivity implements View.OnClickList
     @Override
     public void initData() {
         String cacheJson = CacheUtils.getCache(this, ConfigUtils.COLLEGE_URL + "smart");
-        if (!TextUtils.isEmpty(cacheJson)){
-            parseJson(cacheJson);
-        }
+//        if (!TextUtils.isEmpty(cacheJson)){
+//            parseJson(cacheJson);
+//        }
         netWork();
     }
 

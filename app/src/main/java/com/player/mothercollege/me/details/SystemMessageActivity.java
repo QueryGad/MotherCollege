@@ -6,8 +6,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
+import com.player.mothercollege.adapter.SystemMessageAdapter;
+import com.player.mothercollege.bean.SystemMessageBean;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -17,6 +20,8 @@ import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/12/6.
@@ -74,6 +79,7 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("系统消息:"+info);
+                parseJson(info);
             }
 
             @Override
@@ -86,6 +92,14 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
 
             }
         });
+    }
+
+    private void parseJson(String info) {
+        Gson gson = new Gson();
+        SystemMessageBean systemMessageBean = gson.fromJson(info, SystemMessageBean.class);
+        List<SystemMessageBean.NoticesBean> noticesList = systemMessageBean.getNotices();
+        SystemMessageAdapter adapter = new SystemMessageAdapter(SystemMessageActivity.this,noticesList);
+        lv_mycomment.setAdapter(adapter);
     }
 
     @Override

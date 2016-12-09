@@ -8,7 +8,8 @@ public class MeBean {
 
     /**
      * uid : U00000001
-     * uicon : http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/62e55c81-72d5-4dc3-b170-6530d01beeb9.png
+     * guid : 100001
+     * uicon : http://121.42.31.133:8201/AppUserSpace/U00000001/images/UserFace/1c6748e8-beab-410c-a5ef-905e2b93283b.png
      * uniceName : 我是谁
      * coins : 500
      * gold : 0
@@ -17,6 +18,7 @@ public class MeBean {
      */
 
     private String uid;
+    private String guid;
     private String uicon;
     private String uniceName;
     private int coins;
@@ -30,6 +32,14 @@ public class MeBean {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 
     public String getUicon() {

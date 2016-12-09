@@ -277,6 +277,7 @@
         <activity android:name=".me.details.MyCommentActivity" android:screenOrientation="portrait"/>//我的评论
         <activity android:name=".me.details.MyZanActivity" android:screenOrientation="portrait"/>//我的赞
         <activity android:name=".me.details.SystemMessageActivity" android:screenOrientation="portrait"/>//系统消息
+        <activity android:name=".me.details.WebViewDeatilsActivity" android:screenOrientation="portrait"/>//系统消息详情
 
     </application>
 

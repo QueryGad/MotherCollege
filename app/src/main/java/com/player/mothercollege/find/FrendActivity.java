@@ -179,31 +179,36 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.view_share_pengyou:
                 new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
-                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！输入我的邀请码："+inviteCode+"，有惊喜哦！")
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.view_share_wechat:
                 new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.WEIXIN)
-                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！输入我的邀请码："+inviteCode+"，有惊喜哦！")
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.view_share_sina:
                 new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.SINA)
-                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！输入我的邀请码："+inviteCode+"，有惊喜哦！")
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.view_share_space:
                 new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.QZONE)
-                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！输入我的邀请码："+inviteCode+"，有惊喜哦！")
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.view_share_qq:
                 new ShareAction(FrendActivity.this).setPlatform(SHARE_MEDIA.QQ)
-                        .withText("快来安装母亲大学堂app,我的邀请码是"+inviteCode+"。")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！输入我的邀请码："+inviteCode+"，有惊喜哦！")
                         .setCallback(umShareListener)
                         .share();
                 break;

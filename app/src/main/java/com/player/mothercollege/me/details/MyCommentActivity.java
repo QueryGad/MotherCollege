@@ -6,8 +6,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
+import com.player.mothercollege.adapter.MyCommentAdapter;
+import com.player.mothercollege.bean.MyCommentBean;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -17,6 +20,8 @@ import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/12/6.
@@ -58,7 +63,7 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
 
     private void netWork() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(MyCommentActivity.this, "uid", "null");
+        String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("uid",uid);
@@ -89,7 +94,11 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void parseJson(String info) {
-        //TODO
+        Gson gson = new Gson();
+        MyCommentBean myCommentBean = gson.fromJson(info, MyCommentBean.class);
+        List<MyCommentBean.NoticesBean> noticesList = myCommentBean.getNotices();
+        MyCommentAdapter adapter = new MyCommentAdapter(MyCommentActivity.this,noticesList);
+        lv_mycomment.setAdapter(adapter);
     }
 
     @Override
