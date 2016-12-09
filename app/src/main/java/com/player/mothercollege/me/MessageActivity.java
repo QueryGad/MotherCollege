@@ -34,6 +34,10 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void initViews() {
+        String newReviewCount = getIntent().getStringExtra("newReviewCount");
+        String newZlikeCount = getIntent().getStringExtra("newZlikeCount");
+        String newSystemNoticeCount = getIntent().getStringExtra("newSystemNoticeCount");
+
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
         ll_me_message_comment = (LinearLayout) findViewById(R.id.ll_me_message_comment);
@@ -43,7 +47,29 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         tv_message_comm_num = (TextView) findViewById(R.id.tv_message_comm_num);
         tv_message_zan_num = (TextView) findViewById(R.id.tv_message_zan_num);
         tv_message_sys_num = (TextView) findViewById(R.id.tv_message_sys_num);
+
         tv_details_title.setText("我的消息");
+
+        if (newReviewCount.equals("0")){
+            tv_message_comm_num.setVisibility(View.GONE);
+        }else {
+            tv_message_comm_num.setVisibility(View.VISIBLE);
+            tv_message_comm_num.setText(newReviewCount);
+        }
+
+        if (newZlikeCount.equals("0")){
+            tv_message_zan_num.setVisibility(View.GONE);
+        }else {
+            tv_message_zan_num.setVisibility(View.VISIBLE);
+            tv_message_zan_num.setText(newZlikeCount);
+        }
+
+        if (newSystemNoticeCount.equals("0")){
+            tv_message_sys_num.setVisibility(View.GONE);
+        }else {
+            tv_message_sys_num.setVisibility(View.VISIBLE);
+            tv_message_sys_num.setText(newSystemNoticeCount);
+        }
 
     }
 
@@ -57,12 +83,9 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void initData() {
-        netWork();
+
     }
 
-    private void netWork() {
-//        NoHttp.createStringRequest(ConfigUtils.)
-    }
 
     @Override
     public void onClick(View v) {

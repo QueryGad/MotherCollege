@@ -17,6 +17,8 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.adapter.ActiveAdapter;
 import com.player.mothercollege.bean.ActiveBean;
 import com.player.mothercollege.bean.CityBean;
+import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.PrefUtils;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -72,9 +74,9 @@ public class ActivityFragment extends Fragment{
     }
 
     private void netWorkCity() {
-        String url = "http://121.42.31.133:8201/m/api/business/sns.aspx";
-        Request<String> request = NoHttp.createStringRequest(url, RequestMethod.GET);
-        request.add("apptoken","apptoken");
+        String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
+        request.add("apptoken",apptoken);
         request.add("op","cityItem");
         requestQueue.add(001, request, new OnResponseListener<String>() {
             @Override
@@ -124,10 +126,10 @@ public class ActivityFragment extends Fragment{
 
 
     private void netWorkActivity(String key) {
-        String url = "http://121.42.31.133:8201/m/api/business/sns.aspx";
-        Request<String> request = NoHttp.createStringRequest(url, RequestMethod.GET);
+        String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
         request.add("op","active");
-        request.add("apptoken","apptoken");
+        request.add("apptoken",apptoken);
         request.add("lastIndex","0");
         request.add("city",key);
         requestQueue.add(002, request, new OnResponseListener<String>() {

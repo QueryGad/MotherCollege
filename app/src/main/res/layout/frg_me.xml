@@ -208,7 +208,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:gravity="center"
-                        android:text="100"
+                        android:text="0"
                         android:textSize="10dp"
                         android:textColor="#fff"
                         android:background="@mipmap/icon_circle_point"

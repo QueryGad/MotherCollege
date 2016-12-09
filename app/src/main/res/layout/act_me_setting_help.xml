@@ -28,6 +28,7 @@
         android:textSize="15sp"
         android:text="您的联系方式"/>
     <EditText
+        android:id="@+id/et_help_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="  输入您的手机号或邮箱（选填）"/>

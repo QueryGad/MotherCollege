@@ -1,19 +1,28 @@
 package com.player.mothercollege.me.details;
 
+import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
-import com.player.mothercollege.adapter.MyCommentAdapter;
+import com.player.mothercollege.bean.MessageNullBean;
 import com.player.mothercollege.bean.MyCommentBean;
 import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
+import com.player.mothercollege.view.GlideCircleTransform;
+import com.squareup.picasso.Picasso;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -21,6 +30,7 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,10 +40,12 @@ import java.util.List;
 public class MyCommentActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int GET_MESSAGE_COMMENT_DATA = 001;
+    private static final int POST_NULL_DATA = 002;
     private Button btn_mycomment_null;
     private TextView tv_mycomment_null;
     private ListView lv_mycomment;
     private RequestQueue requestQueue;
+    private MyCommentAdapter adapter;
 
     @Override
     public void setContentView() {
@@ -97,7 +109,7 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
         Gson gson = new Gson();
         MyCommentBean myCommentBean = gson.fromJson(info, MyCommentBean.class);
         List<MyCommentBean.NoticesBean> noticesList = myCommentBean.getNotices();
-        MyCommentAdapter adapter = new MyCommentAdapter(MyCommentActivity.this,noticesList);
+        adapter = new MyCommentAdapter(MyCommentActivity.this,noticesList);
         lv_mycomment.setAdapter(adapter);
     }
 
@@ -108,8 +120,132 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.tv_mycomment_null:
-                Toast.makeText(MyCommentActivity.this,"清空评论",Toast.LENGTH_SHORT).show();
+                postNull();
                 break;
         }
     }
+
+    private void postNull() {
+        //把集合中的nids拿出来
+        String nidd = "";
+        for (int i =0;i<nids.size();i++){
+            String nid =  nids.get(i);
+            nidd = nidd+","+nid;
+            MyLog.testLog("清空消息nid:"+nidd);
+        }
+        String apptoken = PrefUtils.getString(this, "apptoken", "");
+        String uid = PrefUtils.getString(this, "uid", "null");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("op","removenotice");
+        request.add("apptoken",apptoken);
+        request.add("uid",uid);
+        request.add("nids",nidd);
+        MyLog.testLog("最后nidd:"+nidd);
+        request.add("optype","2");
+        request.add("ntype","2");
+        requestQueue.add(POST_NULL_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("清空消息"+info);
+                Gson gson = new Gson();
+                MessageNullBean messageNullBean = gson.fromJson(info, MessageNullBean.class);
+                boolean isSuccess = messageNullBean.isIsSuccess();
+                if (isSuccess){
+                    adapter.notifyDataSetChanged();
+                }else {
+                    Toast.makeText(MyCommentActivity.this,"处理失败，请稍候再试!",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    private List<String> nids = new ArrayList<>();
+    public class MyCommentAdapter extends BaseAdapter {
+
+        private Context context;
+        private List<MyCommentBean.NoticesBean> lists = new ArrayList<>();
+        private RequestManager glideRequest;
+
+        public MyCommentAdapter(Context context,List lists) {
+            super();
+            this.context = context;
+            this.lists = lists;
+        }
+
+        @Override
+        public int getCount() {
+            return lists.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = null;
+            MyCommentHolder holder = null;
+            if (convertView==null){
+                view = View.inflate(context, R.layout.item_message_mycomment,null);
+                holder = new MyCommentHolder();
+                holder.iv_mycomment_icon = (ImageView) view.findViewById(R.id.iv_mycomment_icon);
+                holder.tv_mycomment_name = (TextView) view.findViewById(R.id.tv_mycomment_name);
+                holder.tv_mycomment_recew = (TextView) view.findViewById(R.id.tv_mycomment_recew);
+                holder.tv_mycomment_date = (TextView) view.findViewById(R.id.tv_mycomment_date);
+                holder.iv_mycomment_desc = (ImageView) view.findViewById(R.id.iv_mycomment_desc);
+                holder.tv_mycomment_desc = (TextView) view.findViewById(R.id.tv_mycomment_desc);
+                view.setTag(holder);
+            }else {
+                view = convertView;
+                holder = (MyCommentHolder) view.getTag();
+            }
+            glideRequest = Glide.with(context);
+            glideRequest.load(lists.get(position).getFromUicon())
+                    .transform(new GlideCircleTransform(context)).into(holder.iv_mycomment_icon);
+            holder.tv_mycomment_name.setText(lists.get(position).getFromUniceName());
+            holder.tv_mycomment_recew.setText(lists.get(position).getRcontent());
+            holder.tv_mycomment_date.setText(lists.get(position).getDatetime());
+            String sourceText = lists.get(position).getSourceText();
+            String sourcePic = lists.get(position).getSourcePic();
+            int nid = lists.get(position).getNid();
+            nids.add(nid+"");
+            holder.tv_mycomment_desc.setText(sourceText);
+            Picasso.with(context).load(sourcePic)
+                    .resize(DensityUtils.dip2px(context,50),DensityUtils.dip2px(context,58))
+                    .centerCrop().into(holder.iv_mycomment_desc);
+            return view;
+        }
+
+        class MyCommentHolder{
+            private ImageView iv_mycomment_icon;
+            private TextView tv_mycomment_name;
+            private TextView tv_mycomment_recew;
+            private TextView tv_mycomment_date;
+            private ImageView iv_mycomment_desc;
+            private TextView tv_mycomment_desc;
+        }
+    }
+
 }

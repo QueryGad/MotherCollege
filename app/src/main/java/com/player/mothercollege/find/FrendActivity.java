@@ -125,7 +125,7 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
 
     private void netWork() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(FrendActivity.this, "uid", "null");
+        String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.FIND_URL, RequestMethod.GET);
         request.add("op","yqhy");
         request.add("uid",uid);

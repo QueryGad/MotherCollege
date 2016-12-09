@@ -43,6 +43,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:text="0"
+                android:textSize="10dp"
                 android:gravity="center"
                 android:layout_marginLeft="5dp"
                 android:textColor="#fff"
@@ -91,6 +92,7 @@
                 android:layout_height="15dp"
                 android:text="0"
                 android:gravity="center"
+                android:textSize="10dp"
                 android:layout_marginLeft="5dp"
                 android:textColor="#fff"
                 android:background="@mipmap/icon_circle_point"/>
@@ -136,6 +138,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:text="0"
+                android:textSize="10dp"
                 android:gravity="center"
                 android:layout_marginLeft="5dp"
                 android:textColor="#fff"
