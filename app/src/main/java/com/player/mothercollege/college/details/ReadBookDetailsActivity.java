@@ -55,6 +55,8 @@ import com.yolanda.nohttp.rest.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/11/2.
  */
@@ -83,6 +85,11 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     private Button comment_send;
     private RelativeLayout rl_comment;
     private LinearLayout ll_persondeatials_line;
+    private OriginalReveiwAdapter adapter;
+    private List<ReadBookDetailsBean.ReveiwBean> reveiwList;
+    private ImageView iv_person_zan;
+    private TextDetailsAdapter textAdapter;
+    private List<ReadBookDetailsBean.ZlistBean> zlistList;
 
     @Override
     public void setContentView() {
@@ -177,6 +184,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     private void parseJson(String info){
         Gson gson = new Gson();
         readBookDetailsBean = gson.fromJson(info, ReadBookDetailsBean.class);
+
         String hasLike = readBookDetailsBean.getHasLike();
         if (hasLike.equals("true")){
             iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
@@ -192,7 +200,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         }
 
         initHead();
-        OriginalReveiwAdapter adapter = new OriginalReveiwAdapter(ReadBookDetailsActivity.this,readBookDetailsBean.getReveiw());
+        adapter = new OriginalReveiwAdapter(ReadBookDetailsActivity.this,readBookDetailsBean.getReveiw());
         lv_details.setAdapter(adapter);
     }
 
@@ -211,6 +219,8 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         tv_textdetails_viewCount.setText("浏览人数:"+readBookDetailsBean.getViewCount());
         tv_textdetails_zan.setText(readBookDetailsBean.getZlist().size()+"");
         tv_textdetails_comment.setText(readBookDetailsBean.getReveiw().size()+"");
+        reveiwList = readBookDetailsBean.getReveiw();
+        zlistList = readBookDetailsBean.getZlist();
         content = readBookDetailsBean.getContent();
         initH5(content);
 
@@ -228,8 +238,8 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         gr_textdetails_head.setStretchMode(GridView.NO_STRETCH);
         gr_textdetails_head.setNumColumns(readBookDetailsBean.getZlist().size()); // 设置列数量=列表集合数
 
-        TextDetailsAdapter adapter = new TextDetailsAdapter();
-        gr_textdetails_head.setAdapter(adapter);
+        textAdapter = new TextDetailsAdapter();
+        gr_textdetails_head.setAdapter(textAdapter);
 
         lv_details.addHeaderView(view);
     }
@@ -282,6 +292,16 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                 if (orZan){
                     iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
                     Toast.makeText(ReadBookDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
+
+                    String uicon = PrefUtils.getString(ReadBookDetailsActivity.this, "uicon", "");
+                    MyLog.testLog("我的头像:"+uicon);
+                    ReadBookDetailsBean.ZlistBean bean = new ReadBookDetailsBean.ZlistBean();
+                    bean.setUicon(uicon);
+                    zlistList.add(bean);
+//                    glideRequest = Glide.with(ReadBookDetailsActivity.this);
+//                    glideRequest.load(uicon)
+//                            .transform(new GlideCircleTransform(ReadBookDetailsActivity.this)).into(iv_person_zan);
+                    textAdapter.notifyDataSetChanged();
                     postZan();
                     orZan = false;
                 }else {
@@ -290,6 +310,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                     canleZan();
                     orZan = true;
                 }
+                adapter.notifyDataSetChanged();
                 break;
             case R.id.ll_persondeatials_collect:
                 if (orCollect){
@@ -354,7 +375,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private ProgressDialog pd;
-    private void postComment(String self_comment) {
+    private void postComment(final String self_comment) {
         String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
         String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
@@ -387,6 +408,14 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                         InputMethodManager im = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         im.hideSoftInputFromWindow(comment_content.getWindowToken(), 0);
                         Toast.makeText(ReadBookDetailsActivity.this,"评论成功!",Toast.LENGTH_SHORT).show();
+                        ReadBookDetailsBean.ReveiwBean bean = new ReadBookDetailsBean.ReveiwBean();
+                        String username = PrefUtils.getString(ReadBookDetailsActivity.this, "username", "");
+                        MyLog.testLog("我拿到你的名字了:"+username);
+                        bean.setUnicename(username);
+                        bean.setContent(self_comment);
+                        reveiwList.add(bean);
+                        adapter.notifyDataSetChanged();
+                        lv_details.setSelection(lv_details.getBottom());
                     }else {
                         pd.dismiss();
                         Toast.makeText(ReadBookDetailsActivity.this,"评论失败，请稍候重试!",Toast.LENGTH_SHORT).show();
@@ -612,7 +641,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = View.inflate(ReadBookDetailsActivity.this, R.layout.item_details_personzan,null);
-            ImageView iv_person_zan = (ImageView) view.findViewById(R.id.iv_person_zan);
+            iv_person_zan = (ImageView) view.findViewById(R.id.iv_person_zan);
             glideRequest = Glide.with(ReadBookDetailsActivity.this);
             glideRequest.load(readBookDetailsBean.getZlist().get(position).getUicon())
                     .transform(new GlideCircleTransform(ReadBookDetailsActivity.this)).into(iv_person_zan);

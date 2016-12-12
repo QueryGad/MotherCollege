@@ -16,6 +16,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.adapter.RecommAdapter;
 import com.player.mothercollege.bean.RecommBean;
 import com.player.mothercollege.college.details.BzzbDeatilsActivity;
+import com.player.mothercollege.college.details.ClassDetailsActivity;
 import com.player.mothercollege.find.MarketActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -53,12 +54,16 @@ public class RecommFragment extends Fragment {
             int rtype = rtypes.get(position-1);
             MyLog.testLog("rtype"+rtype);
             String sid = sidBanner.get(position-1);
-            if (rtype==11||rtype==12){
+            if (rtype==11){
                 //跳转直播页面 跳转课程
                 Intent intent1 = new Intent(getActivity(), BzzbDeatilsActivity.class);
                 intent1.putExtra("sid",sid);
                 startActivity(intent1);
-            }else if (rtype==13||rtype==14){
+            }else if (rtype==12){
+                Intent intent1 = new Intent(getActivity(), ClassDetailsActivity.class);
+                intent1.putExtra("sid",sid);
+                startActivity(intent1);
+            } else if (rtype==13||rtype==14){
                 //读书  原创
                 Intent intent2 = new Intent(getActivity(), BzzbDeatilsActivity.class);
                 intent2.putExtra("sid",sid);

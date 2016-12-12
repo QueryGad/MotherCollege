@@ -43,6 +43,9 @@ import com.yolanda.nohttp.rest.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/12/6.
  */
@@ -85,6 +88,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
             }
         }
     };
+    private List<ClassDetailsBean.CourseInfoBean.ReviewsBean> reviewsList = new ArrayList<>();
 
     @Override
     public void setContentView() {
@@ -208,6 +212,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         Gson gson = new Gson();
         ClassDetailsBean classDetailsBean = gson.fromJson(info, ClassDetailsBean.class);
         ClassDetailsBean.CourseInfoBean courseInfo = classDetailsBean.getCourseInfo();
+        reviewsList = courseInfo.getReviews();
         boolean hasLike = courseInfo.isHasLike();
         if (hasLike){
             iv_videodetails_zan.setImageResource(R.mipmap.icon_favour_list);
@@ -455,7 +460,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private ProgressDialog pd;
-    private void postComment(String self_comment) {
+    private void postComment(final String self_comment) {
         String apptoken = PrefUtils.getString(ClassDetailsActivity.this, "apptoken", "");
         String uid = PrefUtils.getString(ClassDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
@@ -488,6 +493,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
                         InputMethodManager im = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         im.hideSoftInputFromWindow(comment_content.getWindowToken(), 0);
                         Toast.makeText(ClassDetailsActivity.this,"评论成功!",Toast.LENGTH_SHORT).show();
+
                     }else {
                         pd.dismiss();
                         Toast.makeText(ClassDetailsActivity.this,"评论失败，请稍候重试!",Toast.LENGTH_SHORT).show();

@@ -54,6 +54,8 @@ import com.yolanda.nohttp.rest.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/11/2.
  */
@@ -82,6 +84,8 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     private Button comment_send;
     private RelativeLayout rl_comment;
     private LinearLayout ll_persondeatials_line;
+    private List<ReadBookDetailsBean.ReveiwBean> reveiwList;
+    private OriginalReveiwAdapter adapter;
 
     @Override
     public void setContentView() {
@@ -203,6 +207,7 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     private void parseJson(String info){
         Gson gson = new Gson();
         readBookDetailsBean = gson.fromJson(info, ReadBookDetailsBean.class);
+        reveiwList = readBookDetailsBean.getReveiw();
         String hasLike = readBookDetailsBean.getHasLike();
         if (hasLike.equals("true")){
             iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
@@ -216,7 +221,7 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
             iv_persondeatials_collect.setImageResource(R.mipmap.tab_collect);
         }
         initHead();
-        OriginalReveiwAdapter adapter = new OriginalReveiwAdapter(OriginalDetailsActivity.this,readBookDetailsBean.getReveiw());
+        adapter = new OriginalReveiwAdapter(OriginalDetailsActivity.this,readBookDetailsBean.getReveiw());
         lv_details.setAdapter(adapter);
     }
 
@@ -376,7 +381,7 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private ProgressDialog pd ;
-    private void postComment(String self_comment) {
+    private void postComment(final String self_comment) {
         String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
         String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
@@ -409,6 +414,15 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                         InputMethodManager im = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         im.hideSoftInputFromWindow(comment_content.getWindowToken(), 0);
                         Toast.makeText(OriginalDetailsActivity.this,"评论成功!",Toast.LENGTH_SHORT).show();
+
+                        ReadBookDetailsBean.ReveiwBean bean = new ReadBookDetailsBean.ReveiwBean();
+                        String username = PrefUtils.getString(OriginalDetailsActivity.this, "username", "");
+                        MyLog.testLog("我拿到你的名字了:"+username);
+                        bean.setUnicename(username);
+                        bean.setContent(self_comment);
+                        reveiwList.add(bean);
+                        adapter.notifyDataSetChanged();
+                        lv_details.setSelection(lv_details.getBottom());
                     }else {
                         pd.dismiss();
                         Toast.makeText(OriginalDetailsActivity.this,"评论失败，请稍候重试!",Toast.LENGTH_SHORT).show();

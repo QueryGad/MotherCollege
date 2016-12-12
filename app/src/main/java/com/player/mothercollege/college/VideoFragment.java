@@ -98,14 +98,22 @@ public class VideoFragment extends Fragment{
 
     private void parseJson(String info){
         Gson gson = new Gson();
+
         VideoBean videoBean = gson.fromJson(info, VideoBean.class);
         //本周直播
-        bzzbBean = videoBean.getBzzb();
+        if (videoBean.getBzzb()==null){
+            MyLog.testLog("服务器给我null了");
+        }else {
+            bzzbBean = videoBean.getBzzb();
+            //本周直播绑定
+            bzzbVideoBind();
+        }
+
+
         //上期回看
         sqhgBean = videoBean.getSqhg();
         List<VideoBean.WqhkBean> wqhkBean = videoBean.getWqhk();//往期回看
-        //本周直播绑定
-        bzzbVideoBind();
+
         //上期回看绑定
         sqhgkVideoBind();
         //往期回看
