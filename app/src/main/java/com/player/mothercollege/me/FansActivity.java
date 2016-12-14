@@ -45,7 +45,9 @@ public class FansActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void onClick(View v, int position, FansBean.UsersBean data) {
             //点击头像进入他人主页
+            String uid = usersList.get(position).getUid();
             Intent intent = new Intent(FansActivity.this, HeadIconActivity.class);
+            intent.putExtra("toUid",uid);
             startActivity(intent);
         }
     };
@@ -124,7 +126,7 @@ public class FansActivity extends BaseActivity implements View.OnClickListener {
         FansBean fansBean = gson.fromJson(info, FansBean.class);
         int currentPageSize = fansBean.getCurrentPageSize();//总页数
         int lastIndex = fansBean.getLastIndex();//最后一页
-        List<FansBean.UsersBean> usersList = fansBean.getUsers();
+        usersList = fansBean.getUsers();
         FansAdapter adapter = new FansAdapter(this,usersList);
         rv_fans.setAdapter(adapter);
         rv_fans.setLayoutManager(new LinearLayoutManager(this));

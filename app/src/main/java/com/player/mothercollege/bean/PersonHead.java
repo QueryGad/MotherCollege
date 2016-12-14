@@ -29,6 +29,15 @@ public class PersonHead {
     private int sex;
     private String uicon;
     private String uid;
+    private String guid;
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
 
     public String getAutograph() {
         return autograph;

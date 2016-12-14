@@ -44,10 +44,13 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void onClick(View v, int position, LoveBean.UsersBean data) {
             //点击头像进入他人主页
+            String uid = usersList.get(position).getUid();
             Intent intent = new Intent(LoveActivity.this, HeadIconActivity.class);
+            intent.putExtra("toUid",uid);
             startActivity(intent);
         }
     };
+    private List<LoveBean.UsersBean> usersList;
 
     @Override
     public void setContentView() {
@@ -122,7 +125,7 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
         LoveBean loveBean = gson.fromJson(info, LoveBean.class);
         int currentPageSize = loveBean.getCurrentPageSize(); //总共页面数
         int lastIndex = loveBean.getLastIndex(); //最后传入下标
-        List<LoveBean.UsersBean> usersList = loveBean.getUsers();
+        usersList = loveBean.getUsers();
         LoveAdapter adapter = new LoveAdapter(usersList,LoveActivity.this);
         rv_find_love.setAdapter(adapter);
         rv_find_love.setLayoutManager(new LinearLayoutManager(LoveActivity.this));

@@ -14,6 +14,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.FastDetailsAdapter;
 import com.player.mothercollege.bean.FastDetailsBean;
+import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DateUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -80,8 +81,6 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
         MyLog.testLog("apptoken："+apptoken);
         request.add("op","qustioninfo");
         request.add("qid",qid+"");
-        MyLog.testLog("问答详情qid:"+qid);
-        MyLog.testLog("QID："+qid);
         requestQueue.add(GET_FASTDETAILS_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -112,7 +111,7 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
         fastDetailsBean = gson.fromJson(info, FastDetailsBean.class);
         answerList = fastDetailsBean.getAnswer();
         addHeadTitle();
-        adapter =   new FastDetailsAdapter(FastInquiryDetailsActivity.this, answerList);
+        adapter =  new FastDetailsAdapter(FastInquiryDetailsActivity.this, answerList);
         lv_fastdetails.setAdapter(adapter);
     }
 
@@ -129,6 +128,15 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
         glideRequest = Glide.with(FastInquiryDetailsActivity.this);
         glideRequest.load(fastDetailsBean.getUicon())
                 .transform(new GlideCircleTransform(FastInquiryDetailsActivity.this)).into(iv_fastdetails_me);
+        final String uid = fastDetailsBean.getUid();
+        iv_fastdetails_me.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FastInquiryDetailsActivity.this, HeadIconActivity.class);
+                intent.putExtra("toUid",uid);
+                startActivity(intent);
+            }
+        });
         tv_fastdetails_mename.setText(fastDetailsBean.getUnicename());
         String time = fastDetailsBean.getDate();
         tv_fastdetails_metime.setText(DateUtils.getStandardDate(time));

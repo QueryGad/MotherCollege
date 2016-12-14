@@ -1,6 +1,7 @@
 package com.player.mothercollege.bean;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.player.mothercollege.R;
+import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.DateUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
 
@@ -65,6 +67,15 @@ public class FastDetailsAdapter extends BaseAdapter{
         glideRequest = Glide.with(context);
         glideRequest.load(lists.get(position).getUicon())
                 .transform(new GlideCircleTransform(context)).into(holder.iv_fastdetails_other);
+        final String uid = lists.get(position).getUid();
+        holder.iv_fastdetails_other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, HeadIconActivity.class);
+                intent.putExtra("toUid",uid);
+                context.startActivity(intent);
+            }
+        });
         holder.tv_fastdetails_name.setText(lists.get(position).getUnicename());
         String time = lists.get(position).getDate();
         holder.tv_fastdetails_time.setText(DateUtils.getStandardDate(time));

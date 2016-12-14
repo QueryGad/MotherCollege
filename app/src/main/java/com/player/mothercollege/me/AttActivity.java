@@ -45,7 +45,9 @@ public class AttActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void onClick(View v, int position, AttBean.UsersBean data) {
             //点击头像进入他人主页
+            String uid = usersList.get(position).getUid();
             Intent intent = new Intent(AttActivity.this, HeadIconActivity.class);
+            intent.putExtra("toUid",uid);
             startActivity(intent);
         }
     };
@@ -125,7 +127,7 @@ public class AttActivity extends BaseActivity implements View.OnClickListener {
         AttBean attBean = gson.fromJson(info, AttBean.class);
         int currentPageSize = attBean.getCurrentPageSize();//总页数
         int lastIndex = attBean.getLastIndex();//最后一页
-        List<AttBean.UsersBean> usersList = attBean.getUsers();
+        usersList =  attBean.getUsers();
         AttAdapter adapter = new AttAdapter(this,usersList);
         rv_att.setAdapter(adapter);
         rv_att.setLayoutManager(new LinearLayoutManager(this));

@@ -86,6 +86,8 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private RelativeLayout rl_comment;
     private LinearLayout ll_activitydeatials_line;
     private String aid;
+    private List<ActivityDetailsBean.ReviewsBean> reviewsList;
+    private ActivityReveiwAdapter adapter;
 
     @Override
     public void setContentView() {
@@ -218,8 +220,9 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
             iv_activitydeatials_collect.setImageResource(R.mipmap.tab_collect);
         }
         content = activityDetailsBean.getContent();
+        reviewsList = activityDetailsBean.getReviews();
         initHead();
-        ActivityReveiwAdapter adapter = new ActivityReveiwAdapter(ActivityDetailsActivity.this,activityDetailsBean.getReviews());
+        adapter = new ActivityReveiwAdapter(ActivityDetailsActivity.this,activityDetailsBean.getReviews());
         lv_activitydetails.setAdapter(adapter);
     }
 
@@ -419,7 +422,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private ProgressDialog pd ;
-    private void postComment(String self_comment) {
+    private void postComment(final String self_comment) {
         String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
         String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
@@ -452,6 +455,13 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                         InputMethodManager im = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         im.hideSoftInputFromWindow(comment_content.getWindowToken(), 0);
                         Toast.makeText(ActivityDetailsActivity.this,"评论成功!",Toast.LENGTH_SHORT).show();
+                        ActivityDetailsBean.ReviewsBean bean = new ActivityDetailsBean.ReviewsBean();
+                        String username = PrefUtils.getString(ActivityDetailsActivity.this, "username", "");
+                        bean.setUnicename(username);
+                        bean.setContent(self_comment);
+                        reviewsList.add(bean);
+                        adapter.notifyDataSetChanged();
+                        lv_activitydetails.setSelection(lv_activitydetails.getBottom());
                     }else {
                         pd.dismiss();
                         Toast.makeText(ActivityDetailsActivity.this,"评论失败，请稍候重试!",Toast.LENGTH_SHORT).show();

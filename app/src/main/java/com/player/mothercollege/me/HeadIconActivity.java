@@ -47,6 +47,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     private ProgressDialog pd;
     private TextView tv_otherperson_guanzhu,tv_otherperson_chat;
     private LinearLayout ll_other_zhuanchat;
+    private String toUid;
 
     @Override
     public void setContentView() {
@@ -56,6 +57,9 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void initViews() {
+
+        toUid = getIntent().getStringExtra("toUid");
+
         iv_refresh = (ImageView) findViewById(R.id.iv_refresh);
         btn_refrsh = (Button) findViewById(R.id.btn_refrsh);
         btn_back = (Button) findViewById(R.id.btn_back);
@@ -73,15 +77,13 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void initData() {
         netWork1();//个人信息
-
     }
 
     private void netWork2() {
         String apptoken = PrefUtils.getString(HeadIconActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(HeadIconActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","tiezilist");
-        request.add("uid",uid);
+        request.add("uid",toUid);
         request.add("apptoken",apptoken);
         request.add("lastindex","0");
         requestQueue.add(GET_DYNAMIC_DATA, request, new OnResponseListener<String>() {
@@ -116,7 +118,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","userinfo");
         request.add("uid",uid);
-        request.add("toUid",uid);
+        request.add("toUid",toUid);
         request.add("apptoken",apptoken);
         requestQueue.add(GET_HEADICON_DATA, request, new OnResponseListener<String>() {
             @Override
@@ -187,7 +189,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         String uicon = personHeadBean.getUicon(); //头像
         String niceName = personHeadBean.getNiceName();//昵称
         boolean isVip = personHeadBean.isIsVip();//是否VIP
-        String uidID = personHeadBean.getUid();//用户ID
+        String guid = personHeadBean.getGuid();
         int followCount = personHeadBean.getFollowCount();//关注人数
         int fansCount = personHeadBean.getFansCount();//粉丝人数
         int sex = personHeadBean.getSex();//性别
@@ -224,7 +226,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         }else {
             iv_isVip.setVisibility(View.GONE);
         }
-        tv_person_id.setText("ID:"+uidID);
+        tv_person_id.setText("ID:"+guid);
         tv_person_guanzhu.setText("关注"+followCount);
         tv_person_fans.setText("粉丝"+fansCount);
         if (sex==0){

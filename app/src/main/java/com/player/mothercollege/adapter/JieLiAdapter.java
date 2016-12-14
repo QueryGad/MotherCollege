@@ -1,6 +1,7 @@
 package com.player.mothercollege.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.JieLiBean;
+import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.view.GlideCircleTransform;
 
 import java.util.ArrayList;
@@ -48,6 +50,15 @@ public class JieLiAdapter extends RecyclerView.Adapter<JieLiAdapter.JieLiViewHol
         glideRequest = Glide.with(context);
         glideRequest.load(jieLilist.get(position).getUIcon())
                 .transform(new GlideCircleTransform(context)).into(holder.iv_find_jieli);
+        final String uid = jieLilist.get(position).getUid();
+        holder.iv_find_jieli.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, HeadIconActivity.class);
+                intent.putExtra("toUid",uid);
+                context.startActivity(intent);
+            }
+        });
         holder.tv_find_jieli.setText(jieLilist.get(position).getUniceName());
     }
 
