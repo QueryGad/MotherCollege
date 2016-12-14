@@ -1,6 +1,7 @@
 package com.player.mothercollege.unity.details;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
@@ -101,7 +102,7 @@ public class MyAnswerActivity extends BaseActivity implements View.OnClickListen
         alertDialog = builder.show();
     }
 
-    private void netWork(String content){
+    private void netWork(final String content){
         String apptoken = PrefUtils.getString(MyAnswerActivity.this, "apptoken", "");
         String uid = PrefUtils.getString(MyAnswerActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.POST);
@@ -126,6 +127,9 @@ public class MyAnswerActivity extends BaseActivity implements View.OnClickListen
                     if (isSuccess){
                         //回答成功
                         Toast.makeText(MyAnswerActivity.this,"回答成功!",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent();
+                        intent.putExtra("content",content);
+                        setResult(100,intent);
                         finish();
                     }else {
                         //回答失败

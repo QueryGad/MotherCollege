@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/refresh_recomm"
+<com.player.mothercollege.utils.VpSwipeRefreshLayout
+    android:id="@+id/refreshLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/lv_recomm"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@color/transprant"
-        android:divider="#0000"
-        android:dividerHeight="0.5dp"
-        android:listSelector="@color/transprant"/>
-</android.support.v4.widget.SwipeRefreshLayout>
+        <ListView
+            android:id="@+id/lv_recomm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@color/transprant"
+            android:divider="#0000"
+            android:dividerHeight="0.5dp"
+            android:listSelector="@color/transprant"/>
+
+
+</com.player.mothercollege.utils.VpSwipeRefreshLayout>

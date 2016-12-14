@@ -42,6 +42,8 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
     private String qid;
     private RequestQueue requestQueue;
     private FastDetailsBean fastDetailsBean;
+    private FastDetailsAdapter adapter;
+    private List<FastDetailsBean.AnswerBean> answerList;
 
     @Override
     public void setContentView() {
@@ -108,9 +110,9 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
     private void parseJson(String info){
         Gson gson = new Gson();
         fastDetailsBean = gson.fromJson(info, FastDetailsBean.class);
-        List<FastDetailsBean.AnswerBean> answerList = fastDetailsBean.getAnswer();
+        answerList = fastDetailsBean.getAnswer();
         addHeadTitle();
-        FastDetailsAdapter adapter = new FastDetailsAdapter(FastInquiryDetailsActivity.this,answerList);
+        adapter =   new FastDetailsAdapter(FastInquiryDetailsActivity.this, answerList);
         lv_fastdetails.setAdapter(adapter);
     }
 
@@ -145,8 +147,27 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
             case R.id.btn_fastdetails_answer://我来回答
                 Intent intent = new Intent(FastInquiryDetailsActivity.this,MyAnswerActivity.class);
                 intent.putExtra("qid",qid);
-                startActivity(intent);
+                startActivityForResult(intent,100);
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+       if (requestCode==100&&resultCode==100){
+           String content = data.getStringExtra("content");
+           String uicon = PrefUtils.getString(FastInquiryDetailsActivity.this, "uicon", "");
+           String username = PrefUtils.getString(FastInquiryDetailsActivity.this, "username", "");
+           FastDetailsBean.AnswerBean bean = new FastDetailsBean.AnswerBean();
+           bean.setUicon(uicon);
+           bean.setUnicename(username);
+           bean.setAnswer(content);
+           bean.setDate("刚刚");
+           answerList.add(bean);
+           adapter.notifyDataSetChanged();
+       }
+
     }
 }

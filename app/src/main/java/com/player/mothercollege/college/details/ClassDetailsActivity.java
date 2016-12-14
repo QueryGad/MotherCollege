@@ -493,7 +493,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
                         InputMethodManager im = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         im.hideSoftInputFromWindow(comment_content.getWindowToken(), 0);
                         Toast.makeText(ClassDetailsActivity.this,"评论成功!",Toast.LENGTH_SHORT).show();
-
+                        rb_frg_comment.setChecked(true);
                     }else {
                         pd.dismiss();
                         Toast.makeText(ClassDetailsActivity.this,"评论失败，请稍候重试!",Toast.LENGTH_SHORT).show();

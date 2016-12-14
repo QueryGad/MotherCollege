@@ -274,6 +274,9 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
             glideRequest = Glide.with(context);
             glideRequest.load(lists.get(position).getFromUicon())
                     .transform(new GlideCircleTransform(context)).into(holder.iv_myzan_icon);
+
+            MyLog.testLog("头像信息:"+lists.get(position).getFromUicon());
+
             holder.tv_myzan_name.setText(lists.get(position).getFromUniceName());
             holder.tv_myzan_date.setText(lists.get(position).getDatetime());
             String sourceText = lists.get(position).getSourceText();
@@ -305,6 +308,7 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
             }
             int nid = lists.get(position).getNid();
             nids.add(nid+"");
+            MyLog.testLog("nids:"+nids);
             Picasso.with(context).load(sourcePic)
                     .resize(DensityUtils.dip2px(context,50),DensityUtils.dip2px(context,58))
                     .centerCrop().into(holder.iv_myzan_desc);

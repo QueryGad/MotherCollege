@@ -73,7 +73,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void initData() {
         netWork1();//个人信息
-        netWork2();//帖子
+
     }
 
     private void netWork2() {
@@ -149,6 +149,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         Gson gson = new Gson();
         PersonHead personHeadBean = gson.fromJson(info, PersonHead.class);
         initHead(personHeadBean);
+        netWork2();//帖子
     }
 
     private void parseJson2(String info){

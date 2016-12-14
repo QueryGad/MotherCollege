@@ -1,5 +1,6 @@
 package com.player.mothercollege.me.details;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -24,6 +25,7 @@ import com.player.mothercollege.utils.ImagePostUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.RecyclerItemClickListener;
+import com.yanzhenjie.permission.AndPermission;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -43,6 +45,7 @@ import me.iwf.photopicker.PhotoPreview;
 public class CirlePostMessageActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int POST_MESSAGE_DATA = 001;
+    private static final int GET_PERMISSIONS_PHONE_STATE = 002;
     private Button btn_back;
     private TextView tv_details_title;
     private EditText et_postmessage_title,et_postmessage_content;
@@ -103,13 +106,15 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
         }));
     }
 
+    List<String> photos = new ArrayList<>();
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK &&
                 (requestCode == PhotoPicker.REQUEST_CODE || requestCode == PhotoPreview.REQUEST_CODE)) {
 
-            List<String> photos = null;
+
             if (data != null) {
                 photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
             }
@@ -123,13 +128,15 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
             for (int i = 0;i<photos.size();i++){
 //                postImageArr.clear();
                 String photoLocation = photos.get(i).toString();  //所选图片路径
-
+                MyLog.testLog("图片路径:"+photoLocation);
                 String png = photoLocation.substring(photoLocation.lastIndexOf("."));
                 png = png.substring(1,png.length());
                 String location = ImagePostUtils.imageBASE64(photoLocation);//转换为64位编码格式的图片路径
                 String postImage = png+"|"+location;
                 postImageArr.add(postImage);
             }
+
+
             photoAdapter.notifyDataSetChanged();
         }
     }
@@ -167,6 +174,9 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
                 builder.show();
                 break;
             case R.id.btn_postmessage_camer:
+                AndPermission.with(this).requestCode(GET_PERMISSIONS_PHONE_STATE)
+                        .permission(Manifest.permission.CAMERA)
+                        .send();
                 PhotoPicker.builder()
                         .setPhotoCount(9)
                         .setGridColumnCount(4)
@@ -205,15 +215,14 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
     }
 
     private  void postMessage(String title,String content){
+
+
+
         String imgs="";
         for (int i =0;i<postImageArr.size();i++){
             String img = postImageArr.get(i);
-//            MyLog.testLog("单张图片:"+img);
-//            if (i==0){
-//                imgs = postImageArr.get(0);
-//            }else if (i>0){
+
                 imgs = imgs+(img+"^");
-//            }
 
         }
 
@@ -227,7 +236,6 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
         request.add("apptoken",apptoken);
         request.add("op","PostTrend");
         request.add("uid",uid);
-//        request.add("uid","u1611130003");
         request.add("gid",groupId);
         request.add("title",title);
         request.add("content",content);

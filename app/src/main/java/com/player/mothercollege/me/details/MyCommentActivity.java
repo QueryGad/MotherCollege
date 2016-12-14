@@ -81,6 +81,7 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
         String nidd = "";
         for (int i =0;i<nids.size();i++){
             String nid =  nids.get(i);
+            MyLog.testLog("nid:"+nid);
             nidd = nidd+","+nid;
         }
 
@@ -156,8 +157,7 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
         List<MyCommentBean.NoticesBean> noticesList = myCommentBean.getNotices();
         adapter = new MyCommentAdapter(MyCommentActivity.this,noticesList);
         lv_mycomment.setAdapter(adapter);
-        //打开后全部显示已读
-        allRead();
+
     }
 
     @Override
@@ -301,6 +301,7 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
             }
             int nid = lists.get(position).getNid();
             nids.add(nid+"");
+            MyLog.testLog("nids:"+nids);
             holder.tv_mycomment_desc.setText(sourceText);
             Picasso.with(context).load(sourcePic)
                     .resize(DensityUtils.dip2px(context,50),DensityUtils.dip2px(context,58))

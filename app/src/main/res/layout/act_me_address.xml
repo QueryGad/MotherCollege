@@ -4,15 +4,52 @@
     android:layout_height="match_parent"
     android:background="@color/bg_content"
     android:orientation="vertical">
-    <include
-        android:id="@+id/include"
-        layout="@layout/details_title"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/bg_title"
+        >
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/transprant"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_return"/>
+        <TextView
+            android:id="@+id/tv_details_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text=""
+            android:textSize="18sp"
+            android:textColor="#000"/>
+        <TextView
+            android:id="@+id/tv_address_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加"
+            android:textSize="18sp"
+            android:layout_marginRight="5dp"
+            android:textColor="#f00"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc"/>
     <com.player.mothercollege.view.LeftSlideDeleteListView
         android:id="@+id/lv_address"
         android:cacheColorHint="@color/transprant"
         android:divider="#0000"
         android:dividerHeight="9.5dp"
         android:listSelector="@color/transprant"
+        android:layout_gravity="left|top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

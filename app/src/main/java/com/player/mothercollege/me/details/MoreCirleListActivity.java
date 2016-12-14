@@ -2,6 +2,7 @@ package com.player.mothercollege.me.details;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -49,7 +50,12 @@ public class MoreCirleListActivity extends BaseActivity{
     private AdapterView.OnItemClickListener TitleItemListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //内容listview
+            boolean onClick = groupWithClass.get(position).getOnClick();
+//            if (onClick){
+                tv_title.setBackgroundColor(Color.WHITE);
+//            }else {
+//                tv_title.setBackgroundColor(Color.GRAY);
+//            }
             groupsList =  groupWithClass.get(position).getGroups();
             contentAdapter = new ContentAdapter();
             lv_content.setAdapter(contentAdapter);
@@ -81,9 +87,10 @@ public class MoreCirleListActivity extends BaseActivity{
 
     private void netWork() {
         String uid = PrefUtils.getString(MoreCirleListActivity.this, "uid", "null");
+        String apptoken = PrefUtils.getString(this, "apptoken", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL);
         request.add("uid",uid);
-        request.add("apptoken","sefsefa");
+        request.add("apptoken",apptoken);
         request.add("op","moreGroup");
         requestQueue.add(001, request, new OnResponseListener<String>() {
             @Override

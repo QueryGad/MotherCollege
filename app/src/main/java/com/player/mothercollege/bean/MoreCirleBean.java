@@ -30,6 +30,8 @@ public class MoreCirleBean {
 
         private GroupClassBean groupClass;
         private int index;
+
+        private boolean onClick;
         /**
          * classNo : g01
          * groupId : g1
@@ -39,6 +41,14 @@ public class MoreCirleBean {
          * index : 1
          * joinCount : 99
          */
+
+        public void  setOnClick(boolean onClick){
+            this.onClick = onClick;
+        }
+
+        public boolean getOnClick(){
+            return onClick;
+        }
 
         private List<GroupsBean> groups;
 
@@ -151,6 +161,7 @@ public class MoreCirleBean {
             public void setJoinCount(int joinCount) {
                 this.joinCount = joinCount;
             }
+
         }
     }
 }

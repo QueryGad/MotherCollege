@@ -68,7 +68,7 @@ public class ActiveAdapter extends BaseAdapter{
 
         holder.tv_active_title.setText(lists.get(position).getTitle());
         Picasso.with(context).load(lists.get(position).getImg())
-                .resize(DensityUtils.dip2px(context, ScreenUtils.getWidth(context)),DensityUtils.dip2px(context,350f))
+                .resize(DensityUtils.dip2px(context, ScreenUtils.getWidth(context)),DensityUtils.dip2px(context,300))
                 .centerCrop().into(holder.iv_active);
         holder.tv_active_address.setText(lists.get(position).getCity());
         holder.tv_active_person.setText(lists.get(position).getJoinCount()+"");

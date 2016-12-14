@@ -14,4 +14,6 @@ public class ConfigUtils {
     public static final String LOGIN_URL = BASE_URL + "/login.aspx";
     public static final String POST_PHOTO = BASE_URL + "/tools/fileUploadapi.ashx";
     public static final String POST_COMMON= BASE_URL + "/business/CommonTools.ashx";
+    public static final String PAY= BASE_URL + "/business/pay.aspx";
+
 }

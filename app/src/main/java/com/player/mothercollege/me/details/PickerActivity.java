@@ -3,6 +3,7 @@ package com.player.mothercollege.me.details;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -176,7 +177,6 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
                 netWork(name,phone,details);
                 break;
             case R.id.tv_address_picker:  //三级联动
-
                 ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE))
                         .hideSoftInputFromWindow(PickerActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 pvOptions.show();
@@ -230,7 +230,7 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    private void netWork(String name,String phone,String details) {
+    private void netWork(final String name,final String phone,final String details) {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
         String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
@@ -242,7 +242,6 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
         request.add("linkphone",phone);
         request.add("linkname",name);
         request.add("ad1",sheng);
-        MyLog.testLog("省"+sheng);
         request.add("ad2",shi);
         request.add("ad3",xian);
         request.add("add_ext",details);
@@ -261,10 +260,20 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
                 try {
                     JSONObject json = new JSONObject(info);
                     boolean isSuccess = json.getBoolean("isSuccess");
+
                     MyLog.testLog("上传是否成功:"+isSuccess);
                     if (isSuccess){
                         Toast.makeText(PickerActivity.this,"添加收货地址成功!",Toast.LENGTH_SHORT).show();
                         pd.dismiss();
+                        Intent intent = new Intent();
+                        intent.putExtra("name",name);
+                        intent.putExtra("phone",phone);
+                        intent.putExtra("details",details);
+                        intent.putExtra("sheng",sheng);
+                        intent.putExtra("shi",shi);
+                        intent.putExtra("xian",xian);
+                        intent.putExtra("moren",moren);
+                        setResult(100,intent);
                         finish();
                     }else {
                         Toast.makeText(PickerActivity.this,"添加收货地址失败!",Toast.LENGTH_SHORT).show();

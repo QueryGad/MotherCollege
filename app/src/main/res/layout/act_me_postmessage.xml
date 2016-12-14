@@ -17,7 +17,6 @@
         android:textSize="17sp"
         android:textColor="#999"
         android:background="@null"
-        android:textCursorDrawable="@null"
         android:hint="标题(选填18字以内)"/>
     <EditText
         android:id="@+id/et_postmessage_content"
@@ -30,7 +29,6 @@
         android:textSize="15sp"
         android:textColor="#999"
         android:background="@null"
-        android:textCursorDrawable="@null"
         android:hint="此时此刻，想说点什么......"
         android:gravity="top"/>
     <android.support.v7.widget.RecyclerView

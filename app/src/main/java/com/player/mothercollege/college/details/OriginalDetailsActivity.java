@@ -54,6 +54,7 @@ import com.yolanda.nohttp.rest.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -86,6 +87,8 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     private LinearLayout ll_persondeatials_line;
     private List<ReadBookDetailsBean.ReveiwBean> reveiwList;
     private OriginalReveiwAdapter adapter;
+    private List<ReadBookDetailsBean.ZlistBean> zlistList = new ArrayList<>();
+    private TextDetailsAdapter adapterZlike;
 
     @Override
     public void setContentView() {
@@ -257,8 +260,8 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
         gr_textdetails_head.setStretchMode(GridView.NO_STRETCH);
         gr_textdetails_head.setNumColumns(readBookDetailsBean.getZlist().size()); // 设置列数量=列表集合数
 
-        TextDetailsAdapter adapter = new TextDetailsAdapter();
-        gr_textdetails_head.setAdapter(adapter);
+        adapterZlike = new TextDetailsAdapter();
+        gr_textdetails_head.setAdapter(adapterZlike);
 
         lv_details.addHeaderView(view);
     }
@@ -310,6 +313,7 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                 if (orZan){
                     iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
                     Toast.makeText(OriginalDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
+                    //todo
                     postZan();
                     orZan = false;
                 }else {
@@ -623,8 +627,9 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = View.inflate(OriginalDetailsActivity.this, R.layout.item_details_personzan,null);
             ImageView iv_person_zan = (ImageView) view.findViewById(R.id.iv_person_zan);
+            zlistList = readBookDetailsBean.getZlist();
             glideRequest = Glide.with(OriginalDetailsActivity.this);
-            glideRequest.load(readBookDetailsBean.getZlist().get(position).getUicon())
+            glideRequest.load(zlistList.get(position).getUicon())
                     .transform(new GlideCircleTransform(OriginalDetailsActivity.this)).into(iv_person_zan);
             iv_person_zan.setOnClickListener(new View.OnClickListener() {
                 @Override

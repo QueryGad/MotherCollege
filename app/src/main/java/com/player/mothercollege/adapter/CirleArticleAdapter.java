@@ -82,7 +82,7 @@ public class CirleArticleAdapter extends BaseAdapter{
         glideRequest = Glide.with(context);
         glideRequest.load(lists.get(position).getUicon())
                 .transform(new GlideCircleTransform(context)).into(holder.iv_cirlearticle_head);
-        holder.tv_cirlearticle_name.setText(lists.get(position).getTitle());
+        holder.tv_cirlearticle_name.setText(lists.get(position).getUniceName());
         holder.tv_cirlearticle_time.setText(lists.get(position).getDatetime());
         holder.tv_cirlearticle_address.setText(lists.get(position).getFrom());
         if (lists.get(position).getTitle()==""){
