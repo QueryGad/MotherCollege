@@ -6,11 +6,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,7 +50,7 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
     private static final int POST_MESSAGE_DATA = 001;
     private static final int GET_PERMISSIONS_PHONE_STATE = 002;
     private Button btn_back;
-    private TextView tv_details_title;
+    private TextView tv_details_title,tv_postmessage_xianzhi;
     private EditText et_postmessage_title,et_postmessage_content;
     private Button btn_postmessage_camer;
     private Button btn_postmessage;
@@ -61,6 +64,37 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
     private String groupId;
     private RequestQueue requestQueue;
     private ProgressDialog pd;
+    private TextWatcher EditTextInPutListener = new TextWatcher() {
+
+        private CharSequence temp;
+        private int editStart;
+        private int editEnd;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            temp = s;
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            editStart = et_postmessage_title.getSelectionStart();
+            editEnd = et_postmessage_title.getSelectionEnd();
+            tv_postmessage_xianzhi.setText(temp.length()+"/15");
+            tv_postmessage_xianzhi.setTextColor(Color.RED);
+            if (temp.length()>15){
+                Toast.makeText(CirlePostMessageActivity.this,"您输入的字数已经超过了限制!",Toast.LENGTH_SHORT).show();
+                s.delete(editStart-1,editEnd);
+                int tempSelection = editStart;
+                et_postmessage_title.setText(s);
+                et_postmessage_title.setSelection(tempSelection);
+            }
+        }
+    };
 
     @Override
     public void setContentView() {
@@ -74,6 +108,7 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
         et_postmessage_title = (EditText) findViewById(R.id.et_postmessage_title);
+        tv_postmessage_xianzhi = (TextView) findViewById(R.id.tv_postmessage_xianzhi);
         et_postmessage_content = (EditText) findViewById(R.id.et_postmessage_content);
         btn_postmessage_camer = (Button) findViewById(R.id.btn_postmessage_camer);
         btn_postmessage = (Button) findViewById(R.id.btn_postmessage);
@@ -88,6 +123,7 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
         btn_postmessage_camer.setOnClickListener(this);
         recycler_view.setOnClickListener(this);
         btn_postmessage.setOnClickListener(this);
+        et_postmessage_title.addTextChangedListener(EditTextInPutListener);
     }
 
     @Override

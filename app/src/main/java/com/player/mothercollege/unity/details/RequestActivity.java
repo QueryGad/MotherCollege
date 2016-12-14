@@ -1,6 +1,9 @@
 package com.player.mothercollege.unity.details;
 
+import android.graphics.Color;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,9 +31,40 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
 
     private static final int POST_REQUEST_DATA = 001;
     private Button btn_back;
-    private TextView tv_details_title,tv_send;
+    private TextView tv_details_title,tv_send,tv_request_xianzhi;
     private EditText et_request_title,et_request_content;
     private RequestQueue requestQueue;
+    private TextWatcher EditTextInPutListener = new TextWatcher() {
+
+        private CharSequence temp;
+        private int editStart;
+        private int editEnd;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            temp = s;
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            editStart = et_request_title.getSelectionStart();
+            editEnd = et_request_title.getSelectionEnd();
+            tv_request_xianzhi.setText(temp.length()+"/15");
+            tv_request_xianzhi.setTextColor(Color.RED);
+            if (temp.length()>15){
+                Toast.makeText(RequestActivity.this,"您输入的字数已经超过了限制!",Toast.LENGTH_SHORT).show();
+                s.delete(editStart-1,editEnd);
+                int tempSelection = editStart;
+                et_request_title.setText(s);
+                et_request_title.setSelection(tempSelection);
+            }
+        }
+    };
 
 
     @Override
@@ -46,6 +80,7 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
         tv_send = (TextView) findViewById(R.id.tv_send);
         et_request_title = (EditText) findViewById(R.id.et_request_title);
         et_request_content = (EditText) findViewById(R.id.et_request_content);
+        tv_request_xianzhi = (TextView) findViewById(R.id.tv_request_xianzhi);
 
         tv_details_title.setText("提问");
     }
@@ -54,6 +89,7 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
     public void initListeners() {
         btn_back.setOnClickListener(this);
         tv_send.setOnClickListener(this);
+        et_request_title.addTextChangedListener(EditTextInPutListener);
     }
 
     @Override

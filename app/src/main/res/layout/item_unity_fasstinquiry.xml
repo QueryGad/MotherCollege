@@ -27,9 +27,11 @@
         android:text="问题详情"
         android:layout_below="@id/tv_fastinquiry_title"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="10dp"
         android:textColor="#666"
         android:textSize="14sp"
+        android:maxLines="5"
+        android:ellipsize="end"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <ImageView
@@ -73,6 +75,8 @@
             android:layout_height="wrap_content"
             android:textColor="#666"
             android:textSize="14sp"
+            android:maxLines="5"
+            android:ellipsize="end"
             android:text="回答内容"/>
     </RelativeLayout>
     <LinearLayout

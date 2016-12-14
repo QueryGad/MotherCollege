@@ -300,7 +300,6 @@
         <activity android:name=".me.details.SettingHelpActivity" android:screenOrientation="portrait"/>//帮助与反馈
         <activity android:name=".me.details.SettingAboutActivity" android:screenOrientation="portrait"/>//关于
         <activity android:name=".me.details.CirleDetailsActivity" android:screenOrientation="portrait"/>//圈子详情页面
-        //圈子中帖子详情
         <activity android:name=".me.details.MoreCirleListActivity" android:screenOrientation="portrait"/>//推荐更多圈子列表
         <activity android:name=".me.details.CirlePostMessageActivity" android:screenOrientation="portrait"/>//发帖页面
         <activity android:name=".me.details.MyCommentActivity" android:screenOrientation="portrait"/>//我的评论

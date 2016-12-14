@@ -56,14 +56,21 @@
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/et_request_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="31dp"
             android:gravity="bottom"
-            android:maxLength="18"
+
             android:textSize="14sp"
             android:maxLines="18"
             android:background="@null"
-            android:hint="让大家快速了解您的问题(18字以内)"/>
+            android:hint="让大家快速了解您的问题(15字以内)"/>
+        <TextView
+            android:id="@+id/tv_request_xianzhi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="15/15"/>
     </LinearLayout>
     <EditText
         android:id="@+id/et_request_content"

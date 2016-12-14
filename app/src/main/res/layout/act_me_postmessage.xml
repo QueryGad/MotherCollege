@@ -6,18 +6,32 @@
     <include
         android:id="@+id/include"
         layout="@layout/details_title"/>
-    <EditText
-        android:id="@+id/et_postmessage_title"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:maxLength="18"
-        android:textSize="17sp"
-        android:textColor="#999"
-        android:background="@null"
-        android:hint="标题(选填18字以内)"/>
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/et_postmessage_title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:textSize="17sp"
+            android:textColor="#999"
+            android:background="@null"
+            android:hint="标题(选填15字以内)"/>
+        <TextView
+            android:id="@+id/tv_postmessage_xianzhi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:text="15/15"/>
+    </LinearLayout>
     <EditText
         android:id="@+id/et_postmessage_content"
         android:layout_width="match_parent"

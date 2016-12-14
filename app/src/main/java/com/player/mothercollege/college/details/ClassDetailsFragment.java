@@ -118,6 +118,27 @@ public class ClassDetailsFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+         switch (v.getId()){
+             case R.id.ll_video_item_head:
+                 initUpDown();
+                 break;
+         }
+    }
 
+    //展开与收起
+    boolean isUp = false;
+    private void initUpDown() {
+
+        if (isUp){
+            tv_video_item_info.setMaxLines(20);
+            iv_rb_shrink.setVisibility(View.VISIBLE);
+            iv_rb_pulldown.setVisibility(View.GONE);
+            isUp = false;
+        }else {
+            tv_video_item_info.setMaxLines(1);
+            iv_rb_shrink.setVisibility(View.GONE);
+            iv_rb_pulldown.setVisibility(View.VISIBLE);
+            isUp = true;
+        }
     }
 }
