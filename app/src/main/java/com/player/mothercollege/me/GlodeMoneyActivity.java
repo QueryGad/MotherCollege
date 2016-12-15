@@ -37,6 +37,7 @@ public class GlodeMoneyActivity extends BaseActivity implements View.OnClickList
     private TextView tv_glode_now,tv_glode_add,tv_glode_lessen;
     private GlodeMoneyBean glodeMoneyBean = new GlodeMoneyBean();
     private RequestQueue requestQueue;
+    private int currentNum;
 
     @Override
     public void setContentView() {
@@ -108,11 +109,12 @@ public class GlodeMoneyActivity extends BaseActivity implements View.OnClickList
     private void parseJson(String info){
         Gson gson = new Gson();
         glodeMoneyBean = gson.fromJson(info, GlodeMoneyBean.class);
-        int currentNum = glodeMoneyBean.getCurrentNum(); //余额
+        //余额
+        currentNum = glodeMoneyBean.getCurrentNum();
         int totalAdd = glodeMoneyBean.getTotalAdd(); //累计增加
         int totalPayOut = glodeMoneyBean.getTotalPayOut(); //累计支出
         //金币明细
-        tv_glode_now.setText(currentNum+"");
+        tv_glode_now.setText(currentNum +"");
         tv_glode_add.setText(totalAdd+"");
         tv_glode_lessen.setText(totalPayOut+"");
     }
@@ -132,6 +134,7 @@ public class GlodeMoneyActivity extends BaseActivity implements View.OnClickList
             //提现
             case R.id.ll_me_glode_getmoney:
                 Intent intent2 = new Intent(GlodeMoneyActivity.this, GetGlodeActivity.class);
+                intent2.putExtra("currentNum",currentNum);
                 startActivity(intent2);
                 break;
         }
