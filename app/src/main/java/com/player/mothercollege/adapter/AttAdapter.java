@@ -45,9 +45,14 @@ public class AttAdapter extends RecyclerView.Adapter<AttAdapter.AttHolder>{
 
     @Override
     public void onBindViewHolder(AttHolder holder, int position) {
-        glideRequest = Glide.with(context);
-        glideRequest.load(lists.get(position).getUIcon())
-                .transform(new GlideCircleTransform(context)).into(holder.iv_find_jieli);
+        String uIcon = lists.get(position).getUIcon();
+        if (uIcon==null){
+            holder.iv_find_jieli.setImageResource(R.mipmap.head_group);
+        }else {
+            glideRequest = Glide.with(context);
+            glideRequest.load(uIcon)
+                    .transform(new GlideCircleTransform(context)).into(holder.iv_find_jieli);
+        }
         holder.tv_find_jieli.setText(lists.get(position).getUniceName());
     }
 

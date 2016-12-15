@@ -271,9 +271,15 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
                 view = convertView;
                 holder = (MyZanHolder) view.getTag();
             }
-            glideRequest = Glide.with(context);
-            glideRequest.load(lists.get(position).getFromUicon())
-                    .transform(new GlideCircleTransform(context)).into(holder.iv_myzan_icon);
+            String fromUicon = lists.get(position).getFromUicon();
+            if (fromUicon==null){
+                holder.iv_myzan_icon.setImageResource(R.mipmap.head_me_nor);
+            }else {
+                glideRequest = Glide.with(context);
+                glideRequest.load(fromUicon)
+                        .transform(new GlideCircleTransform(context)).into(holder.iv_myzan_icon);
+            }
+
 
             MyLog.testLog("头像信息:"+lists.get(position).getFromUicon());
 

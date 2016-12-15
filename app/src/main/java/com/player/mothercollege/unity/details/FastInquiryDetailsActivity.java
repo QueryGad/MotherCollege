@@ -14,6 +14,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.FastDetailsAdapter;
 import com.player.mothercollege.bean.FastDetailsBean;
+import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DateUtils;
@@ -45,6 +46,8 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
     private FastDetailsBean fastDetailsBean;
     private FastDetailsAdapter adapter;
     private List<FastDetailsBean.AnswerBean> answerList;
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -75,10 +78,11 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(FastInquiryDetailsActivity.this, "apptoken", "");
+        apptoken = PrefUtils.getString(FastInquiryDetailsActivity.this, "apptoken", "");
+        uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
-        request.add("apptoken",apptoken);
-        MyLog.testLog("apptoken："+apptoken);
+        request.add("apptoken", apptoken);
+        MyLog.testLog("apptoken："+ apptoken);
         request.add("op","qustioninfo");
         request.add("qid",qid+"");
         requestQueue.add(GET_FASTDETAILS_DATA, request, new OnResponseListener<String>() {
@@ -125,9 +129,15 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
         TextView tv_fastdetails_questContent = (TextView) headView.findViewById(R.id.tv_fastdetails_questContent);
         TextView tv_fastdetails_num = (TextView) headView.findViewById(R.id.tv_fastdetails_num);
         tv_fastdetails_title.setText(fastDetailsBean.getTitle());
-        glideRequest = Glide.with(FastInquiryDetailsActivity.this);
-        glideRequest.load(fastDetailsBean.getUicon())
-                .transform(new GlideCircleTransform(FastInquiryDetailsActivity.this)).into(iv_fastdetails_me);
+        String uicon = fastDetailsBean.getUicon();
+        if (uicon==null){
+            iv_fastdetails_me.setImageResource(R.mipmap.head_me_nor);
+        }else {
+            glideRequest = Glide.with(FastInquiryDetailsActivity.this);
+            glideRequest.load(uicon)
+                    .transform(new GlideCircleTransform(FastInquiryDetailsActivity.this)).into(iv_fastdetails_me);
+        }
+
         final String uid = fastDetailsBean.getUid();
         iv_fastdetails_me.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,9 +163,15 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
                 finish();
                 break;
             case R.id.btn_fastdetails_answer://我来回答
-                Intent intent = new Intent(FastInquiryDetailsActivity.this,MyAnswerActivity.class);
-                intent.putExtra("qid",qid);
-                startActivityForResult(intent,100);
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(FastInquiryDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(FastInquiryDetailsActivity.this,MyAnswerActivity.class);
+                    intent.putExtra("qid",qid);
+                    startActivityForResult(intent,100);
+                }
                 break;
         }
     }

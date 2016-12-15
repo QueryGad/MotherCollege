@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.adapter.FastInquiryAdapter;
 import com.player.mothercollege.bean.FastBean;
+import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -38,6 +39,8 @@ public class FastFragment extends Fragment implements View.OnClickListener {
     private ListView lv_unity_fast;
     private ImageView iv_fast_public;
     private RequestQueue requestQueue;
+    private String apptoken;
+    private String uid;
 
 
     @Nullable
@@ -63,9 +66,10 @@ public class FastFragment extends Fragment implements View.OnClickListener {
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
+        apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
+        uid = PrefUtils.getString(getActivity(), "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
-        request.add("apptoken",apptoken);
+        request.add("apptoken", apptoken);
         request.add("op","quickqustion");
         request.add("lastIndex","0");
         requestQueue.add(GET_FAST_DATA, request, new OnResponseListener<String>() {
@@ -107,8 +111,14 @@ public class FastFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.iv_fast_public:
                 //点击进入提问页面
-                Intent intent = new Intent(getActivity(),RequestActivity.class);
-                startActivity(intent);
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(getActivity(),RequestActivity.class);
+                    startActivity(intent);
+                }
                 break;
         }
     }

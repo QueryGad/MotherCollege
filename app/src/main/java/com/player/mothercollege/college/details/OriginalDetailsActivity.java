@@ -31,6 +31,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.OriginalReveiwAdapter;
 import com.player.mothercollege.bean.ReadBookDetailsBean;
+import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
@@ -89,6 +90,8 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     private OriginalReveiwAdapter adapter;
     private List<ReadBookDetailsBean.ZlistBean> zlistList = new ArrayList<>();
     private TextDetailsAdapter adapterZlike;
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -127,7 +130,13 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
         ll_textdeatials_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(OriginalDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
                 showShareDialog();
+                }
             }
         });
         ll_textdeatials_comment.setOnClickListener(this);
@@ -174,12 +183,12 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
+        apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
+        uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
-        request.add("apptoken",apptoken);
+        request.add("apptoken", apptoken);
         request.add("op","getStuInfo");
-        request.add("uid",uid);
+        request.add("uid", uid);
         request.add("stype","2");
         request.add("sid",sid);
         requestQueue.add(GET_TEXTDETAILS_DATA, request, new OnResponseListener<String>() {
@@ -291,12 +300,18 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                 finish();
                 break;
             case R.id.ll_persondeatials_comment: //评论
-                // 弹出输入法
-                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                // 显示评论框
-                ll_persondeatials_line.setVisibility(View.GONE);
-                rl_comment.setVisibility(View.VISIBLE);
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(OriginalDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    // 弹出输入法
+                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                    // 显示评论框
+                    ll_persondeatials_line.setVisibility(View.GONE);
+                    rl_comment.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.hide_down:
                 // 隐藏评论框
@@ -310,30 +325,42 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                 sendComment();
                 break;
             case R.id.ll_persondeatials_zan:
-                if (orZan){
-                    iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
-                    Toast.makeText(OriginalDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
-                    //todo
-                    postZan();
-                    orZan = false;
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(OriginalDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }else {
-                    iv_persondeatials_zan.setImageResource(R.mipmap.tab_favour);
-                    Toast.makeText(OriginalDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
-                    canleZan();
-                    orZan = true;
+                    if (orZan){
+                        iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
+                        Toast.makeText(OriginalDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
+                        //todo
+                        postZan();
+                        orZan = false;
+                    }else {
+                        iv_persondeatials_zan.setImageResource(R.mipmap.tab_favour);
+                        Toast.makeText(OriginalDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                        canleZan();
+                        orZan = true;
+                    }
                 }
                 break;
             case R.id.ll_persondeatials_collect:
-                if (orCollect){
-                    iv_persondeatials_collect.setImageResource(R.mipmap.tab_collected);
-                    Toast.makeText(OriginalDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
-                    postCollect();
-                    orCollect = false;
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(OriginalDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }else {
-                    iv_persondeatials_collect.setImageResource(R.mipmap.tab_collect);
-                    Toast.makeText(OriginalDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
-                    canleCollect();
-                    orCollect = true;
+                    if (orCollect){
+                        iv_persondeatials_collect.setImageResource(R.mipmap.tab_collected);
+                        Toast.makeText(OriginalDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
+                        postCollect();
+                        orCollect = false;
+                    }else {
+                        iv_persondeatials_collect.setImageResource(R.mipmap.tab_collect);
+                        Toast.makeText(OriginalDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                        canleCollect();
+                        orCollect = true;
+                    }
                 }
                 break;
             case R.id.view_share_pengyou:
@@ -386,8 +413,6 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
 
     private ProgressDialog pd ;
     private void postComment(final String self_comment) {
-        String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostReview");
@@ -449,8 +474,6 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void canleCollect() {
-        String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostUnKeep");
@@ -482,8 +505,6 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void postCollect() {
-        String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postkeep");
@@ -517,8 +538,6 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void canleZan() {
-        String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postUnZLike");
@@ -550,9 +569,6 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void postZan() {
-
-        String apptoken = PrefUtils.getString(OriginalDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(OriginalDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postZLike");
@@ -628,9 +644,15 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
             View view = View.inflate(OriginalDetailsActivity.this, R.layout.item_details_personzan,null);
             ImageView iv_person_zan = (ImageView) view.findViewById(R.id.iv_person_zan);
             zlistList = readBookDetailsBean.getZlist();
-            glideRequest = Glide.with(OriginalDetailsActivity.this);
-            glideRequest.load(zlistList.get(position).getUicon())
-                    .transform(new GlideCircleTransform(OriginalDetailsActivity.this)).into(iv_person_zan);
+            String uicon = zlistList.get(position).getUicon();
+            if (uicon==null){
+                iv_person_zan.setImageResource(R.mipmap.head_me_nor);
+            }else {
+                glideRequest = Glide.with(OriginalDetailsActivity.this);
+                glideRequest.load(uicon)
+                        .transform(new GlideCircleTransform(OriginalDetailsActivity.this)).into(iv_person_zan);
+            }
+
             iv_person_zan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

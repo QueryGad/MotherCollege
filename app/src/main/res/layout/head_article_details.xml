@@ -19,7 +19,7 @@
         android:layout_below="@id/tv_invit_title"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="8dp"
-        android:src="@mipmap/head_homepage_others" />
+        android:background="@mipmap/head_homepage_others"/>
 
     <TextView
         android:id="@+id/tv_invit_name"

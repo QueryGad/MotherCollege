@@ -47,9 +47,15 @@ public class GengZhongAdapter extends RecyclerView.Adapter<GengZhongAdapter.Geng
 
     @Override
     public void onBindViewHolder(GengZhongViewHolder holder, int position) {
-        glideRequest = Glide.with(context);
-        glideRequest.load(gengZhongList.get(position).getUIcon())
-                .transform(new GlideCircleTransform(context)).into(holder.iv_find_jieli);
+        String uIcon = gengZhongList.get(position).getUIcon();
+        if (uIcon==null){
+            holder.iv_find_jieli.setImageResource(R.mipmap.head_group);
+        }else {
+            glideRequest = Glide.with(context);
+            glideRequest.load(uIcon)
+                    .transform(new GlideCircleTransform(context)).into(holder.iv_find_jieli);
+        }
+
         final String uid = gengZhongList.get(position).getUid();
         holder.iv_find_jieli.setOnClickListener(new View.OnClickListener() {
             @Override

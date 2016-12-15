@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -32,6 +33,7 @@ import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.ActivityReveiwAdapter;
 import com.player.mothercollege.bean.ActivityApplyBean;
 import com.player.mothercollege.bean.ActivityDetailsBean;
+import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -88,6 +90,8 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     private String aid;
     private List<ActivityDetailsBean.ReviewsBean> reviewsList;
     private ActivityReveiwAdapter adapter;
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -126,7 +130,13 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         ll_activitydeatials_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showShareDialog();
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ActivityDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                     showShareDialog();
+                }
             }
         });
         ll_activitydeatials_comment.setOnClickListener(this);
@@ -172,12 +182,12 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
+        apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
+        uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
         request.add("aid",aid+"");
-        request.add("uid",uid);
-        request.add("apptoken",apptoken);
+        request.add("uid", uid);
+        request.add("apptoken", apptoken);
         request.add("op","activeInfo");
         requestQueue.add(GET_ACTIVITYDITAILS, request, new OnResponseListener<String>() {
             @Override
@@ -299,41 +309,53 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                 finish();
                 break;
             case R.id.iv_activitydetails_baoming:   //报名
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                View view = View.inflate(this,R.layout.alert_apply,null);
-                final EditText et_applay_name = (EditText) view.findViewById(R.id.et_applay_name);
-                final EditText et_applay_phone = (EditText) view.findViewById(R.id.et_applay_phone);
-                final EditText et_applay_join = (EditText) view.findViewById(R.id.et_applay_join);
-                final EditText et_applay_qq = (EditText) view.findViewById(R.id.et_applay_qq);
-                Button btn_applay_ok = (Button) view.findViewById(R.id.btn_applay_ok);
-                btn_applay_ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String name = et_applay_name.getText().toString().trim();
-                        String phone = et_applay_phone.getText().toString().trim();
-                        String join = et_applay_join.getText().toString().trim();
-                        String qq = et_applay_qq.getText().toString().trim();
-                        if (TextUtils.isEmpty(name)||TextUtils.isEmpty(phone)||TextUtils.isEmpty(join)){
-                            Toast.makeText(ActivityDetailsActivity.this,"请补全您的个人信息!",Toast.LENGTH_SHORT).show();
-                            return;
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ActivityDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    View view = View.inflate(this,R.layout.alert_apply,null);
+                    final EditText et_applay_name = (EditText) view.findViewById(R.id.et_applay_name);
+                    final EditText et_applay_phone = (EditText) view.findViewById(R.id.et_applay_phone);
+                    final EditText et_applay_join = (EditText) view.findViewById(R.id.et_applay_join);
+                    final EditText et_applay_qq = (EditText) view.findViewById(R.id.et_applay_qq);
+                    Button btn_applay_ok = (Button) view.findViewById(R.id.btn_applay_ok);
+                    btn_applay_ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String name = et_applay_name.getText().toString().trim();
+                            String phone = et_applay_phone.getText().toString().trim();
+                            String join = et_applay_join.getText().toString().trim();
+                            String qq = et_applay_qq.getText().toString().trim();
+                            if (TextUtils.isEmpty(name)||TextUtils.isEmpty(phone)||TextUtils.isEmpty(join)){
+                                Toast.makeText(ActivityDetailsActivity.this,"请补全您的个人信息!",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (TextUtils.isEmpty(qq)){
+                                qq = "null";
+                            }
+                            applayNetWork(name,phone,join,qq);
                         }
-                        if (TextUtils.isEmpty(qq)){
-                            qq = "null";
-                        }
-                        applayNetWork(name,phone,join,qq);
-                    }
-                });
-                builder.setView(view);
-                alertDialog = builder.show();
-//                alertDialog.setCancelable(false);
+                    });
+                    builder.setView(view);
+                    alertDialog = builder.show();
+    //                alertDialog.setCancelable(false);
+                }
                 break;
             case R.id.ll_activitydeatials_comment://评论
-                // 弹出输入法
-                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                // 显示评论框
-                ll_activitydeatials_line.setVisibility(View.GONE);
-                rl_comment.setVisibility(View.VISIBLE);
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ActivityDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    // 弹出输入法
+                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                    // 显示评论框
+                    ll_activitydeatials_line.setVisibility(View.GONE);
+                    rl_comment.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.hide_down:
                 // 隐藏评论框
@@ -347,29 +369,41 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                 sendComment();
                 break;
             case R.id.ll_activitydeatials_zan:
-                if (orZan){
-                    iv_activeydetails_zan.setImageResource(R.mipmap.icon_favour_list);
-                    Toast.makeText(ActivityDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
-                    postZan();
-                    orZan = false;
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ActivityDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }else {
-                    iv_activeydetails_zan.setImageResource(R.mipmap.tab_favour);
-                    Toast.makeText(ActivityDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
-                    canleZan();
-                    orZan = true;
+                    if (orZan){
+                        iv_activeydetails_zan.setImageResource(R.mipmap.icon_favour_list);
+                        Toast.makeText(ActivityDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
+                        postZan();
+                        orZan = false;
+                    }else {
+                        iv_activeydetails_zan.setImageResource(R.mipmap.tab_favour);
+                        Toast.makeText(ActivityDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                        canleZan();
+                        orZan = true;
+                    }
                 }
                 break;
             case R.id.ll_activitydeatials_collect:
-                if (orCollect){
-                    iv_activitydeatials_collect.setImageResource(R.mipmap.tab_collected);
-                    Toast.makeText(ActivityDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
-                    postCollect();
-                    orCollect = false;
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ActivityDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }else {
-                    iv_activitydeatials_collect.setImageResource(R.mipmap.tab_collect);
-                    Toast.makeText(ActivityDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
-                    canleCollect();
-                    orCollect = true;
+                    if (orCollect){
+                        iv_activitydeatials_collect.setImageResource(R.mipmap.tab_collected);
+                        Toast.makeText(ActivityDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
+                        postCollect();
+                        orCollect = false;
+                    }else {
+                        iv_activitydeatials_collect.setImageResource(R.mipmap.tab_collect);
+                        Toast.makeText(ActivityDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                        canleCollect();
+                        orCollect = true;
+                    }
                 }
                 break;
             case R.id.view_share_pengyou:
@@ -423,8 +457,6 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
 
     private ProgressDialog pd ;
     private void postComment(final String self_comment) {
-        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostReview");
@@ -484,9 +516,6 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void canleCollect() {
-
-        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostUnKeep");
@@ -518,8 +547,6 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void postCollect() {
-        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postkeep");
@@ -574,9 +601,6 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     };
 
     private void canleZan() {
-
-        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postUnZLike");
@@ -608,9 +632,6 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void postZan() {
-
-        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postZLike");
@@ -642,8 +663,6 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void applayNetWork(String name,String phone,String join,String qq) {
-        String uid = PrefUtils.getString(ActivityDetailsActivity.this, "uid", "null");
-        String apptoken = PrefUtils.getString(ActivityDetailsActivity.this, "apptoken", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.POST);
         request.add("op","singUpActive");
         request.add("apptoken",apptoken);
@@ -747,9 +766,15 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = View.inflate(ActivityDetailsActivity.this, R.layout.item_details_personzan,null);
             ImageView iv_person_zan = (ImageView) view.findViewById(R.id.iv_person_zan);
-            glideRequest = Glide.with(ActivityDetailsActivity.this);
-            glideRequest.load(activityDetailsBean.getLikes().get(position).getUicon())
-                    .transform(new GlideCircleTransform(ActivityDetailsActivity.this)).into(iv_person_zan);
+            String uicon = activityDetailsBean.getLikes().get(position).getUicon();
+            if (uicon==null){
+                iv_person_zan.setImageResource(R.mipmap.head_me_nor);
+            }else {
+                glideRequest = Glide.with(ActivityDetailsActivity.this);
+                glideRequest.load(uicon)
+                        .transform(new GlideCircleTransform(ActivityDetailsActivity.this)).into(iv_person_zan);
+            }
+
             return view;
         }
     }

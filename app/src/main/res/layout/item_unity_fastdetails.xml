@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
-    android:paddingLeft="10dp"
     android:paddingRight="10dp">
     <ImageView
         android:id="@+id/iv_fastdetails_other"
@@ -12,7 +11,7 @@
         android:layout_height="37dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:src="@mipmap/head_homepage_others"/>
+        android:background="@mipmap/head_homepage_others"/>
     <TextView
         android:id="@+id/tv_fastdetails_name"
         android:layout_width="wrap_content"

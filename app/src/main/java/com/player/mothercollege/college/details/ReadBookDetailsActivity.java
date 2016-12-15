@@ -32,6 +32,7 @@ import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.OriginalReveiwAdapter;
 import com.player.mothercollege.bean.ReadBookDetailsBean;
+import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
@@ -90,6 +91,8 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     private ImageView iv_person_zan;
     private TextDetailsAdapter textAdapter;
     private List<ReadBookDetailsBean.ZlistBean> zlistList;
+    private String uid;
+    private String apptoken;
 
     @Override
     public void setContentView() {
@@ -130,7 +133,17 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         ll_textdeatials_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showShareDialog();
+                //判断是否登录
+
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ReadBookDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+
+                }else {
+                    showShareDialog();
+                }
+
             }
         });
         ll_textdeatials_comment.setOnClickListener(this);
@@ -148,10 +161,10 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
+        apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
+        uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
-        request.add("apptoken",apptoken);
+        request.add("apptoken", apptoken);
         request.add("op","getStuInfo");
         request.add("uid",uid);
         request.add("stype","1");
@@ -270,12 +283,20 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                 finish();
                 break;
             case R.id.ll_persondeatials_comment://评论
-                // 弹出输入法
-                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                // 显示评论框
-                ll_persondeatials_line.setVisibility(View.GONE);
-                rl_comment.setVisibility(View.VISIBLE);
+                //todo
+                //判断是否登录
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ReadBookDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    // 弹出输入法
+                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                    // 显示评论框
+                    ll_persondeatials_line.setVisibility(View.GONE);
+                    rl_comment.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.hide_down:
                 // 隐藏评论框
@@ -289,41 +310,55 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                 sendComment();
                 break;
             case R.id.ll_persondeatials_zan:
-                if (orZan){
-                    iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
-                    Toast.makeText(ReadBookDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ReadBookDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    if (orZan){
+                        iv_persondeatials_zan.setImageResource(R.mipmap.icon_favour_list);
+                        Toast.makeText(ReadBookDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
 
-                    String uicon = PrefUtils.getString(ReadBookDetailsActivity.this, "uicon", "");
-                    MyLog.testLog("我的头像:"+uicon);
-                    ReadBookDetailsBean.ZlistBean bean = new ReadBookDetailsBean.ZlistBean();
-                    bean.setUicon(uicon);
-                    zlistList.add(bean);
+                        String uicon = PrefUtils.getString(ReadBookDetailsActivity.this, "uicon", "");
+                        MyLog.testLog("我的头像:"+uicon);
+                        ReadBookDetailsBean.ZlistBean bean = new ReadBookDetailsBean.ZlistBean();
+                        bean.setUicon(uicon);
+                        zlistList.add(bean);
 //                    glideRequest = Glide.with(ReadBookDetailsActivity.this);
 //                    glideRequest.load(uicon)
 //                            .transform(new GlideCircleTransform(ReadBookDetailsActivity.this)).into(iv_person_zan);
-                    textAdapter.notifyDataSetChanged();
-                    postZan();
-                    orZan = false;
-                }else {
-                    iv_persondeatials_zan.setImageResource(R.mipmap.tab_favour);
-                    Toast.makeText(ReadBookDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
-                    canleZan();
-                    orZan = true;
+                        textAdapter.notifyDataSetChanged();
+                        postZan();
+                        orZan = false;
+                    }else {
+                        iv_persondeatials_zan.setImageResource(R.mipmap.tab_favour);
+                        Toast.makeText(ReadBookDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                        canleZan();
+                        orZan = true;
+                    }
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
+
                 break;
             case R.id.ll_persondeatials_collect:
-                if (orCollect){
-                    iv_persondeatials_collect.setImageResource(R.mipmap.tab_collected);
-                    Toast.makeText(ReadBookDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
-                    postCollect();
-                    orCollect = false;
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ReadBookDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }else {
-                    iv_persondeatials_collect.setImageResource(R.mipmap.tab_collect);
-                    Toast.makeText(ReadBookDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
-                    canleCollect();
-                    orCollect = true;
+                    if (orCollect){
+                        iv_persondeatials_collect.setImageResource(R.mipmap.tab_collected);
+                        Toast.makeText(ReadBookDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
+                        postCollect();
+                        orCollect = false;
+                    }else {
+                        iv_persondeatials_collect.setImageResource(R.mipmap.tab_collect);
+                        Toast.makeText(ReadBookDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                        canleCollect();
+                        orCollect = true;
+                    }
                 }
+
                 break;
             case R.id.view_share_pengyou:
                 new ShareAction(ReadBookDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
@@ -376,8 +411,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
 
     private ProgressDialog pd;
     private void postComment(final String self_comment) {
-        String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostReview");
@@ -438,8 +471,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void canleCollect() {
-        String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostUnKeep");
@@ -471,8 +502,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void postCollect() {
-        String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postkeep");
@@ -504,8 +533,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void canleZan() {
-        String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postUnZLike");
@@ -537,8 +564,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void postZan() {
-        String apptoken = PrefUtils.getString(ReadBookDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ReadBookDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postZLike");
@@ -642,14 +667,21 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = View.inflate(ReadBookDetailsActivity.this, R.layout.item_details_personzan,null);
             iv_person_zan = (ImageView) view.findViewById(R.id.iv_person_zan);
-            glideRequest = Glide.with(ReadBookDetailsActivity.this);
-            glideRequest.load(readBookDetailsBean.getZlist().get(position).getUicon())
-                    .transform(new GlideCircleTransform(ReadBookDetailsActivity.this)).into(iv_person_zan);
+            String uicon = readBookDetailsBean.getZlist().get(position).getUicon();
+            if (uicon==null){
+                iv_person_zan.setImageResource(R.mipmap.head_me_nor);
+            }else {
+                glideRequest = Glide.with(ReadBookDetailsActivity.this);
+                glideRequest.load(uicon)
+                        .transform(new GlideCircleTransform(ReadBookDetailsActivity.this)).into(iv_person_zan);
+            }
+
             iv_person_zan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //点击头像进入他人主页
                     Intent intent = new Intent(ReadBookDetailsActivity.this, HeadIconActivity.class);
+
                     startActivity(intent);
                 }
             });

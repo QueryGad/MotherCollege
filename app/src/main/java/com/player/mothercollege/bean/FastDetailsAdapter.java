@@ -64,9 +64,17 @@ public class FastDetailsAdapter extends BaseAdapter{
             view = convertView;
             holder = (FastDetailsHolder) view.getTag();
         }
-        glideRequest = Glide.with(context);
-        glideRequest.load(lists.get(position).getUicon())
-                .transform(new GlideCircleTransform(context)).into(holder.iv_fastdetails_other);
+
+        String uicon = lists.get(position).getUicon();
+        if (uicon==null){
+            holder.iv_fastdetails_other.setImageResource(R.mipmap.head_me_nor);
+        }else {
+            glideRequest = Glide.with(context);
+            glideRequest.load(uicon)
+                    .transform(new GlideCircleTransform(context)).into(holder.iv_fastdetails_other);
+        }
+
+
         final String uid = lists.get(position).getUid();
         holder.iv_fastdetails_other.setOnClickListener(new View.OnClickListener() {
             @Override

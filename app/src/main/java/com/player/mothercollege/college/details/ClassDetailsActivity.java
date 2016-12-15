@@ -3,6 +3,7 @@ package com.player.mothercollege.college.details;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.ClassDetailsBean;
+import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -89,6 +91,8 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         }
     };
     private List<ClassDetailsBean.CourseInfoBean.ReviewsBean> reviewsList = new ArrayList<>();
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -131,7 +135,13 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         ll_videodetails_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ClassDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
                 showShareDialog();
+                }
             }
         });
         ll_videodetails_comment.setOnClickListener(this);
@@ -176,12 +186,12 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(ClassDetailsActivity.this, "uid", "null");
+        apptoken = PrefUtils.getString(this, "apptoken", "");
+        uid = PrefUtils.getString(ClassDetailsActivity.this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("op","courseInfo");
-        request.add("apptoken",apptoken);
-        request.add("uid",uid);
+        request.add("apptoken", apptoken);
+        request.add("uid", uid);
         request.add("courseid",sid);
         requestQueue.add(GET_CLASS_DETAILS_DATA, request, new OnResponseListener<String>() {
             @Override
@@ -270,13 +280,18 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
                 Toast.makeText(ClassDetailsActivity.this,"母亲大学堂",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.ll_videodetails_comment: //评论
-
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ClassDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
                 // 弹出输入法
                 InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 // 显示评论框
                 ll_persondeatials_line.setVisibility(View.GONE);
                 rl_comment.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.hide_down:
                 // 隐藏评论框
@@ -290,37 +305,47 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
                 sendComment();
                 break;
             case R.id.ll_videodetails_zan: //赞
-                if (orZan){
-                    iv_videodetails_zan.setImageResource(R.mipmap.icon_favour_list);
-                    Toast.makeText(ClassDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
-                    postZan();
-                    orZan = false;
-                }else {
-                    iv_videodetails_zan.setImageResource(R.mipmap.tab_favour);
-                    Toast.makeText(ClassDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
-                    canleZan();
-                    orZan = true;
+                if (uid.equals("")){
+                        //未登录  提示登录
+                        Intent intent = new Intent(ClassDetailsActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }else {
+                    if (orZan){
+                        iv_videodetails_zan.setImageResource(R.mipmap.icon_favour_list);
+                        Toast.makeText(ClassDetailsActivity.this,"已赞!",Toast.LENGTH_SHORT).show();
+                        postZan();
+                        orZan = false;
+                    }else {
+                        iv_videodetails_zan.setImageResource(R.mipmap.tab_favour);
+                        Toast.makeText(ClassDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                        canleZan();
+                        orZan = true;
+                    }
                 }
                 break;
             case R.id.ll_videodetails_collect:
-                if (orCollect){
-                    iv_videodetails_collect.setImageResource(R.mipmap.tab_collected);
-                    Toast.makeText(ClassDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
-                    postCollect();
-                    orCollect = false;
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ClassDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }else {
-                    iv_videodetails_collect.setImageResource(R.mipmap.tab_collect);
-                    Toast.makeText(ClassDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
-                    canleCollect();
-                    orCollect = true;
+                    if (orCollect){
+                        iv_videodetails_collect.setImageResource(R.mipmap.tab_collected);
+                        Toast.makeText(ClassDetailsActivity.this,"已收藏!",Toast.LENGTH_SHORT).show();
+                        postCollect();
+                        orCollect = false;
+                    }else {
+                        iv_videodetails_collect.setImageResource(R.mipmap.tab_collect);
+                        Toast.makeText(ClassDetailsActivity.this,"已取消!",Toast.LENGTH_SHORT).show();
+                        canleCollect();
+                        orCollect = true;
+                    }
                 }
                 break;
         }
     }
 
     private void canleCollect() {
-        String apptoken = PrefUtils.getString(ClassDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ClassDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostUnKeep");
@@ -352,8 +377,6 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void postCollect() {
-        String apptoken = PrefUtils.getString(ClassDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ClassDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postkeep");
@@ -385,8 +408,6 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void canleZan() {
-        String apptoken = PrefUtils.getString(ClassDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ClassDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postUnZLike");
@@ -418,8 +439,6 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void postZan() {
-        String apptoken = PrefUtils.getString(ClassDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ClassDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","postZLike");
@@ -461,8 +480,6 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private ProgressDialog pd;
     private void postComment(final String self_comment) {
-        String apptoken = PrefUtils.getString(ClassDetailsActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(ClassDetailsActivity.this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.POST_COMMON, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostReview");

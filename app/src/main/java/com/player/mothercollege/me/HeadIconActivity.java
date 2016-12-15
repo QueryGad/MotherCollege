@@ -1,6 +1,7 @@
 package com.player.mothercollege.me;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.PersonAdapter;
 import com.player.mothercollege.bean.PersonDynamicBean;
 import com.player.mothercollege.bean.PersonHead;
+import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -48,6 +50,8 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     private TextView tv_otherperson_guanzhu,tv_otherperson_chat;
     private LinearLayout ll_other_zhuanchat;
     private String toUid;
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -80,7 +84,6 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void netWork2() {
-        String apptoken = PrefUtils.getString(HeadIconActivity.this, "apptoken", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","tiezilist");
         request.add("uid",toUid);
@@ -113,13 +116,13 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void netWork1() {
-        String apptoken = PrefUtils.getString(HeadIconActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(HeadIconActivity.this, "uid", "null");
+        apptoken = PrefUtils.getString(HeadIconActivity.this, "apptoken", "");
+        uid = PrefUtils.getString(HeadIconActivity.this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","userinfo");
-        request.add("uid",uid);
+        request.add("uid", uid);
         request.add("toUid",toUid);
-        request.add("apptoken",apptoken);
+        request.add("apptoken", apptoken);
         requestQueue.add(GET_HEADICON_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -205,13 +208,25 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
             tv_otherperson_guanzhu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(HeadIconActivity.this,"关注",Toast.LENGTH_SHORT).show();
+                    if (uid.equals("")){
+                        //未登录  提示登录
+                        Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(HeadIconActivity.this,"关注",Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             tv_otherperson_chat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(HeadIconActivity.this,"聊天",Toast.LENGTH_SHORT).show();
+                    if (uid.equals("")){
+                        //未登录  提示登录
+                        Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(HeadIconActivity.this,"聊天",Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }

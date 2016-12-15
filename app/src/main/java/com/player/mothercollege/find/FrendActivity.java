@@ -1,6 +1,7 @@
 package com.player.mothercollege.find;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -24,6 +25,7 @@ import com.google.zxing.common.BitMatrix;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.QRBean;
+import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.utils.CacheUtils;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -53,6 +55,8 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
     private ImageView iv_find_frend;
     private RequestQueue requestQueue;
     private String inviteCode;
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -77,7 +81,13 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
         btn_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showShareDialog();
+                if (uid.equals("")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(FrendActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    showShareDialog();
+                }
             }
         });
     }
@@ -124,12 +134,12 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
+        apptoken = PrefUtils.getString(this, "apptoken", "");
+        uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.FIND_URL, RequestMethod.GET);
         request.add("op","yqhy");
-        request.add("uid",uid);
-        request.add("apptoken",apptoken);
+        request.add("uid", uid);
+        request.add("apptoken", apptoken);
         requestQueue.add(GET_QR_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

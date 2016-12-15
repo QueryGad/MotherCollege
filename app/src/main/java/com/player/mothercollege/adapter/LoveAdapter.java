@@ -51,9 +51,15 @@ public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.LoveViewHolder
         }else {
             holder.tv_find_love_id.setText("");
         }
-        glideRequest = Glide.with(context);
-        glideRequest.load(userList.get(position).getUIcon())
-                .transform(new GlideCircleTransform(context)).into(holder.iv_find_love);
+
+        String uIcon = userList.get(position).getUIcon();
+        if (uIcon==null){
+            holder.iv_find_love.setImageResource(R.mipmap.head_group);
+        }else {
+            glideRequest = Glide.with(context);
+            glideRequest.load(uIcon)
+                    .transform(new GlideCircleTransform(context)).into(holder.iv_find_love);
+        }
         holder.tv_find_love_name.setText(userList.get(position).getUniceName());
         holder.tv_find_love_viewCount.setText(userList.get(position).getTjrs()+"");
     }

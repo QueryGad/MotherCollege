@@ -86,7 +86,7 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
         }
 
         String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
+        String uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("op","removenotice");
         request.add("apptoken",apptoken);
@@ -267,9 +267,15 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
                 view = convertView;
                 holder = (MyCommentHolder) view.getTag();
             }
-            glideRequest = Glide.with(context);
-            glideRequest.load(lists.get(position).getFromUicon())
-                    .transform(new GlideCircleTransform(context)).into(holder.iv_mycomment_icon);
+            String fromUicon = lists.get(position).getFromUicon();
+            if (fromUicon==null){
+                holder.iv_mycomment_icon.setImageResource(R.mipmap.head_me_nor);
+            }else {
+                glideRequest = Glide.with(context);
+                glideRequest.load(fromUicon)
+                        .transform(new GlideCircleTransform(context)).into(holder.iv_mycomment_icon);
+            }
+
             holder.tv_mycomment_name.setText(lists.get(position).getFromUniceName());
             holder.tv_mycomment_recew.setText(lists.get(position).getRcontent());
             holder.tv_mycomment_date.setText(lists.get(position).getDatetime());
