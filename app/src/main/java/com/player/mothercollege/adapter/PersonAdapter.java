@@ -1,6 +1,8 @@
 package com.player.mothercollege.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +19,19 @@ import com.lzy.ninegrid.preview.NineGridViewClickAdapter;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.PersonDynamicBean;
 import com.player.mothercollege.unity.details.HotArticleDetailsActivity;
+import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DateUtils;
 import com.player.mothercollege.utils.DensityUtils;
+import com.player.mothercollege.utils.MyLog;
+import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.utils.ScreenUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
+import com.yolanda.nohttp.NoHttp;
+import com.yolanda.nohttp.RequestMethod;
+import com.yolanda.nohttp.rest.OnResponseListener;
+import com.yolanda.nohttp.rest.Request;
+import com.yolanda.nohttp.rest.RequestQueue;
+import com.yolanda.nohttp.rest.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +44,15 @@ public class PersonAdapter extends BaseAdapter{
     private Context context;
     private RequestManager glideRequest;
     private List<PersonDynamicBean.TrendsBean> lists = new ArrayList<>();
+    private String selfuid;
+    private String apptoken;
 
-    public PersonAdapter(Context context, List lists) {
+    public PersonAdapter(Context context, List lists,String uid) {
         super();
         this.context = context;
         this.lists = lists;
+        this.selfuid = uid;
+        apptoken = PrefUtils.getString(context, "apptoken", "");
     }
 
     @Override
@@ -72,6 +87,7 @@ public class PersonAdapter extends BaseAdapter{
             ph.nineGrid = (NineGridView) view.findViewById(R.id.nineGrid);
             ph.tv_person_zan = (TextView) view.findViewById(R.id.tv_person_zan);
             ph.tv_person_comment = (TextView) view.findViewById(R.id.tv_person_comment);
+            ph.tv_person_delete = (TextView) view.findViewById(R.id.tv_person_delete);
             view.setTag(ph);
         }else {
             view = convertView;
@@ -121,13 +137,74 @@ public class PersonAdapter extends BaseAdapter{
                 context.startActivity(intent);
             }
         });
+        //删除
+        String uid = lists.get(position).getUid();
+
+        if (selfuid.equals(uid)){
+            ph.tv_person_delete.setVisibility(View.VISIBLE);
+            ph.tv_person_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("确认删除此贴?");
+
+                    builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteArticle(tid);
+                        }
+                    });
+                    builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
+                }
+            });
+        }else {
+            ph.tv_person_delete.setVisibility(View.GONE);
+        }
+
         return view;
+    }
+
+    private void deleteArticle(String tid) {
+        RequestQueue requestQueue = NoHttp.newRequestQueue();
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("op","DeleTetrend");
+        request.add("uid",selfuid);
+        request.add("trendno",tid);
+        request.add("apptoken",apptoken);
+        requestQueue.add(001, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("删除帖子:"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     class PersonHolder{
         public LinearLayout ll_person;
         public ImageView iv_head;
-        public TextView tv_name,tv_time,tv_address,tv_title,tv_desc,tv_person_zan,tv_person_comment;
+        public TextView tv_name,tv_time,tv_address,tv_title,tv_desc,tv_person_zan,tv_person_comment,tv_person_delete;
         public NineGridView nineGrid;
     }
 }

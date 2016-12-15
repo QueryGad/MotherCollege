@@ -169,7 +169,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
      */
     private void initDynamic(PersonDynamicBean personDynamicBean) {
         List<PersonDynamicBean.TrendsBean> trendsList = personDynamicBean.getTrends();
-        PersonAdapter adapter = new PersonAdapter(HeadIconActivity.this,trendsList);
+        PersonAdapter adapter = new PersonAdapter(HeadIconActivity.this,trendsList,uid);
         lv_headicon.setAdapter(adapter);
         lv_headicon.addHeaderView(personHeadView);
     }
