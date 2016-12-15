@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.OrientationHelper;
@@ -26,6 +27,8 @@ import com.player.mothercollege.adapter.PhotoAdapter;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.ImagePostUtils;
 import com.player.mothercollege.utils.MyLog;
+import com.player.mothercollege.utils.MyUtils;
+import com.player.mothercollege.utils.PhotoSmallUitls;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.RecyclerItemClickListener;
 import com.yanzhenjie.permission.AndPermission;
@@ -161,18 +164,6 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
                 selectedPhotos.addAll(photos);
             }
 
-            for (int i = 0;i<photos.size();i++){
-//                postImageArr.clear();
-                String photoLocation = photos.get(i).toString();  //所选图片路径
-                MyLog.testLog("图片路径:"+photoLocation);
-                String png = photoLocation.substring(photoLocation.lastIndexOf("."));
-                png = png.substring(1,png.length());
-                String location = ImagePostUtils.imageBASE64(photoLocation);//转换为64位编码格式的图片路径
-                String postImage = png+"|"+location;
-                postImageArr.add(postImage);
-            }
-
-
             photoAdapter.notifyDataSetChanged();
         }
     }
@@ -252,14 +243,28 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
 
     private  void postMessage(String title,String content){
 
+        for (int i = 0;i<photos.size();i++){
+//                postImageArr.clear();
+            String photoLocation = photos.get(i).toString();  //所选图片路径
+            //压缩图片
+            //// TODO: 2016/12/15
+            Bitmap bitmapFromPath = MyUtils.getBitmapFromPath(photoLocation);
+            Bitmap bitmap = PhotoSmallUitls.compressImage(bitmapFromPath);
+            String newPath = MyUtils.convertIconToString(bitmap);
+            MyLog.testLog("新图片路径:"+newPath);
+            String png = photoLocation.substring(photoLocation.lastIndexOf("."));
+            png = png.substring(1,png.length());
+            String location = ImagePostUtils.imageBASE64(photoLocation);//转换为64位编码格式的图片路径
+            MyLog.testLog("转换后路径:"+location);
+            String postImage = png+"|"+location;
+            postImageArr.add(postImage);
+        }
 
 
         String imgs="";
         for (int i =0;i<postImageArr.size();i++){
             String img = postImageArr.get(i);
-
                 imgs = imgs+(img+"^");
-
         }
 
         if (imgs!=null&&imgs.length()>0){
@@ -267,7 +272,7 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
         }
         MyLog.testLog("最后:"+imgs);
         String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
+        String uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","PostTrend");

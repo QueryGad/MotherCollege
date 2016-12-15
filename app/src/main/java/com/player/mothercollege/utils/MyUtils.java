@@ -1,6 +1,7 @@
 package com.player.mothercollege.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -8,9 +9,11 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -144,4 +147,44 @@ public class MyUtils {
 		}
 		return photoFile;
 	}
+
+	public static Bitmap getBitmapFromPath(String path){
+		if (!new File(path).exists()){
+			System.err.println("getBitmapFromPath: file not exists");
+			return null;
+		}
+
+		byte[] buf = new byte[1024*1024];
+		Bitmap bitmap = null;
+
+		try{
+
+			FileInputStream fis = new FileInputStream(path);
+			  int len = fis.read(buf, 0, buf.length);
+			  bitmap = BitmapFactory.decodeByteArray(buf, 0, len);
+			  if (bitmap == null) {
+				 System.out.println("len= " + len);
+				 System.err  .println("path: " + path + "  could not be decode!!!");
+				 }
+			 } catch (Exception e) {
+			     e.printStackTrace();
+
+			 }
+
+		 return bitmap;
+	}
+
+	/** 
+	 * 图片转成string 
+	 * 
+	 * @param bitmap 
+	 * @return 
+	 */
+	public static String convertIconToString(Bitmap bitmap) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();// outputstream  
+		bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+		byte[] appicon = baos.toByteArray();// 转为byte数组  
+		return Base64.encodeToString(appicon, Base64.DEFAULT);
+
+		 }
 }

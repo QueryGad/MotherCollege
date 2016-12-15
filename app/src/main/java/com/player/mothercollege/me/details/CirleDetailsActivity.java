@@ -80,7 +80,7 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void netWorkTitle() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
+        String uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("uid",uid);
@@ -175,6 +175,8 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
         boolean hasJoin = cirleNameDetailsBean.isHasJoin();
         final String groupId = cirleNameDetailsBean.getGroupId();
         if (hasJoin){
+            //显示编辑按钮
+            iv_cirle_edit.setVisibility(View.VISIBLE);
             iv_cirle_hasjoin.setImageResource(R.mipmap.icon_join);
             //如果加入过的圈子点击可取消关注
             iv_cirle_hasjoin.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +189,9 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
                 }
             });
         }else {
+            //不显示编辑按钮
+            //todo
+            iv_cirle_edit.setVisibility(View.GONE);
             iv_cirle_hasjoin.setImageResource(R.mipmap.icon_2_join);
             //如果未加入过的圈子点击可关注
             iv_cirle_hasjoin.setOnClickListener(new View.OnClickListener() {

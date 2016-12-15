@@ -78,11 +78,13 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
 
     private void allRead() {
         //把集合中的nids拿出来
+        MyLog.testLog("nids:"+nids.size());
         String nidd = "";
         for (int i =0;i<nids.size();i++){
             String nid =  nids.get(i);
             MyLog.testLog("nid:"+nid);
             nidd = nidd+","+nid;
+            MyLog.testLog("nid:"+nid);
         }
 
         String apptoken = PrefUtils.getString(this, "apptoken", "");
@@ -157,7 +159,11 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
         List<MyCommentBean.NoticesBean> noticesList = myCommentBean.getNotices();
         adapter = new MyCommentAdapter(MyCommentActivity.this,noticesList);
         lv_mycomment.setAdapter(adapter);
-
+        MyLog.testLog("nids:"+nids.size());
+        for (int i=0;i<nids.size();i++){
+            String nid = nids.get(i);
+            MyLog.testLog("遍历到的nid："+nid);
+        }
     }
 
     @Override
@@ -174,6 +180,7 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
 
     private void postNull() {
         //把集合中的nids拿出来
+        MyLog.testLog("nids:"+nids);
         String nidd = "";
         for (int i =0;i<nids.size();i++){
             String nid =  nids.get(i);
@@ -306,8 +313,9 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
                 });
             }
             int nid = lists.get(position).getNid();
+            MyLog.testLog("nid:"+nid);
             nids.add(nid+"");
-            MyLog.testLog("nids:"+nids);
+
             holder.tv_mycomment_desc.setText(sourceText);
             Picasso.with(context).load(sourcePic)
                     .resize(DensityUtils.dip2px(context,50),DensityUtils.dip2px(context,58))

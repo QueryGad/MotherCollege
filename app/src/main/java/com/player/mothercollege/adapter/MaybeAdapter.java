@@ -110,6 +110,7 @@ public class MaybeAdapter extends BaseAdapter{
             public void onClick(View v) {
                 Intent intent = new Intent(context, CirleDetailsActivity.class);
                 intent.putExtra("groupId",groupId);
+
                 context.startActivity(intent);
             }
         });
@@ -128,10 +129,11 @@ public class MaybeAdapter extends BaseAdapter{
 
     private void netWork(String groupId){
         String apptoken = PrefUtils.getString(context, "apptoken", "");
+        String uid = PrefUtils.getString(context, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","joinGroup");
-        request.add("uid","null");
+        request.add("uid",uid);
         request.add("groupNos",groupId);
         requestQueue.add(POST_INJOIN_DATA, request, new OnResponseListener<String>() {
             @Override
