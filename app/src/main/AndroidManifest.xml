@@ -308,7 +308,8 @@
         <activity android:name=".me.details.WebViewDeatilsActivity" android:screenOrientation="portrait"/>//系统消息详情
 
         //支付
-        <activity android:name=".pay.ClientPayActivity" android:screenOrientation="portrait"/>//提现
+        <activity android:name=".pay.ClientPayActivity" android:screenOrientation="portrait"/>//提现(银行卡、微信)
+        <activity android:name=".pay.ClientExplainActivity" android:screenOrientation="portrait"/>//提现说明
 
     </application>
 

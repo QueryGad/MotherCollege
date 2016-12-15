@@ -1,5 +1,6 @@
 package com.player.mothercollege.pay;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
@@ -26,6 +28,7 @@ public class ClientPayActivity extends BaseActivity implements View.OnClickListe
     private RadioGroup rg_client;
     private RadioButton rb_client_bank,rb_client_wechat;
     private ViewPager vp_me_client;
+    private TextView tv_details_let;
     private BankClientFragment bankClientFragment;
     private WeChatClientFragment weChatClientFragment;
     private List<Fragment> lists = new ArrayList<>();
@@ -86,6 +89,7 @@ public class ClientPayActivity extends BaseActivity implements View.OnClickListe
         rb_client_bank = (RadioButton) findViewById(R.id.rb_client_bank);
         rb_client_wechat = (RadioButton) findViewById(R.id.rb_client_wechat);
         vp_me_client = (ViewPager) findViewById(R.id.vp_me_client);
+        tv_details_let = (TextView) findViewById(R.id.tv_details_let);
 
         bankClientFragment = new BankClientFragment();
         weChatClientFragment = new WeChatClientFragment();
@@ -99,6 +103,7 @@ public class ClientPayActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void initListeners() {
         btn_back.setOnClickListener(this);
+        tv_details_let.setOnClickListener(this);
         vp_me_client.setOnPageChangeListener(ClientPageListener);
         rg_client.setOnCheckedChangeListener(ClientCheckListener);
     }
@@ -120,6 +125,11 @@ public class ClientPayActivity extends BaseActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.btn_back:
                 finish();
+                break;
+            case R.id.tv_details_let:
+                //提现说明
+                Intent intent = new Intent(ClientPayActivity.this,ClientExplainActivity.class);
+                startActivity(intent);
                 break;
         }
     }
