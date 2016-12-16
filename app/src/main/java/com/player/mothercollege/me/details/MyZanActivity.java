@@ -52,6 +52,8 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
     private RequestQueue requestQueue;
     private MyZanAdapter adapter;
     private List<MyZanBean.NoticesBean> noticesList = new ArrayList<>();
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -81,12 +83,12 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
+        apptoken = PrefUtils.getString(this, "apptoken", "");
+        uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
-        request.add("apptoken",apptoken);
+        request.add("apptoken", apptoken);
         request.add("op","noticeZlike");
-        request.add("uid",uid);
+        request.add("uid", uid);
         requestQueue.add(GET_MYZAN_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -122,46 +124,8 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void allRead() {
-        //把集合中的nids拿出来
-        String nidd = "";
-        MyLog.testLog("我已读了多少个参数:"+nids.size());
-        for (int i =0;i<nids.size();i++){
-            String nid =  nids.get(i);
-            nidd = nidd+","+nid;
-        }
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
-        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
-        request.add("op","removenotice");
-        request.add("apptoken",apptoken);
-        request.add("uid",uid);
-        request.add("optype","1");
-        request.add("nids",nidd);
-        MyLog.testLog("nids:"+nidd);
-        request.add("ntype","3");
-        requestQueue.add(POST_READ_DATA, request, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
 
-            }
 
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                String info = response.get();
-                MyLog.testLog("已读:"+info);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-
-            }
-
-            @Override
-            public void onFinish(int what) {
-
-            }
-        });
     }
 
     @Override
@@ -178,7 +142,6 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
 
     private ProgressDialog pd;
     private void postNull() {
-
         //把集合中的nids拿出来
         String nidd = "";
         for (int i =0;i<nids.size();i++){
@@ -187,8 +150,6 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
             MyLog.testLog("清空消息nid:"+nidd);
         }
 
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("op","removenotice");
         request.add("apptoken",apptoken);
@@ -322,7 +283,7 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
             }
             int nid = lists.get(position).getNid();
             nids.add(nid+"");
-            MyLog.testLog("nids:"+nids);
+            readItem(nid);
             Picasso.with(context).load(sourcePic)
                     .resize(DensityUtils.dip2px(context,50),DensityUtils.dip2px(context,58))
                     .centerCrop().into(holder.iv_myzan_desc);
@@ -336,6 +297,39 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
             private ImageView iv_myzan_desc;
             private LinearLayout ll_item_message;
         }
+    }
+
+    private void readItem(int nid) {
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("op","removenotice");
+        request.add("apptoken",apptoken);
+        request.add("uid",uid);
+        request.add("optype","1");
+        request.add("nids",nid+"");
+        request.add("ntype","3");
+        requestQueue.add(POST_READ_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("已读:"+info);
+
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
 }

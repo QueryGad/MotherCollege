@@ -52,6 +52,8 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
     private RequestQueue requestQueue;
     private MyCommentAdapter adapter;
     private List<MyCommentBean.NoticesBean> noticesList = new ArrayList<>();
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -78,57 +80,12 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
 
     }
 
-    private void allRead() {
-        //把集合中的nids拿出来
-        MyLog.testLog("nids:"+nids.size());
-        String nidd = "";
-        for (int i =0;i<nids.size();i++){
-            String nid =  nids.get(i);
-            MyLog.testLog("nid:"+nid);
-            nidd = nidd+","+nid;
-            MyLog.testLog("nid:"+nid);
-        }
-
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "");
-        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
-        request.add("op","removenotice");
-        request.add("apptoken",apptoken);
-        request.add("uid",uid);
-        request.add("optype","1");
-        request.add("nids",nidd);
-        request.add("ntype","2");
-        requestQueue.add(POST_COMMENT_DATA, request, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
-
-            }
-
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                String info = response.get();
-                MyLog.testLog("已读:"+info);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-
-            }
-
-            @Override
-            public void onFinish(int what) {
-
-            }
-        });
-    }
-
     private void netWork() {
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
+        apptoken = PrefUtils.getString(this, "apptoken", "");
+        uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
-        request.add("apptoken",apptoken);
-        request.add("uid",uid);
+        request.add("apptoken", apptoken);
+        request.add("uid", uid);
         request.add("op","noticeReview");
         requestQueue.add(GET_MESSAGE_COMMENT_DATA, request, new OnResponseListener<String>() {
             @Override
@@ -161,11 +118,6 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
         noticesList = myCommentBean.getNotices();
         adapter = new MyCommentAdapter(MyCommentActivity.this, noticesList);
         lv_mycomment.setAdapter(adapter);
-        MyLog.testLog("nids:"+nids.size());
-        for (int i=0;i<nids.size();i++){
-            String nid = nids.get(i);
-            MyLog.testLog("遍历到的nid："+nid);
-        }
     }
 
     @Override
@@ -183,14 +135,11 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
     private ProgressDialog pd;
     private void postNull() {
         //把集合中的nids拿出来
-        MyLog.testLog("nids:"+nids);
         String nidd = "";
         for (int i =0;i<nids.size();i++){
             String nid =  nids.get(i);
             nidd = nidd+","+nid;
         }
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("op","removenotice");
         request.add("apptoken",apptoken);
@@ -321,9 +270,9 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
                 });
             }
             int nid = lists.get(position).getNid();
-            MyLog.testLog("nid:"+nid);
             nids.add(nid+"");
-
+            //显示一条  已读一条
+            readItem(nid);
             holder.tv_mycomment_desc.setText(sourceText);
             Picasso.with(context).load(sourcePic)
                     .resize(DensityUtils.dip2px(context,50),DensityUtils.dip2px(context,58))
@@ -340,6 +289,38 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
             private TextView tv_mycomment_desc;
             private LinearLayout ll_item_message;
         }
+    }
+
+    private void readItem(int nid) {
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("op","removenotice");
+        request.add("apptoken",apptoken);
+        request.add("uid",uid);
+        request.add("optype","1");
+        request.add("nids",nid+"");
+        request.add("ntype","2");
+        requestQueue.add(POST_COMMENT_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("已读:"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
 }

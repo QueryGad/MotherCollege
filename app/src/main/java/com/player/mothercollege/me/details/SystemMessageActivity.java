@@ -40,12 +40,15 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
 
     private static final int GET_SYSMESSAGE_DATA = 001;
     private static final int POST_NULL_DATA = 002;
+    private static final int POST_READ_DATA =003;
     private Button btn_mycomment_null;
     private TextView tv_mycomment_title,tv_mycomment_null;
     private ListView lv_mycomment;
     private RequestQueue requestQueue;
     private SystemMessageAdapter adapter;
     private List<SystemMessageBean.NoticesBean> noticesList = new ArrayList<>();
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -75,12 +78,12 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
+        apptoken = PrefUtils.getString(this, "apptoken", "");
+        uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
-        request.add("apptoken",apptoken);
+        request.add("apptoken", apptoken);
         request.add("op","noticeSystem");
-        request.add("uid",uid);
+        request.add("uid", uid);
         requestQueue.add(GET_SYSMESSAGE_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -136,8 +139,6 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
             MyLog.testLog("清空消息nid:"+nidd);
         }
 
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("op","removenotice");
         request.add("apptoken",apptoken);
@@ -234,6 +235,7 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
             holder.tv_sys_desc.setText(lists.get(position).getSourceText());
             int nid = lists.get(position).getNid();
             nids.add(nid+"");
+            readItem(nid);
             final String rcontent = lists.get(position).getRcontent();
             holder.rl_message_sys.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -253,6 +255,39 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
             private ImageView iv_sys_look;
             private RelativeLayout rl_message_sys;
         }
+    }
+
+    private void readItem(int nid) {
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("op","removenotice");
+        request.add("apptoken",apptoken);
+        request.add("uid",uid);
+        request.add("optype","1");
+        request.add("nids",nid+"");
+        request.add("ntype","1");
+        requestQueue.add(POST_READ_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("已读:"+info);
+
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
 }
