@@ -121,7 +121,7 @@ public class AddressActivity extends Activity implements View.OnClickListener {
 
     private void netWork() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
+        String uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("uid",uid);

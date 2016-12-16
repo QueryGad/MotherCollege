@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.player.mothercollege.R;
 
@@ -38,7 +40,22 @@ public class BankClientFragment extends Fragment implements View.OnClickListener
     }
 
     private void initData() {
-        
+
+    }
+
+    private void initFoot(){
+        View viewFoot = View.inflate(getActivity(),R.layout.foot_pay_clent_bank,null);
+        TextView tv_bank_maxmoney = (TextView) viewFoot.findViewById(R.id.tv_bank_maxmoney);//可提现金额
+        TextView tv_bank_selfmoney = (TextView) viewFoot.findViewById(R.id.tv_bank_selfmoney);//本次可提
+        TextView tv_bank_allmoney = (TextView) viewFoot.findViewById(R.id.tv_bank_allmoney);//全部提现
+        EditText et_bank_getmoney = (EditText) viewFoot.findViewById(R.id.et_bank_getmoney);//本次提现金额
+        TextView tv_bank_othermoney = (TextView) viewFoot.findViewById(R.id.tv_bank_othermoney);//手续费
+        EditText et_bank_phone = (EditText) viewFoot.findViewById(R.id.et_bank_phone);//手机号
+        EditText et_bank_yanzheng = (EditText) viewFoot.findViewById(R.id.et_bank_yanzheng);//验证码
+        Button btn_bank_yanzhenma = (Button) viewFoot.findViewById(R.id.btn_bank_yanzhenma);//获取验证码
+
+
+        lv_pay_bank.addFooterView(viewFoot);
     }
 
     @Override
@@ -49,4 +66,5 @@ public class BankClientFragment extends Fragment implements View.OnClickListener
                 break;
         }
     }
+
 }

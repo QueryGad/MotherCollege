@@ -1,5 +1,6 @@
 package com.player.mothercollege.me.details;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -50,6 +51,7 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
     private ListView lv_mycomment;
     private RequestQueue requestQueue;
     private MyZanAdapter adapter;
+    private List<MyZanBean.NoticesBean> noticesList = new ArrayList<>();
 
     @Override
     public void setContentView() {
@@ -113,8 +115,8 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
     private void parseJson(String info) {
         Gson gson = new Gson();
         MyZanBean myZanBean = gson.fromJson(info, MyZanBean.class);
-        List<MyZanBean.NoticesBean> noticesList = myZanBean.getNotices();
-        adapter = new MyZanAdapter(MyZanActivity.this,noticesList);
+        noticesList = myZanBean.getNotices();
+        adapter = new MyZanAdapter(MyZanActivity.this, noticesList);
         lv_mycomment.setAdapter(adapter);
         allRead();
     }
@@ -174,6 +176,7 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    private ProgressDialog pd;
     private void postNull() {
 
         //把集合中的nids拿出来
@@ -196,7 +199,8 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
         requestQueue.add(POST_NULL_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-
+                pd = new ProgressDialog(MyZanActivity.this);
+                pd.show();
             }
 
             @Override
@@ -206,20 +210,24 @@ public class MyZanActivity extends BaseActivity implements View.OnClickListener 
                 MessageNullBean messageNullBean = gson.fromJson(info, MessageNullBean.class);
                 boolean isSuccess = messageNullBean.isIsSuccess();
                 if (isSuccess){
+                    noticesList.removeAll(noticesList);
                     adapter.notifyDataSetChanged();
+                    Toast.makeText(MyZanActivity.this,"已清空!",Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                 }else {
                     Toast.makeText(MyZanActivity.this,"处理失败，请稍候再试!",Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                 }
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-
+                pd.dismiss();
             }
 
             @Override
             public void onFinish(int what) {
-
+                pd.dismiss();
             }
         });
     }

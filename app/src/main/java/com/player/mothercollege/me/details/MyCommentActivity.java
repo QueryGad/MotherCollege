@@ -1,5 +1,6 @@
 package com.player.mothercollege.me.details;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -50,6 +51,7 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
     private ListView lv_mycomment;
     private RequestQueue requestQueue;
     private MyCommentAdapter adapter;
+    private List<MyCommentBean.NoticesBean> noticesList = new ArrayList<>();
 
     @Override
     public void setContentView() {
@@ -156,8 +158,8 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
     private void parseJson(String info) {
         Gson gson = new Gson();
         MyCommentBean myCommentBean = gson.fromJson(info, MyCommentBean.class);
-        List<MyCommentBean.NoticesBean> noticesList = myCommentBean.getNotices();
-        adapter = new MyCommentAdapter(MyCommentActivity.this,noticesList);
+        noticesList = myCommentBean.getNotices();
+        adapter = new MyCommentAdapter(MyCommentActivity.this, noticesList);
         lv_mycomment.setAdapter(adapter);
         MyLog.testLog("nids:"+nids.size());
         for (int i=0;i<nids.size();i++){
@@ -178,6 +180,7 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    private ProgressDialog pd;
     private void postNull() {
         //把集合中的nids拿出来
         MyLog.testLog("nids:"+nids);
@@ -198,7 +201,8 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
         requestQueue.add(POST_NULL_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-
+                pd = new ProgressDialog(MyCommentActivity.this);
+                pd.show();
             }
 
             @Override
@@ -209,20 +213,24 @@ public class MyCommentActivity extends BaseActivity implements View.OnClickListe
                 MessageNullBean messageNullBean = gson.fromJson(info, MessageNullBean.class);
                 boolean isSuccess = messageNullBean.isIsSuccess();
                 if (isSuccess){
+                    noticesList.removeAll(noticesList);
                     adapter.notifyDataSetChanged();
+                    Toast.makeText(MyCommentActivity.this,"已清空!",Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                 }else {
                     Toast.makeText(MyCommentActivity.this,"处理失败，请稍候再试!",Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                 }
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-
+                    pd.dismiss();
             }
 
             @Override
             public void onFinish(int what) {
-
+                    pd.dismiss();
             }
         });
     }
