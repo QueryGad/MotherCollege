@@ -1,5 +1,6 @@
 package com.player.mothercollege.me.details;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -44,6 +45,7 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
     private ListView lv_mycomment;
     private RequestQueue requestQueue;
     private SystemMessageAdapter adapter;
+    private List<SystemMessageBean.NoticesBean> noticesList = new ArrayList<>();
 
     @Override
     public void setContentView() {
@@ -107,8 +109,8 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
     private void parseJson(String info) {
         Gson gson = new Gson();
         SystemMessageBean systemMessageBean = gson.fromJson(info, SystemMessageBean.class);
-        List<SystemMessageBean.NoticesBean> noticesList = systemMessageBean.getNotices();
-        adapter = new SystemMessageAdapter(SystemMessageActivity.this,noticesList);
+        noticesList = systemMessageBean.getNotices();
+        adapter = new SystemMessageAdapter(SystemMessageActivity.this, noticesList);
         lv_mycomment.setAdapter(adapter);
     }
 
@@ -124,6 +126,7 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    private ProgressDialog pd;
     private void postNull() {
         //把集合中的nids拿出来
         String nidd = "";
@@ -145,7 +148,8 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
         requestQueue.add(POST_NULL_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-
+                pd = new ProgressDialog(SystemMessageActivity.this);
+                pd.show();
             }
 
             @Override
@@ -155,20 +159,24 @@ public class SystemMessageActivity extends BaseActivity implements View.OnClickL
                 MessageNullBean messageNullBean = gson.fromJson(info, MessageNullBean.class);
                 boolean isSuccess = messageNullBean.isIsSuccess();
                 if (isSuccess){
+                    noticesList.removeAll(noticesList);
                     adapter.notifyDataSetChanged();
+                    Toast.makeText(SystemMessageActivity.this,"已清空!",Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                 }else {
                     Toast.makeText(SystemMessageActivity.this,"处理失败，请稍候再试!",Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                 }
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-
+                pd.dismiss();
             }
 
             @Override
             public void onFinish(int what) {
-
+                pd.dismiss();
             }
         });
     }
