@@ -15,6 +15,7 @@ import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.me.details.DataCleanManager;
 import com.player.mothercollege.me.details.SettingAboutActivity;
 import com.player.mothercollege.me.details.SettingHelpActivity;
+import com.player.mothercollege.utils.PrefUtils;
 
 import ch.ielse.view.SwitchView;
 
@@ -98,6 +99,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent2 = new Intent(SettingActivity.this, LoginActivity.class);
+                        PrefUtils.setString(SettingActivity.this,"uid","");
                         intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent2);
                         alertDialog.dismiss();

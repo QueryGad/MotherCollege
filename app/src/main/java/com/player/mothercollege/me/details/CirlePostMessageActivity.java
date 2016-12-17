@@ -248,10 +248,8 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
             String photoLocation = photos.get(i).toString();  //所选图片路径
             MyLog.testLog("压缩前图片路径:"+photoLocation);
             //压缩图片
-            //// TODO: 2016/12/15
             Bitmap compressedImage = PicUtils.getimage(photoLocation);
             String newPic = ImagePostUtils.bitmaptoString(compressedImage); //转换后64位图
-
 
             String png = photoLocation.substring(photoLocation.lastIndexOf("."));
             png = png.substring(1,png.length());
