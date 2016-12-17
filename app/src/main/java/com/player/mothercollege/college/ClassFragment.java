@@ -75,7 +75,10 @@ public class ClassFragment extends Fragment{
     private OnBannerClickListener ClassBannerListener = new OnBannerClickListener() {
         @Override
         public void OnBannerClick(int position) {
+            String sid = banerBean.get(position).getSid();
             Intent intent = new Intent(getActivity(), ClassDetailsActivity.class);
+            intent.putExtra("sid",sid);
+            MyLog.testLog("课堂轮播图:"+sid);
             startActivity(intent);
         }
     };
