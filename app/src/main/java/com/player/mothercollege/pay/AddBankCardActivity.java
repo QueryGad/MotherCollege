@@ -1,9 +1,6 @@
-package com.player.mothercollege.me.details;
+package com.player.mothercollege.pay;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,6 +13,7 @@ import com.bigkoo.pickerview.OptionsPickerView;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.ProvinceBean;
+import com.player.mothercollege.me.details.JsonFileReader;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -33,17 +31,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.ielse.view.SwitchView;
+/**
+ * Created by Administrator on 2016/12/17.
+ */
+public class AddBankCardActivity extends BaseActivity implements View.OnClickListener {
 
-public class PickerActivity extends BaseActivity implements View.OnClickListener {
-
-    private static final int POST_ADDRESS_DATA = 001;
+    private static final int POST_ADDBANK_DATA = 001;
     private Button btn_back;
-    private TextView tv_address_ok,tv_address_picker;
-    private EditText et_address_name,et_address_phone,et_address_details;
-    private SwitchView btn_address_ischeck;
-    private AlertDialog dialog;
-    private RequestQueue requestQueue;
+    private TextView tv_details_title,btn_addbank_ok;
+    private EditText et_addbankcard_name,et_addbankcard_number,et_addbankcard_bank;
+    private TextView tv_addbankcard_address;
     private OptionsPickerView pvOptions;
     private ProgressDialog pd;
     //  省份
@@ -60,47 +57,33 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
     private String shi;
     private String xian;
     private String moren = "1";
-    private SwitchView.OnStateChangedListener SwitchButtonStateListener = new SwitchView.OnStateChangedListener() {
-        @Override
-        public void toggleToOn(SwitchView view) {
-            //打开状态
-            view.toggleSwitch(true);
-            //默认地址
-            moren = "1";
-        }
-
-        @Override
-        public void toggleToOff(SwitchView view) {
-            //关闭状态
-            view.toggleSwitch(false);
-            moren = "0";
-        }
-    };
+    private RequestQueue requestQueue;
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.act_me_picker);
+        setContentView(R.layout.act_pay_add_bank_card);
         requestQueue = NoHttp.newRequestQueue();
+
     }
 
     @Override
     public void initViews() {
         btn_back = (Button) findViewById(R.id.btn_back);
-        tv_address_picker = (TextView) findViewById(R.id.tv_address_picker);
-        tv_address_ok = (TextView) findViewById(R.id.tv_address_ok);
-        et_address_name = (EditText) findViewById(R.id.et_address_name);
-        et_address_phone = (EditText) findViewById(R.id.et_address_phone);
-        et_address_details = (EditText) findViewById(R.id.et_address_details);
-        btn_address_ischeck = (SwitchView) findViewById(R.id.btn_address_ischeck);
+        tv_details_title = (TextView) findViewById(R.id.tv_details_title);
+        btn_addbank_ok = (TextView) findViewById(R.id.btn_addbank_ok);
+        et_addbankcard_name = (EditText) findViewById(R.id.et_addbankcard_name);
+        et_addbankcard_number = (EditText) findViewById(R.id.et_addbankcard_number);
+        et_addbankcard_bank = (EditText) findViewById(R.id.et_addbankcard_bank);
+        tv_addbankcard_address = (TextView) findViewById(R.id.tv_addbankcard_address);
 
+        tv_details_title.setText("添加银行卡");
     }
 
     @Override
     public void initListeners() {
         btn_back.setOnClickListener(this);
-        tv_address_ok.setOnClickListener(this);
-        tv_address_picker.setOnClickListener(this);
-        btn_address_ischeck.setOnStateChangedListener(SwitchButtonStateListener);
+        tv_addbankcard_address.setOnClickListener(this);
+        btn_addbank_ok.setOnClickListener(this);
     }
 
     @Override
@@ -116,7 +99,6 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
         //  设置选择的三级单位
         //pvOptions.setLabels("省", "市", "区");
         //pvOptions.setTitle("选择城市");
-
         //  设置是否循环滚动
         pvOptions.setCyclic(false, false, false);
         // 设置默认选中的三级项目
@@ -137,54 +119,14 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
                             + " " + cityList.get(options1).get(option2)
                             + " " + districtList.get(options1).get(option2).get(options3);
                 }
-                tv_address_picker.setText(address);
+                tv_addbankcard_address.setText(address);
                 sheng =  provinceBeanList.get(options1).getPickerViewText();
                 shi = cityList.get(options1).get(option2);
                 xian = districtList.get(options1).get(option2).get(options3);
             }
         });
+
     }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_back:
-                final AlertDialog.Builder builder = new AlertDialog.Builder(PickerActivity.this);
-                builder.setTitle("温馨提示");
-                builder.setMessage("确认取消此次操作?");
-                builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-                dialog = builder.show();
-                break;
-            case R.id.tv_address_ok:    //确定，联网提交
-                String name = et_address_name.getText().toString().trim();//收货人
-                String phone = et_address_phone.getText().toString().trim();//联系电话
-                String details = et_address_details.getText().toString().trim();//详细地址
-                if (TextUtils.isEmpty(name)||TextUtils.isEmpty(name)||TextUtils.isEmpty(name)){
-                    Toast.makeText(PickerActivity.this,"信息不完整，请补全您的信息!",Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                netWork(name,phone,details);
-                break;
-            case R.id.tv_address_picker:  //三级联动
-                ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE))
-                        .hideSoftInputFromWindow(PickerActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                pvOptions.show();
-                break;
-
-        }
-    }
-
 
     public void parseJson(String str) {
         try {
@@ -229,91 +171,67 @@ public class PickerActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_back:
+                finish();
+                break;
+            case R.id.tv_addbankcard_address://三级联动
+                ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE))
+                        .hideSoftInputFromWindow(AddBankCardActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                pvOptions.show();
+                break;
+            case R.id.btn_addbank_ok:
+                String name = et_addbankcard_name.getText().toString().trim();
+                String number = et_addbankcard_number.getText().toString().trim();
+                String bankname = et_addbankcard_bank.getText().toString().trim();
+                //判空
+                if (TextUtils.isEmpty(name)&&TextUtils.isEmpty(number)&&TextUtils.isEmpty(bankname)){
+                    Toast.makeText(AddBankCardActivity.this,"请将信息填写完整",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                netWork(name,number,bankname);
+                break;
+        }
+    }
 
-    private void netWork(final String name,final String phone,final String details) {
+    private void netWork(String name, String number, String bankname) {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
         String uid = PrefUtils.getString(this, "uid", "");
-        Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
-        request.add("op","changeuseradd");
-        request.add("ctype","0");
+        request.add("op","addUserBank");
         request.add("uid",uid);
-        request.add("aid","");
-        request.add("linkphone",phone);
-        request.add("linkname",name);
-        request.add("ad1",sheng);
-        request.add("ad2",shi);
-        request.add("ad3",xian);
-        request.add("add_ext",details);
-        request.add("isdefault",moren);
-        requestQueue.add(POST_ADDRESS_DATA, request, new OnResponseListener<String>() {
+        request.add("Bankid",number);
+        request.add("bankUname",name);
+        request.add("bankcreateAdd",bankname);
+        request.add("bankadd1",sheng);
+        request.add("bankadd2",shi);
+        request.add("bankadd3",xian);
+        requestQueue.add(POST_ADDBANK_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-                 pd = new ProgressDialog(PickerActivity.this);
+                 pd = new ProgressDialog(AddBankCardActivity.this);
                  pd.show();
             }
 
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
-                MyLog.testLog("收货地址:"+info);
-                try {
-                    JSONObject json = new JSONObject(info);
-                    boolean isSuccess = json.getBoolean("isSuccess");
-
-                    MyLog.testLog("上传是否成功:"+isSuccess);
-                    if (isSuccess){
-                        Toast.makeText(PickerActivity.this,"添加收货地址成功!",Toast.LENGTH_SHORT).show();
-                        pd.dismiss();
-                        Intent intent = new Intent();
-                        intent.putExtra("name",name);
-                        intent.putExtra("phone",phone);
-                        intent.putExtra("details",details);
-                        intent.putExtra("sheng",sheng);
-                        intent.putExtra("shi",shi);
-                        intent.putExtra("xian",xian);
-                        intent.putExtra("moren",moren);
-                        setResult(100,intent);
-                        finish();
-                    }else {
-                        Toast.makeText(PickerActivity.this,"添加收货地址失败!",Toast.LENGTH_SHORT).show();
-                        pd.dismiss();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                MyLog.testLog("添加银行卡:"+info);
+                pd.dismiss();
             }
 
-           @Override
+            @Override
             public void onFailed(int what, Response<String> response) {
-               pd.dismiss();
+                pd.dismiss();
             }
 
             @Override
             public void onFinish(int what) {
-
+                pd.dismiss();
             }
         });
     }
-
-    @Override
-    public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("温馨提示");
-        builder.setMessage("确定放弃此次操作?");
-        builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        dialog = builder.show();
-    }
-
 }

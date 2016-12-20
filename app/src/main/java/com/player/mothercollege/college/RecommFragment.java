@@ -16,7 +16,10 @@ import com.player.mothercollege.adapter.RecommAdapter;
 import com.player.mothercollege.bean.RecommBean;
 import com.player.mothercollege.college.details.BzzbDeatilsActivity;
 import com.player.mothercollege.college.details.ClassDetailsActivity;
+import com.player.mothercollege.college.details.OriginalDetailsActivity;
+import com.player.mothercollege.college.details.ReadBookDetailsActivity;
 import com.player.mothercollege.find.MarketActivity;
+import com.player.mothercollege.unity.details.ActivityDetailsActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -63,15 +66,25 @@ public class RecommFragment extends Fragment {
                 Intent intent1 = new Intent(getActivity(), ClassDetailsActivity.class);
                 intent1.putExtra("sid",sid);
                 startActivity(intent1);
-            } else if (rtype==13||rtype==14){
-                //读书  原创
-                Intent intent2 = new Intent(getActivity(), BzzbDeatilsActivity.class);
+            } else if (rtype==13){
+                //读书
+                Intent intent2 = new Intent(getActivity(), ReadBookDetailsActivity.class);
                 intent2.putExtra("sid",sid);
                 startActivity(intent2);
+            }else if (rtype==14){
+                //原创
+                Intent intent3 = new Intent(getActivity(), OriginalDetailsActivity.class);
+                intent3.putExtra("sid",sid);
+                startActivity(intent3);
+            }else if (rtype==23){
+                //活动
+                Intent intent4 = new Intent(getActivity(), ActivityDetailsActivity.class);
+                intent4.putExtra("aid",sid);
+                startActivity(intent4);
             }else if (rtype==00){
                 //商城
-                Intent intent3 = new Intent(getActivity(), MarketActivity.class);
-                startActivity(intent3);
+                Intent intent5 = new Intent(getActivity(), MarketActivity.class);
+                startActivity(intent5);
             }
         }
     };

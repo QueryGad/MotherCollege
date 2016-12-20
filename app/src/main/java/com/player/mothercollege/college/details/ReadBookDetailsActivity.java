@@ -271,8 +271,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
-
-
     private Dialog dialog;
     private boolean orZan=true;
     private boolean orCollect = true;
@@ -283,7 +281,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                 finish();
                 break;
             case R.id.ll_persondeatials_comment://评论
-                //todo
                 //判断是否登录
                 if (uid.equals("")){
                     //未登录  提示登录
@@ -715,5 +712,11 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
             tv_person_othercontent.setText(readBookDetailsBean.getReveiw().get(position).getContent());
             return view;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        web_textdetails.destroy();
+        super.onDestroy();
     }
 }

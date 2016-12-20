@@ -48,12 +48,12 @@ public class SmartMakeOverActivity extends BaseActivity implements View.OnClickL
         //现有智慧币数用于判断转让智慧币必须小于现有智慧币数量
         currentNum = getIntent().getIntExtra("currentNum", smartCurrentNum);
         btn_back = (Button) findViewById(R.id.btn_back);
-        btn_smart_markover = (Button) findViewById(R.id.btn_smart_markover);
+        btn_smart_markover = (Button) findViewById(R.id.btn_smart_markover);//转让
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
         tv_getSmart_currentNum = (TextView) findViewById(R.id.tv_getSmart_currentNum);
-        et_getSmart_phone = (EditText) findViewById(R.id.et_getSmart_phone);
-        et_getSmart_number = (EditText) findViewById(R.id.et_getSmart_number);
-        et_getSmart_liuyan = (EditText) findViewById(R.id.et_getSmart_liuyan);
+        et_getSmart_phone = (EditText) findViewById(R.id.et_getSmart_phone); //获赠人手机号
+        et_getSmart_number = (EditText) findViewById(R.id.et_getSmart_number);//要转让的智慧币数
+        et_getSmart_liuyan = (EditText) findViewById(R.id.et_getSmart_liuyan);//留言
 
         tv_details_title.setText("转让");
 
@@ -70,6 +70,8 @@ public class SmartMakeOverActivity extends BaseActivity implements View.OnClickL
     public void initData() {
 
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -97,7 +99,7 @@ public class SmartMakeOverActivity extends BaseActivity implements View.OnClickL
 
     private void netWork(String number, String phone, String liuyan) {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(SmartMakeOverActivity.this, "uid", "null");
+        String uid = PrefUtils.getString(SmartMakeOverActivity.this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","givezhb");
         request.add("uid",uid);

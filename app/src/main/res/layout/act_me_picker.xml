@@ -108,13 +108,12 @@
             android:textSize="16sp"/>
         <TextView
             android:id="@+id/tv_address_picker"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:layout_marginLeft="8dp"
             android:textSize="16sp"
             android:text="点击选择地址"
-            android:gravity="center"
             />
     </LinearLayout>
     <LinearLayout
