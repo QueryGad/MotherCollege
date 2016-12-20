@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/easeUI" />
             <option value="$PROJECT_DIR$/lib" />
             <option value="$PROJECT_DIR$/lib/bdwallet_pay_sdk" />
             <option value="$PROJECT_DIR$/lib/pingpp" />
@@ -20,6 +21,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/easeUI" />
             <option value="$PROJECT_DIR$/lib" />
             <option value="$PROJECT_DIR$/lib/bdwallet_pay_sdk" />
             <option value="$PROJECT_DIR$/lib/pingpp" />

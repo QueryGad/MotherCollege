@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity{
 
     private void netWork() {
         String apptoken = PrefUtils.getString(MainActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(MainActivity.this, "uid", "null");
+        String uid = PrefUtils.getString(MainActivity.this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("uid",uid);

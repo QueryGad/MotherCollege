@@ -15,18 +15,21 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
         <RadioButton
+            android:id="@+id/rb_unity_message"
             style="@style/rb_unity_top"
             android:layout_marginTop="7dp"
             android:drawableTop="@mipmap/icon_friend_news"
             android:text="消息"
             />
         <RadioButton
+            android:id="@+id/rb_unity_addresslist"
             style="@style/rb_unity_top"
             android:layout_marginTop="7dp"
             android:drawableTop="@mipmap/icon_friend_linkman"
             android:text="通讯录"
             />
         <RadioButton
+            android:id="@+id/rb_unity_qunchat"
             style="@style/rb_unity_top"
             android:layout_marginTop="7dp"
             android:drawableTop="@mipmap/icon_friend_group"
