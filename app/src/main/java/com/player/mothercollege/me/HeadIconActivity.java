@@ -19,6 +19,7 @@ import com.player.mothercollege.adapter.PersonAdapter;
 import com.player.mothercollege.bean.PersonDynamicBean;
 import com.player.mothercollege.bean.PersonHead;
 import com.player.mothercollege.login.LoginActivity;
+import com.player.mothercollege.unity.details.ChatActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -30,6 +31,9 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -38,6 +42,7 @@ import java.util.List;
  */
 public class HeadIconActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final int POST_GUANZHU_DATA = 003;
     private ImageView iv_refresh;
     private Button btn_refrsh,btn_back;
     private static final int GET_HEADICON_DATA = 001;
@@ -63,6 +68,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     public void initViews() {
 
         toUid = getIntent().getStringExtra("toUid");
+
 
         iv_refresh = (ImageView) findViewById(R.id.iv_refresh);
         btn_refrsh = (Button) findViewById(R.id.btn_refrsh);
@@ -199,24 +205,35 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         String phone = personHeadBean.getPhone();//手机号
         boolean isShowPhone = personHeadBean.isIsShowPhone();//是否显示手机号
         String autograph = personHeadBean.getAutograph();//个性签名
+        final String snsUid = personHeadBean.getSnsUid();//环信账号
+        final boolean isFollow = personHeadBean.isIsFollow();
         boolean isSelf = personHeadBean.isIsSelf();//是否是用户本人
         if (isSelf){
            //是用户本人 隐藏关注、聊天两个按钮
             ll_other_zhuanchat.setVisibility(View.GONE);
         }else {
-            ll_other_zhuanchat.setVisibility(View.VISIBLE);
-            tv_otherperson_guanzhu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (uid.equals("")){
-                        //未登录  提示登录
-                        Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    }else {
-                        Toast.makeText(HeadIconActivity.this,"关注",Toast.LENGTH_SHORT).show();
+            if (isFollow){
+                //已关注  不再显示关注按钮
+                ll_other_zhuanchat.setVisibility(View.VISIBLE);
+                tv_otherperson_guanzhu.setVisibility(View.GONE);
+            }else {
+                ll_other_zhuanchat.setVisibility(View.VISIBLE);
+                tv_otherperson_guanzhu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (uid.equals("")){
+                            //未登录  提示登录
+                            Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(HeadIconActivity.this,"关注",Toast.LENGTH_SHORT).show();
+                            initGuanZhu();
+                        }
                     }
-                }
-            });
+                });
+            }
+
+
             tv_otherperson_chat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -225,7 +242,10 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                         Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
                         startActivity(intent);
                     }else {
-                        Toast.makeText(HeadIconActivity.this,"聊天",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(HeadIconActivity.this,"聊天",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(HeadIconActivity.this, ChatActivity.class);
+                        intent.putExtra("snsUid", snsUid);
+                        startActivity(intent);
                     }
                 }
             });
@@ -257,6 +277,49 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
             tv_person_phone.setText(phone);
         }
         tv_person_style.setText(autograph);
+    }
+
+    private void initGuanZhu() {
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","tofollow");
+        request.add("optype","follow");
+        request.add("uid",uid);
+        request.add("touid",toUid);
+        requestQueue.add(POST_GUANZHU_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                try {
+                    JSONObject json = new JSONObject(info);
+                    boolean isSuccess = json.getBoolean("isSuccess");
+                    if (isSuccess){
+                        Toast.makeText(HeadIconActivity.this,"关注成功",Toast.LENGTH_SHORT).show();
+                        //todo
+                        tv_otherperson_guanzhu.setVisibility(View.GONE);
+                    }else {
+                        Toast.makeText(HeadIconActivity.this,"关注失败",Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     @Override

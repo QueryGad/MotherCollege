@@ -2,11 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_content"
-    android:orientation="vertical">
-
+    android:background="@color/white">
     <ListView
-        android:id="@+id/lv_goodfrend"
+        android:id="@+id/lv_foot_frend"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@color/transprant"
@@ -14,5 +12,4 @@
         android:dividerHeight="0.5dp"
         android:listSelector="@color/transprant"
         />
-
 </LinearLayout>

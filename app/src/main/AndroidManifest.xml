@@ -299,8 +299,12 @@
         <activity android:name=".unity.details.HotArticleDetailsActivity" android:screenOrientation="portrait"/>//热帖详情页面
         <activity android:name=".unity.details.MyAnswerActivity" android:screenOrientation="portrait"/>//我来回答
         //消息
+        <activity android:name=".unity.details.FrendMessageActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".unity.details.ChatActivity" android:screenOrientation="portrait"/>
         //通讯录
+        <activity android:name=".unity.details.ListAddressActivity" android:screenOrientation="portrait"/>
         //群聊
+        <activity android:name=".unity.details.QunChatActivity" android:screenOrientation="portrait"/>
 
         //发现
         <activity android:name=".find.FrendActivity" android:screenOrientation="portrait"/> //邀请好友
