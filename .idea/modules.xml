@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/MotherCollege.iml" filepath="$PROJECT_DIR$/MotherCollege.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/bdwallet_pay_sdk/bdwallet_pay_sdk.iml" filepath="$PROJECT_DIR$/lib/bdwallet_pay_sdk/bdwallet_pay_sdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/easeUI/easeUI.iml" filepath="$PROJECT_DIR$/easeUI/easeUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easeU/easeU.iml" filepath="$PROJECT_DIR$/easeU/easeU.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/pingpp/pingpp.iml" filepath="$PROJECT_DIR$/lib/pingpp/pingpp.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/pingpp_one/pingpp_one.iml" filepath="$PROJECT_DIR$/lib/pingpp_one/pingpp_one.iml" />

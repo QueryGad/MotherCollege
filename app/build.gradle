@@ -11,6 +11,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        multiDexEnabled true
+
         ndk {
             //选择要添加的对应cpu类型的.so库。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a'
@@ -45,13 +47,11 @@ android {
 //            keyPassword "android"
 //        }
 //    }
-
-
-    dexOptions {
-        javaMaxHeapSize"4g"
+    dexOptions{
+        javaMaxHeapSize "4g"
+        jumboMode = true
     }
-    aaptOptions.cruncherEnabled=false
-    aaptOptions.useNewCruncher=false
+
 
 }
 
@@ -71,7 +71,7 @@ dependencies {
     compile 'com.yanzhenjie:permission:1.0.1'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'ch.ielse:switchbutton:+'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+//    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile files('libs/core.jar')
     compile 'com.lzy.widget:ninegridview:0.2.0'
     compile 'me.iwf.photopicker:PhotoPicker:0.9.0@aar'
@@ -87,4 +87,6 @@ dependencies {
     compile files('libs/SocialSDK_Sina.jar')
     compile 'cn.jiguang:jpush:2.1.8'
     compile 'com.cjj.materialrefeshlayout:library:1.3.0'
+    compile project(':easeU')
+    compile 'com.android.support:multidex:1.0.0'
 }

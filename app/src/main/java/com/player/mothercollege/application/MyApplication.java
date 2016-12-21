@@ -3,8 +3,11 @@ package com.player.mothercollege.application;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.multidex.MultiDex;
 import android.widget.ImageView;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMOptions;
 import com.lzy.ninegrid.NineGridView;
 import com.player.mothercollege.R;
 import com.squareup.picasso.Picasso;
@@ -30,24 +33,32 @@ public class MyApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        NoHttp.initialize(this);
-        NineGridView.setImageLoader(new PicassoImageLoader());
-        UMShareAPI.get(this);
-        Config.REDIRECT_URL = "http://sns.whalecloud.com/sina2/callback";
-        initX5();
-        initJPush();
-//        initEaseUI();
+
+        final Context mContext = this;
+        new Runnable(){
+            @Override
+            public void run() {
+                NoHttp.initialize(MyApplication.this);
+                NineGridView.setImageLoader(new PicassoImageLoader());
+                UMShareAPI.get(mContext);
+                Config.REDIRECT_URL = "http://sns.whalecloud.com/sina2/callback";
+                initX5();
+                initJPush();
+                initEaseUI();
+            }
+        }.run();
+
     }
 
-//    private void initEaseUI() {
-//        EMOptions options = new EMOptions();
-//        //默认添加好友时不需要验证  改成需要验证
-//        options.setAcceptInvitationAlways(false);
-//        //初始化
-//        EMClient.getInstance().init(this,options);
-//        //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
-//        EMClient.getInstance().setDebugMode(true);
-//    }
+    private void initEaseUI() {
+        EMOptions options = new EMOptions();
+        //默认添加好友时不需要验证  改成需要验证
+        options.setAcceptInvitationAlways(false);
+        //初始化
+        EMClient.getInstance().init(this,options);
+        //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
+        EMClient.getInstance().setDebugMode(true);
+    }
 
     private void initJPush() {
         JPushInterface.setDebugMode(true);
@@ -73,5 +84,11 @@ public class MyApplication extends Application{
         public Bitmap getCacheImage(String url) {
             return null;
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

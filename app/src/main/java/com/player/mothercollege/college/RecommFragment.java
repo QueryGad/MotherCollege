@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
@@ -23,8 +22,8 @@ import com.player.mothercollege.unity.details.ActivityDetailsActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
-import com.player.mothercollege.utils.VpSwipeRefreshLayout;
 import com.player.mothercollege.view.GlideImageLoader;
+import com.player.mothercollege.view.PullToRefreshListView;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -45,8 +44,7 @@ public class RecommFragment extends Fragment {
 
     private static final int GET_RECOMM_DATA = 001;
     private View view;
-    private ListView lv_recomm;
-    private VpSwipeRefreshLayout mLayout;
+    private PullToRefreshListView lv_recomm;
     private RequestQueue requestQueue;
     private List<RecommBean.BanerBean> banerBean = new ArrayList<>();
     private List<Integer> rtypes = new ArrayList<>();
@@ -88,6 +86,9 @@ public class RecommFragment extends Fragment {
             }
         }
     };
+    private RecommAdapter adapter;
+    private View banerView;
+
 
     @Nullable
     @Override
@@ -100,10 +101,18 @@ public class RecommFragment extends Fragment {
     }
 
     private void initView() {
-        lv_recomm = (ListView) view.findViewById(R.id.lv_recomm);
-        mLayout = (VpSwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
+        lv_recomm = (PullToRefreshListView) view.findViewById(R.id.lv_recomm);
 
-        initRefreshLayout();
+        banerView = View.inflate(getActivity(), R.layout.head_college_recomm,null);
+        lv_recomm.addHeaderView(banerView);
+
+        lv_recomm.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //刷新数据
+                netWork();
+            }
+        });
     }
 
     private void initData() {
@@ -112,7 +121,7 @@ public class RecommFragment extends Fragment {
 
     private void netWork() {
         String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
-        String uid = PrefUtils.getString(getActivity(), "uid", "null");
+        String uid = PrefUtils.getString(getActivity(), "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("uid",uid);
@@ -128,11 +137,13 @@ public class RecommFragment extends Fragment {
                 String info = response.get();
                 Log.e("推荐页面:",info);
                 parseJson(info);
+                //收起控件
+                lv_recomm.onRefreshComplete(true);
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-
+                lv_recomm.onRefreshComplete(false);
             }
 
             @Override
@@ -149,8 +160,9 @@ public class RecommFragment extends Fragment {
         banerBean = recommBean.getBaner();
         initBaner();
         List<RecommBean.ListBean> lists = recommBean.getList();
-        RecommAdapter adapter = new RecommAdapter(getActivity(),lists);
+        adapter = new RecommAdapter(getActivity(),lists);
         lv_recomm.setAdapter(adapter);
+
     }
 
     private List<String> banerList = new ArrayList<>();
@@ -167,7 +179,7 @@ public class RecommFragment extends Fragment {
             int rtype = banerBean.get(i).getRtype();
             rtypes.add(rtype);
         }
-        View banerView = View.inflate(getActivity(),R.layout.head_college_recomm,null);
+
         Banner banner = (Banner) banerView.findViewById(R.id.banner);
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
@@ -180,11 +192,7 @@ public class RecommFragment extends Fragment {
 
         //banner设置方法全部调用完毕时最后调用
         banner.start();
-        lv_recomm.addHeaderView(banerView);
-    }
 
-    private void initRefreshLayout(){
-        
     }
 
 }
