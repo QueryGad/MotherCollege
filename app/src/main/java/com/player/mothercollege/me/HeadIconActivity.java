@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.PersonAdapter;
@@ -196,7 +198,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         TextView tv_person_style = (TextView) personHeadView.findViewById(R.id.tv_person_style);
 
         String uicon = personHeadBean.getUicon(); //头像
-        String niceName = personHeadBean.getNiceName();//昵称
+        final String niceName = personHeadBean.getNiceName();//昵称
         boolean isVip = personHeadBean.isIsVip();//是否VIP
         String guid = personHeadBean.getGuid();
         int followCount = personHeadBean.getFollowCount();//关注人数
@@ -226,8 +228,8 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                             Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
                             startActivity(intent);
                         }else {
-                            Toast.makeText(HeadIconActivity.this,"关注",Toast.LENGTH_SHORT).show();
-                            initGuanZhu();
+//                            Toast.makeText(HeadIconActivity.this,"关注",Toast.LENGTH_SHORT).show();
+                            initGuanZhu(niceName);
                         }
                     }
                 });
@@ -243,9 +245,14 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                         startActivity(intent);
                     }else {
 //                        Toast.makeText(HeadIconActivity.this,"聊天",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(HeadIconActivity.this, ChatActivity.class);
-                        intent.putExtra("snsUid", snsUid);
-                        startActivity(intent);
+                        if (isFollow){
+                            Intent intent = new Intent(HeadIconActivity.this, ChatActivity.class);
+                            intent.putExtra("snsUid", snsUid);
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(HeadIconActivity.this,"必须先关注才能聊天哦!",Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }
             });
@@ -279,7 +286,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         tv_person_style.setText(autograph);
     }
 
-    private void initGuanZhu() {
+    private void initGuanZhu(final String name) {
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","tofollow");
@@ -300,7 +307,11 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                     boolean isSuccess = json.getBoolean("isSuccess");
                     if (isSuccess){
                         Toast.makeText(HeadIconActivity.this,"关注成功",Toast.LENGTH_SHORT).show();
-                        //todo
+                        try {
+                            EMClient.getInstance().contactManager().addContact(name, "请求添加为好友");
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
                         tv_otherperson_guanzhu.setVisibility(View.GONE);
                     }else {
                         Toast.makeText(HeadIconActivity.this,"关注失败",Toast.LENGTH_SHORT).show();
