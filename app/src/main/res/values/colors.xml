@@ -14,4 +14,6 @@
     <color name="btn_public">#FF4E72</color>
     <color name="indicator_false">#000000</color>
     <color name="divider_color">@null</color>
+    <color name="cl_default">#424242</color>
+    <color name="cl_error">#ffffff</color>
 </resources>

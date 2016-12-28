@@ -4,11 +4,15 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.os.PowerManager;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -23,12 +27,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.dou361.ijkplayer.bean.VideoijkBean;
+import com.dou361.ijkplayer.listener.OnShowThumbnailListener;
+import com.dou361.ijkplayer.widget.PlayStateParams;
+import com.dou361.ijkplayer.widget.PlayerView;
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.ClassDetailsBean;
 import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.MediaUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.umeng.socialize.ShareAction;
@@ -61,7 +71,6 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private static final int POST_COLLECT = 005;
     private static final int POST_CANLE_COLLECT = 006;
     private RequestQueue requestQueue;
-    private Button btn_back;
     private RadioGroup rg_video;
     private RadioButton rb_frg_details,rb_frg_comment;
     private FrameLayout fl_video;
@@ -76,6 +85,13 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private Button comment_send;
     private RelativeLayout rl_comment;
     private LinearLayout ll_persondeatials_line;
+
+    //播放器
+    private PlayerView player;
+    private List<VideoijkBean> list;
+    private PowerManager.WakeLock wakeLock;
+    private View rootView;
+
     private String sid;
     private RadioGroup.OnCheckedChangeListener ClassDeatilsListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
@@ -93,17 +109,44 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private List<ClassDetailsBean.CourseInfoBean.ReviewsBean> reviewsList = new ArrayList<>();
     private String apptoken;
     private String uid;
+    private List<ClassDetailsBean.VideosBean> videosList = new ArrayList<>();
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.act_college_bzzbdetails);
+        rootView = getLayoutInflater().from(this).inflate(R.layout.act_college_bzzbdetails,null);
+        setContentView(rootView);
         requestQueue = NoHttp.newRequestQueue();
+        /**虚拟按键的隐藏方法*/
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+
+                //比较Activity根布局与当前布局的大小
+                int heightDiff = rootView.getRootView().getHeight() - rootView.getHeight();
+                if (heightDiff > 100) {
+                    //大小超过100时，一般为显示虚拟键盘事件
+                    rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                } else {
+                    //大小小于100时，为不显示虚拟键盘或虚拟键盘隐藏
+                    rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+                }
+            }
+        });
+        /**常亮*/
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "liveTAG");
+        wakeLock.acquire();
+        list = new ArrayList<VideoijkBean>();
+
+
     }
 
     @Override
     public void initViews() {
         sid = getIntent().getStringExtra("sid");
-        btn_back = (Button) findViewById(R.id.btn_back);
+
         rg_video = (RadioGroup) findViewById(R.id.rg_video);
         rb_frg_details = (RadioButton) findViewById(R.id.rb_frg_details);
         rb_frg_comment = (RadioButton) findViewById(R.id.rb_frg_comment);
@@ -130,7 +173,6 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void initListeners() {
-        btn_back.setOnClickListener(this);
         rg_video.setOnCheckedChangeListener(ClassDeatilsListener);
         ll_videodetails_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,6 +264,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         Gson gson = new Gson();
         ClassDetailsBean classDetailsBean = gson.fromJson(info, ClassDetailsBean.class);
         ClassDetailsBean.CourseInfoBean courseInfo = classDetailsBean.getCourseInfo();
+        videosList = classDetailsBean.getVideos();
         reviewsList = courseInfo.getReviews();
         boolean hasLike = courseInfo.isHasLike();
         if (hasLike){
@@ -235,6 +278,58 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         }else {
             iv_videodetails_collect.setImageResource(R.mipmap.tab_collect);
         }
+
+
+
+        initVideo();
+    }
+
+    String urlVideo;
+    String titleVideo;
+    String imgVideo;
+    private void initVideo() {
+        //// TODO: 2016/12/27
+        if (videosList.size()!=0){
+            urlVideo =  videosList.get(0).getUrl();
+            titleVideo = videosList.get(0).getTitle();
+            imgVideo = videosList.get(0).getImg();
+        }
+
+        MyLog.testLog("点击课堂视频:"+titleVideo+urlVideo+imgVideo);
+        VideoijkBean ml = new VideoijkBean();
+        ml.setUrl(urlVideo);
+        list.add(ml);
+        player = new PlayerView(this){
+            @Override
+            public PlayerView toggleProcessDurationOrientation() {
+                hideSteam(getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                return setProcessDurationOrientation(getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT ? PlayStateParams.PROCESS_PORTRAIT : PlayStateParams.PROCESS_LANDSCAPE);
+            }
+
+            @Override
+            public PlayerView setPlaySource(List<VideoijkBean> list) {
+                return super.setPlaySource(list);
+            }
+        }
+                .setTitle(titleVideo)
+                .setProcessDurationOrientation(PlayStateParams.PROCESS_PORTRAIT)
+                .setScaleType(PlayStateParams.f4_3)
+                .forbidTouch(false)
+                .hideSteam(true)
+                .hideCenterPlayer(true)
+                .showThumbnail(new OnShowThumbnailListener() {
+                    @Override
+                    public void onShowThumbnail(ImageView ivThumbnail) {
+                        Glide.with(ClassDetailsActivity.this)
+                                .load(imgVideo)
+                                .placeholder(R.color.cl_default)
+                                .error(R.color.cl_error)
+                                .into(ivThumbnail);
+                    }
+                })
+                .setPlaySource(list)
+                .setChargeTie(true,60)
+                .startPlay();
     }
 
     private boolean orZan=true;
@@ -243,9 +338,6 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_back:
-                finish();
-                break;
             case R.id.view_share_pengyou:
                 new ShareAction(ClassDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
                         .withText("母亲大学堂视频分享")
@@ -554,4 +646,58 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
             Toast.makeText(ClassDetailsActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (player != null) {
+            player.onPause();
+        }
+        /**demo的内容，恢复系统其它媒体的状态*/
+        MediaUtils.muteAudioFocus(ClassDetailsActivity.this, true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (player != null) {
+            player.onResume();
+        }
+        /**demo的内容，暂停系统其它媒体的状态*/
+        MediaUtils.muteAudioFocus(ClassDetailsActivity.this, false);
+        /**demo的内容，激活设备常亮状态*/
+        if (wakeLock != null) {
+            wakeLock.acquire();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (player != null) {
+            player.onDestroy();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (player != null) {
+            player.onConfigurationChanged(newConfig);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (player != null && player.onBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
+        /**demo的内容，恢复设备亮度状态*/
+        if (wakeLock != null) {
+            wakeLock.release();
+        }
+    }
+
+
 }

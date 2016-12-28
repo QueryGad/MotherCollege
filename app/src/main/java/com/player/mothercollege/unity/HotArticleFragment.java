@@ -34,6 +34,11 @@ public class HotArticleFragment extends Fragment{
     private View view;
     private ListView lv_hotarticle;
     private RequestQueue requestQueue;
+    private List<HotArticleBean.TrendsBean> trendsList;
+    private String apptoken;
+    private String uid;
+    private HotArticleBean hotArticleBean;
+    private HotArticleAdapter adapter;
 
 
     @Nullable
@@ -53,15 +58,17 @@ public class HotArticleFragment extends Fragment{
 
     private void initData() {
         netWork();
+
+
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
-        String uid = PrefUtils.getString(getActivity(), "uid", "null");
+        apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
+        uid = PrefUtils.getString(getActivity(), "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.GET);
-        request.add("apptoken",apptoken);
+        request.add("apptoken", apptoken);
         request.add("op","retie");
-        request.add("uid",uid);
+        request.add("uid", uid);
         request.add("lastIndex","0");
         requestQueue.add(GET_HOTARTICLE_DATA, request, new OnResponseListener<String>() {
             @Override
@@ -74,6 +81,7 @@ public class HotArticleFragment extends Fragment{
                 String info = response.get();
                 MyLog.testLog("热帖:"+info);
                 parseJson(info);
+
             }
 
             @Override
@@ -89,13 +97,12 @@ public class HotArticleFragment extends Fragment{
     }
 
     private void parseJson(String info){
-        Gson gson = new Gson();
-        HotArticleBean hotArticleBean = gson.fromJson(info, HotArticleBean.class);
-        int lastIndex = hotArticleBean.getLastIndex();//目标索引
-        List<HotArticleBean.TrendsBean> trendsList = hotArticleBean.getTrends();
-        HotArticleAdapter adapter = new HotArticleAdapter(getActivity(),trendsList);
-        lv_hotarticle.setAdapter(adapter);
-
+            Gson gson = new Gson();
+            hotArticleBean = gson.fromJson(info, HotArticleBean.class);
+            int lastIndex = hotArticleBean.getLastIndex();//目标索引
+            trendsList = hotArticleBean.getTrends();
+            adapter = new HotArticleAdapter(getActivity(),trendsList);
+            lv_hotarticle.setAdapter(adapter);
     }
 
 

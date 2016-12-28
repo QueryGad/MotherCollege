@@ -74,12 +74,16 @@ public class ClassDetailsAdapter extends BaseAdapter{
         holder.tv_original_editor.setTextColor(Color.RED);
         holder.tv_original_viewCount.setText(lists.get(position).getViewCount()+"");
         final String sid = lists.get(position).getSid();
+        final String title = lists.get(position).getTitle();
+        final String url = lists.get(position).getUrl();
+        final String img = lists.get(position).getImg();
         holder.ll_original_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //在本页面内更换视频
-                //TODO
-
+//                Intent intent = new Intent(context, ClassDetailsActivity.class);
+//                intent.putExtra("sid",sid);
+//                context.startActivity(intent);
             }
         });
         return view;

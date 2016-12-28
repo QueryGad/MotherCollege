@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.widget.FrameLayout;
 
 import com.google.gson.Gson;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseContactListFragment;
+import com.hyphenate.exceptions.HyphenateException;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.ListAddressBean;
@@ -48,7 +50,13 @@ public class ListAddressActivity extends BaseActivity{
         contactListFragment = new EaseContactListFragment();
 
         //需要设置联系人列表才能启动fragment；
-        contactListFragment.setContactsMap(getContacts());
+        new Thread(){
+            @Override
+            public void run() {
+                contactListFragment.setContactsMap(getContacts());
+            }
+        }.start();
+
         //设置点击事件
         contactListFragment.setContactListItemClickListener(new EaseContactListFragment.EaseContactListItemClickListener() {
             @Override
@@ -105,7 +113,17 @@ public class ListAddressActivity extends BaseActivity{
                     user.setInitialLetter(niceName);
                     user.setAvatar(icon);
                 }
-                contacts.put("myFriends",user);
+
+                try {
+                    List<String> userNames =  EMClient.getInstance().contactManager().getAllContactsFromServer();
+                    for (String userId : userNames){
+                        contacts.put(userId,new EaseUser(userId));
+                    }
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+
+//                contacts.put("myFriends",user);
 
             }
 

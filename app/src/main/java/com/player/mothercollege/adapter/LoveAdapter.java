@@ -30,6 +30,18 @@ public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.LoveViewHolder
         this.listener = listener;
     }
 
+    // 2
+    public void clearData(){
+        userList.clear();
+        notifyItemRangeChanged(0,userList.size());
+    }
+
+    // 1
+    public void addData(List<LoveBean.UsersBean> userList){
+        userList.addAll(userList);
+        notifyItemChanged(0,userList.size());
+    }
+
     public LoveAdapter(List list, Context context) {
         super();
         this.userList = list;
@@ -46,11 +58,7 @@ public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.LoveViewHolder
     @Override
     public void onBindViewHolder(LoveAdapter.LoveViewHolder holder, int position) {
         //只有前三名进行显示
-        if (Integer.valueOf(userList.get(position).getIndex()).intValue()<=3){
-            holder.tv_find_love_id.setText(userList.get(position).getIndex()+"");
-        }else {
-            holder.tv_find_love_id.setText("");
-        }
+        holder.tv_find_love_id.setText(userList.get(position).getIndex()+"");
 
         String uIcon = userList.get(position).getUIcon();
         if (uIcon==null){

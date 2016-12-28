@@ -20,7 +20,7 @@ import java.util.Date;
  * Created by Administrator on 2016/12/20.
  * 下拉刷新
  */
-public class PullToRefreshListView extends ListView{
+public class PullToRefreshHeaderListView extends ListView{
 
     private static final int STATE_PULL_TO_REFRESH = 1;//开始刷新
     private static final int STATE_RELEASE_TO_REFRESH = 2;//松开刷新
@@ -39,17 +39,17 @@ public class PullToRefreshListView extends ListView{
     private RotateAnimation animUp;
     private RotateAnimation animDown;
 
-    public PullToRefreshListView(Context context) {
+    public PullToRefreshHeaderListView(Context context) {
         super(context);
         initHeaderView();
     }
 
-    public PullToRefreshListView(Context context, AttributeSet attrs) {
+    public PullToRefreshHeaderListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initHeaderView();
     }
 
-    public PullToRefreshListView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PullToRefreshHeaderListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initHeaderView();
     }
@@ -58,7 +58,7 @@ public class PullToRefreshListView extends ListView{
      * 初始化头布局
      */
     private void initHeaderView(){
-        mHeaderView = View.inflate(getContext(), R.layout.pull_to_refresh,null);
+        mHeaderView = View.inflate(getContext(), R.layout.pull_to_refresh_header,null);
         this.addHeaderView(mHeaderView);
 
 

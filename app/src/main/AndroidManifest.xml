@@ -290,7 +290,10 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"/>//读书详情页面
         <activity android:name=".college.details.OriginalDetailsActivity" android:screenOrientation="portrait"/>//原创详情页面
-        <activity android:name=".college.details.ClassDetailsActivity" android:screenOrientation="portrait"/>//课堂详情页面
+        <activity android:name=".college.details.ClassDetailsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>//课堂详情页面
 
         //社区
         <activity android:name=".unity.details.ActivityDetailsActivity" android:screenOrientation="portrait"/>//活动详情页面
@@ -311,7 +314,6 @@
         <activity android:name=".find.LuckyActivity" android:screenOrientation="portrait"/> //我的福田
         <activity android:name=".find.LoveActivity" android:screenOrientation="portrait"/> //爱心大使
         <activity android:name=".find.MarketActivity" android:screenOrientation="portrait"/> //商城
-        <activity android:name=".find.VIPActivity" android:screenOrientation="portrait"/> //成为天使会员
 
         //我的
         <activity android:name=".me.HeadIconActivity" android:screenOrientation="portrait"/>//个人资料

@@ -114,25 +114,7 @@
                     <ImageView style="@style/icon_find_right" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_find_vip"
-                    style="@style/linear_button_item"
-                    android:layout_marginTop="13dp">
 
-                    <ImageView
-                        style="@style/icon_find"
-                        android:src="@mipmap/ic_find_vip" />
-
-                    <TextView
-                        style="@style/text_find_title"
-                        android:text="成为天使会员" />
-
-                    <TextView
-                        style="@style/text_find_des"
-                        android:text="" />
-
-                    <ImageView style="@style/icon_find_right" />
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

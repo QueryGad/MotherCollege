@@ -7,7 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
@@ -40,6 +43,16 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
     private ImageView iv_refresh;
     private Button btn_refrsh;
     private RequestQueue requestQueue;
+    private String lastindex =0+"";
+
+    private MaterialRefreshLayout mRefreshLayout;
+    private static final int STATE_NORMAL = 0;
+    private static final int STATE_REFREN = 1;
+    private static final int STATE_MORE = 2;
+
+    private int state = STATE_NORMAL;
+
+
     private LoveAdapter.OnItemClickListener LoveItemListener = new LoveAdapter.OnItemClickListener() {
         @Override
         public void onClick(View v, int position, LoveBean.UsersBean data) {
@@ -51,6 +64,8 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
         }
     };
     private List<LoveBean.UsersBean> usersList;
+    private String lastSize;
+    private LoveAdapter adapter;
 
     @Override
     public void setContentView() {
@@ -65,6 +80,7 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
         rv_find_love = (RecyclerView) findViewById(R.id.rv_find_love);
         iv_refresh = (ImageView) findViewById(R.id.iv_refresh);
         btn_refrsh = (Button)findViewById(R.id.btn_refrsh);
+        mRefreshLayout = (MaterialRefreshLayout) findViewById(R.id.refresh_love);
 
         tv_details_title.setText("爱心大使");
     }
@@ -76,7 +92,7 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void initData() {
-
+        initRefreshLayout();
         netWork();
     }
 
@@ -84,7 +100,8 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.FIND_URL, RequestMethod.GET);
         request.add("op","axds");
-        request.add("lastindex","0");
+        request.add("lastindex",lastindex);
+        MyLog.testLog("两次lastindex:"+lastindex);
         request.add("apptoken",apptoken);
         requestQueue.add(GET_LOVE_DATA, request, new OnResponseListener<String>() {
             @Override
@@ -124,13 +141,42 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
         Gson gson = new Gson();
         LoveBean loveBean = gson.fromJson(info, LoveBean.class);
         int currentPageSize = loveBean.getCurrentPageSize(); //总共页面数
-        int lastIndex = loveBean.getLastIndex(); //最后传入下标
+        //最后传入下标
+        int lastIndex = loveBean.getLastIndex();
+        lastSize = lastIndex+"";
         usersList = loveBean.getUsers();
-        LoveAdapter adapter = new LoveAdapter(usersList,LoveActivity.this);
-        rv_find_love.setAdapter(adapter);
-        rv_find_love.setLayoutManager(new LinearLayoutManager(LoveActivity.this));
-        rv_find_love.addItemDecoration(new DividerItemDecoration(LoveActivity.this,DividerItemDecoration.VERTICAL_LIST));
-        adapter.setOnItemClickListener(LoveItemListener);
+
+        showData();
+
+    }
+
+    private void showData() {
+
+        switch (state){
+            case STATE_NORMAL://正常状态
+                adapter = new LoveAdapter(usersList,LoveActivity.this);
+                rv_find_love.setAdapter(adapter);
+                rv_find_love.setLayoutManager(new LinearLayoutManager(LoveActivity.this));
+                rv_find_love.addItemDecoration(new DividerItemDecoration(LoveActivity.this,DividerItemDecoration.VERTICAL_LIST));
+                adapter.setOnItemClickListener(LoveItemListener);
+                break;
+            case STATE_REFREN: //刷新
+
+                if (lastindex==lastSize){
+                    Toast.makeText(LoveActivity.this,"没有更多数据了",Toast.LENGTH_SHORT).show();
+                }else {
+//                    adapter.clearData();
+                    MyLog.testLog("刷新了:"+lastindex);
+                    MyLog.testLog("lastSize刷新了:"+lastSize);
+                    adapter.addData(usersList);
+                    rv_find_love.scrollToPosition(0);
+                    mRefreshLayout.finishRefresh();
+                }
+
+                break;
+        }
+
+
     }
 
     @Override
@@ -140,5 +186,28 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener {
                 finish();
                 break;
         }
+    }
+
+    private void initRefreshLayout(){
+        mRefreshLayout.setLoadMore(true);//让它支持加载更多
+        mRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+                refreshData();
+            }
+
+            @Override
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+
+
+            }
+        });
+    }
+
+    private void refreshData(){
+        lastindex = lastSize;
+        MyLog.testLog("lastindex:"+lastindex);
+        state = STATE_REFREN;
+        netWork();
     }
 }

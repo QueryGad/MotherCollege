@@ -146,12 +146,14 @@ public class FuMuClassFragment extends Fragment{
             holder.tv_classitem_editor.setText(fuMuList.get(position).getEditor());
             holder.tv_classitem_editor.setTextColor(Color.RED);
             holder.tv_classitem_viewCount.setText(fuMuList.get(position).getViewCount()+"");
+
             holder.ll_class_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String sid = fuMuList.get(position).getSid();
                     Intent intent = new Intent(getActivity(),ClassDetailsActivity.class);
                     intent.putExtra("sid",sid);
+
                     startActivity(intent);
                 }
             });

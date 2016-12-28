@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/include"
@@ -33,10 +33,21 @@
             android:layout_marginTop="305dp"
             android:background="@drawable/btn_refresh"
             android:visibility="gone" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_find_love"
+        <com.cjj.MaterialRefreshLayout
+            android:id="@+id/refresh_love"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            app:overlay="true"
+            app:wave_show="true"
+            app:wave_color="#90ffffff"
+            app:progress_colors="@array/material_colors"
+            app:wave_height_type="higher">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_find_love"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.cjj.MaterialRefreshLayout>
     </FrameLayout>
 
 

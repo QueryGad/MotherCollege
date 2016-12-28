@@ -11,10 +11,13 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/easeU" />
+            <option value="$PROJECT_DIR$/fresh" />
             <option value="$PROJECT_DIR$/lib" />
             <option value="$PROJECT_DIR$/lib/bdwallet_pay_sdk" />
             <option value="$PROJECT_DIR$/lib/pingpp" />
             <option value="$PROJECT_DIR$/lib/pingpp_one" />
+            <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/shuaXin" />
           </set>
         </option>
         <option name="myModules">
@@ -22,10 +25,13 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/easeU" />
+            <option value="$PROJECT_DIR$/fresh" />
             <option value="$PROJECT_DIR$/lib" />
             <option value="$PROJECT_DIR$/lib/bdwallet_pay_sdk" />
             <option value="$PROJECT_DIR$/lib/pingpp" />
             <option value="$PROJECT_DIR$/lib/pingpp_one" />
+            <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/shuaXin" />
           </set>
         </option>
       </GradleProjectSettings>

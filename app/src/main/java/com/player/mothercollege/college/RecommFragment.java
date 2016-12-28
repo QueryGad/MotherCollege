@@ -23,7 +23,7 @@ import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideImageLoader;
-import com.player.mothercollege.view.PullToRefreshListView;
+import com.player.mothercollege.view.PullToRefreshHeaderListView;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -44,7 +44,7 @@ public class RecommFragment extends Fragment {
 
     private static final int GET_RECOMM_DATA = 001;
     private View view;
-    private PullToRefreshListView lv_recomm;
+    private PullToRefreshHeaderListView lv_recomm;
     private RequestQueue requestQueue;
     private List<RecommBean.BanerBean> banerBean = new ArrayList<>();
     private List<Integer> rtypes = new ArrayList<>();
@@ -101,12 +101,12 @@ public class RecommFragment extends Fragment {
     }
 
     private void initView() {
-        lv_recomm = (PullToRefreshListView) view.findViewById(R.id.lv_recomm);
+        lv_recomm = (PullToRefreshHeaderListView) view.findViewById(R.id.lv_recomm);
 
         banerView = View.inflate(getActivity(), R.layout.head_college_recomm,null);
         lv_recomm.addHeaderView(banerView);
 
-        lv_recomm.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
+        lv_recomm.setOnRefreshListener(new PullToRefreshHeaderListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //刷新数据

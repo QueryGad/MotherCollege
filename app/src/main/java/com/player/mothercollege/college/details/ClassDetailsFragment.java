@@ -72,7 +72,7 @@ public class ClassDetailsFragment extends Fragment implements View.OnClickListen
 
     private void netWork() {
         String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
-        String uid = PrefUtils.getString(getActivity(), "uid", "null");
+        String uid = PrefUtils.getString(getActivity(), "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("op","courseInfo");
         request.add("apptoken",apptoken);
