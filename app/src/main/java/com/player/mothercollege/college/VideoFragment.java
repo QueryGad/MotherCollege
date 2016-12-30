@@ -135,7 +135,11 @@ public class VideoFragment extends Fragment{
         Picasso.with(getActivity()).load(sqhgBean.getImg())
                 .resize(DensityUtils.dip2px(getActivity(),116f),DensityUtils.dip2px(getActivity(),63.5f))
                 .centerCrop().into(iv);
-        date.setText(sqhgBean.getDate());
+        //切割字符串，得到遮罩时间
+        String arrDate = sqhgBean.getDate();
+        String[] split = arrDate.split(" ");
+        date.setText(split[0]);
+//        date.setText(sqhgBean.getDate());
         title.setText(sqhgBean.getTitle());
         editor.setText(sqhgBean.getEditor());
         editor.setTextColor(Color.RED);

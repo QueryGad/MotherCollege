@@ -140,7 +140,11 @@ public class FuMuClassFragment extends Fragment{
             Picasso.with(getActivity()).load(fuMuList.get(position).getImg())
                     .resize(DensityUtils.dip2px(getActivity(),116f),DensityUtils.dip2px(getActivity(),63.5f))
                     .centerCrop().into(holder.iv_classitem);
-            holder.tv_classitem_date.setText(fuMuList.get(position).getDate());
+            //切割字符串，得到遮罩时间
+            String arrDate = fuMuList.get(position).getDate();
+            String[] split = arrDate.split(" ");
+            holder.tv_classitem_date.setText(split[0]);
+//            holder.tv_classitem_date.setText(fuMuList.get(position).getDate());
             holder.tv_classitem_title.setText(fuMuList.get(position).getTitle());
             holder.tv_classitem_money.setText(fuMuList.get(position).getPrice()+"");
             holder.tv_classitem_editor.setText(fuMuList.get(position).getEditor());

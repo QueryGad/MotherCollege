@@ -141,7 +141,11 @@ public class XinLingClassFragment extends Fragment{
             Picasso.with(getActivity()).load(xinLingList.get(position).getImg())
                     .resize(DensityUtils.dip2px(getActivity(),116f),DensityUtils.dip2px(getActivity(),63.5f))
                     .centerCrop().into(holder.iv_classitem);
-            holder.tv_classitem_date.setText(xinLingList.get(position).getDate());
+            //切割字符串，得到遮罩时间
+            String arrDate = xinLingList.get(position).getDate();
+            String[] split = arrDate.split(" ");
+            holder.tv_classitem_date.setText(split[0]);
+//            holder.tv_classitem_date.setText(xinLingList.get(position).getDate());
             holder.tv_classitem_title.setText(xinLingList.get(position).getTitle());
             holder.tv_classitem_money.setText(xinLingList.get(position).getPrice()+"");
             holder.tv_classitem_editor.setText(xinLingList.get(position).getEditor());

@@ -285,7 +285,10 @@
 
         //学院
         <activity android:name=".college.details.ReadBookItemActivity" android:screenOrientation="portrait"/>//读书章节
-        <activity android:name=".college.details.BzzbDeatilsActivity" android:screenOrientation="portrait"/>//本周直播详情页面
+        <activity android:name=".college.details.BzzbDeatilsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>//本周直播详情页面
         <activity android:name=".college.details.ReadBookDetailsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"/>//读书详情页面
