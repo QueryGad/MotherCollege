@@ -1,2 +1,1 @@
-include ':app', ':lib:pingpp', ':lib:pingpp_one', ':lib:bdwallet_pay_sdk', ':library', ':fresh', 'shuaXin'
-include ':easeU'
+include ':app', ':lib:pingpp', ':lib:pingpp_one', ':lib:bdwallet_pay_sdk', ':easeU'

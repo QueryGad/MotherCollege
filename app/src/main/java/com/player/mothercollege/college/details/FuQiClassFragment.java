@@ -146,12 +146,18 @@ public class FuQiClassFragment extends Fragment{
             holder.tv_classitem_editor.setText(fuQiList.get(position).getEditor());
             holder.tv_classitem_editor.setTextColor(Color.RED);
             holder.tv_classitem_viewCount.setText(fuQiList.get(position).getViewCount()+"");
+            final String url = fuQiList.get(position).getUrl();
+            final String title = fuQiList.get(position).getTitle();
+            final String img = fuQiList.get(position).getImg();
             holder.ll_class_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String sid = fuQiList.get(position).getSid();
                     Intent intent = new Intent(getActivity(),ClassDetailsActivity.class);
                     intent.putExtra("sid",sid);
+                    intent.putExtra("url",url);
+                    intent.putExtra("img",img);
+                    intent.putExtra("title",title);
                     startActivity(intent);
                 }
             });

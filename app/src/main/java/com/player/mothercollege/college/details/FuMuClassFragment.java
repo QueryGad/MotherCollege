@@ -62,7 +62,7 @@ public class FuMuClassFragment extends Fragment{
 
     private void netWork() {
         String apptoken = PrefUtils.getString(getActivity(),"apptoken","");
-        String uid = PrefUtils.getString(getActivity(), "uid", "null");
+        String uid = PrefUtils.getString(getActivity(), "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL);
         request.add("op","class");
         request.add("apptoken",apptoken);
@@ -146,14 +146,18 @@ public class FuMuClassFragment extends Fragment{
             holder.tv_classitem_editor.setText(fuMuList.get(position).getEditor());
             holder.tv_classitem_editor.setTextColor(Color.RED);
             holder.tv_classitem_viewCount.setText(fuMuList.get(position).getViewCount()+"");
-
+            final String url = fuMuList.get(position).getUrl();
+            final String img = fuMuList.get(position).getImg();
+            final String title = fuMuList.get(position).getTitle();
             holder.ll_class_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String sid = fuMuList.get(position).getSid();
                     Intent intent = new Intent(getActivity(),ClassDetailsActivity.class);
                     intent.putExtra("sid",sid);
-
+                    intent.putExtra("url",url);
+                    intent.putExtra("img",img);
+                    intent.putExtra("title",title);
                     startActivity(intent);
                 }
             });

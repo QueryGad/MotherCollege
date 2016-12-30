@@ -1,6 +1,7 @@
 package com.player.mothercollege.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.ClassDetailsBean;
+import com.player.mothercollege.college.details.ClassDetailsActivity;
 import com.player.mothercollege.utils.DensityUtils;
 import com.squareup.picasso.Picasso;
 
@@ -81,9 +83,12 @@ public class ClassDetailsAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 //在本页面内更换视频
-//                Intent intent = new Intent(context, ClassDetailsActivity.class);
-//                intent.putExtra("sid",sid);
-//                context.startActivity(intent);
+                Intent intent = new Intent(context, ClassDetailsActivity.class);
+                intent.putExtra("sid",sid);
+                intent.putExtra("url",url);
+                intent.putExtra("img",img);
+                intent.putExtra("title",title);
+                context.startActivity(intent);
             }
         });
         return view;

@@ -93,6 +93,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private View rootView;
 
     private String sid;
+    private String url;
     private RadioGroup.OnCheckedChangeListener ClassDeatilsListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -110,6 +111,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private String apptoken;
     private String uid;
     private List<ClassDetailsBean.VideosBean> videosList = new ArrayList<>();
+    private String imgVideo;
 
     @Override
     public void setContentView() {
@@ -146,6 +148,9 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void initViews() {
         sid = getIntent().getStringExtra("sid");
+        url = getIntent().getStringExtra("url");
+        imgVideo = getIntent().getStringExtra("img");
+        titleVideo = getIntent().getStringExtra("title");
 
         rg_video = (RadioGroup) findViewById(R.id.rg_video);
         rb_frg_details = (RadioButton) findViewById(R.id.rb_frg_details);
@@ -284,20 +289,11 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         initVideo();
     }
 
-    String urlVideo;
-    String titleVideo;
-    String imgVideo;
+    private String titleVideo;
     private void initVideo() {
-        //// TODO: 2016/12/27
-        if (videosList.size()!=0){
-            urlVideo =  videosList.get(0).getUrl();
-            titleVideo = videosList.get(0).getTitle();
-            imgVideo = videosList.get(0).getImg();
-        }
 
-        MyLog.testLog("点击课堂视频:"+titleVideo+urlVideo+imgVideo);
         VideoijkBean ml = new VideoijkBean();
-        ml.setUrl(urlVideo);
+        ml.setUrl(url);
         list.add(ml);
         player = new PlayerView(this){
             @Override
@@ -313,7 +309,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         }
                 .setTitle(titleVideo)
                 .setProcessDurationOrientation(PlayStateParams.PROCESS_PORTRAIT)
-                .setScaleType(PlayStateParams.f4_3)
+                .setScaleType(PlayStateParams.fillparent)
                 .forbidTouch(false)
                 .hideSteam(true)
                 .hideCenterPlayer(true)
