@@ -6,12 +6,13 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="104dp"
-        android:src="@mipmap/bg_homepage_others"/>
+        android:background="@mipmap/bg_homepage_others"
+        />
     <ImageView
         android:id="@+id/iv_person_icon"
         android:layout_width="68dp"
         android:layout_height="68dp"
-        android:src="@mipmap/head_homepage_others"
+        android:background="@mipmap/head_me_nor"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="75dp" />
@@ -129,11 +130,13 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/bg_content"/>
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_person_style"
+        android:layout_marginTop="3dp"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:layout_below="@id/rl_person_phone">
         <TextView
             android:layout_width="wrap_content"
@@ -144,12 +147,15 @@
             android:textSize="16sp"/>
         <TextView
             android:id="@+id/tv_person_style"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="right"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="7dp"
             android:text="未填写"
             android:textColor="#000"
             android:textSize="16sp"/>
-    </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

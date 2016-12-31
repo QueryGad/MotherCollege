@@ -259,9 +259,15 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         }
 
         //赋值
-        glideRequest = Glide.with(this);
-        glideRequest.load(uicon).transform(
-                new GlideCircleTransform(HeadIconActivity.this)).into(iv_person_icon);
+        if (uicon==null){
+            iv_person_icon.setImageResource(R.mipmap.head_homepage_others);
+            iv_person_icon.setBackgroundResource(R.mipmap.head_me_nor);
+        }else {
+            glideRequest = Glide.with(this);
+            glideRequest.load(uicon).transform(
+                    new GlideCircleTransform(HeadIconActivity.this)).into(iv_person_icon);
+        }
+
         tv_person_name.setText(niceName);
         if (isVip){
             iv_isVip.setVisibility(View.VISIBLE);
@@ -279,9 +285,10 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
             tv_person_sex.setText("未公开");
         }
         if (isShowPhone){
-            tv_person_phone.setText("未公开");
-        }else {
             tv_person_phone.setText(phone);
+
+        }else {
+            tv_person_phone.setText("未公开");
         }
         tv_person_style.setText(autograph);
     }

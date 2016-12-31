@@ -10,6 +10,6 @@
         android:padding="10dp"
         android:textSize="18sp"
         android:textColor="#000"
-        android:background="#eee"
+        android:background="@drawable/press_selector"
         android:text="标题"/>
 </LinearLayout>

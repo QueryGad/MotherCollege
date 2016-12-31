@@ -50,4 +50,11 @@
         android:gravity="top"
         android:maxLength="30"
         android:hint="最多可以输入30个字符"/>
+    <TextView
+        android:id="@+id/tv_style_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginRight="8dp"
+        android:text="30/30"/>
 </LinearLayout>

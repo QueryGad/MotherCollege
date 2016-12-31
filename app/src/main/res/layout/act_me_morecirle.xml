@@ -10,7 +10,7 @@
         android:id="@+id/lv_title"
         android:layout_width="75dp"
         android:layout_height="match_parent"
-        android:background="#eee"/>
+        />
     <ListView
         android:id="@+id/lv_content"
         android:layout_width="match_parent"

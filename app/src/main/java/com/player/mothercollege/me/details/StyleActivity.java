@@ -2,7 +2,10 @@ package com.player.mothercollege.me.details;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,10 +35,41 @@ public class StyleActivity extends BaseActivity implements View.OnClickListener 
 
     private static final int POST_STYLE_DATA = 001;
     private Button btn_back;
-    private TextView tv_me_style_ok;
+    private TextView tv_me_style_ok,tv_style_num;
     private EditText et_me_style_content;
     private RequestQueue requestQueue;
     private ProgressDialog pd;
+    private TextWatcher EditTextInPutListener = new TextWatcher() {
+
+        private CharSequence temp;
+        private int editStart;
+        private int editEnd;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            temp = s;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            editStart = et_me_style_content.getSelectionStart();
+            editEnd = et_me_style_content.getSelectionEnd();
+            tv_style_num.setText(temp.length()+"/30");
+            tv_style_num.setTextColor(Color.RED);
+            if (temp.length()>30){
+                Toast.makeText(StyleActivity.this,"您输入的字数已经超过了限制!",Toast.LENGTH_SHORT).show();
+                s.delete(editStart-1,editEnd);
+                int tempSelection = editStart;
+                et_me_style_content.setText(s);
+                et_me_style_content.setSelection(tempSelection);
+            }
+        }
+    };
 
     @Override
     public void setContentView() {
@@ -47,6 +81,7 @@ public class StyleActivity extends BaseActivity implements View.OnClickListener 
     public void initViews() {
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_me_style_ok = (TextView) findViewById(R.id.tv_me_style_ok);
+        tv_style_num = (TextView) findViewById(R.id.tv_style_num);
         et_me_style_content = (EditText) findViewById(R.id.et_me_style_content);
 
         //数据回显
@@ -58,6 +93,7 @@ public class StyleActivity extends BaseActivity implements View.OnClickListener 
     public void initListeners() {
         btn_back.setOnClickListener(this);
         tv_me_style_ok.setOnClickListener(this);
+        et_me_style_content.addTextChangedListener(EditTextInPutListener);
     }
 
     @Override
@@ -90,13 +126,13 @@ public class StyleActivity extends BaseActivity implements View.OnClickListener 
 
     private void postData(String content) {
         String apptoken = PrefUtils.getString(StyleActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(StyleActivity.this, "uid", "null");
-        String style = PrefUtils.getString(StyleActivity.this, "style", "");
+        String uid = PrefUtils.getString(StyleActivity.this, "uid", "");
+//        String style = PrefUtils.getString(StyleActivity.this, "style", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
         request.add("op","changeUserInfo");
         request.add("uid",uid);
-        request.add("ctype",style);
+        request.add("ctype","6");
         request.add("cvalue",content);
         requestQueue.add(POST_STYLE_DATA, request, new OnResponseListener<String>() {
             @Override

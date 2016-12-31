@@ -60,6 +60,7 @@ public class FastInquiryAdapter extends BaseAdapter{
             flh.tv_fastinquiry_daname = (TextView) view.findViewById(R.id.tv_fastinquiry_daname);
             flh.tv_fastinquiry_dacontent = (TextView) view.findViewById(R.id.tv_fastinquiry_dacontent);
             flh.rl_item_fastinquiry = (RelativeLayout) view.findViewById(R.id.rl_item_fastinquiry);
+            flh.rl_fastinquiry_da = (RelativeLayout) view.findViewById(R.id.rl_fastinquiry_da);
             view.setTag(flh);
         }else {
             view = convertView;
@@ -72,12 +73,18 @@ public class FastInquiryAdapter extends BaseAdapter{
         flh.tv_fastinquiry_desc.setText(lists.get(position).getQusition());
         flh.tv_fastinquiry_conmment.setText(lists.get(position).getReviewCount()+"");
 
+//        if (lists.get(position).getAsw_unicename().equals("")){
+//            flh.tv_fastinquiry_daname.setText("");
+//        }else {
+//            flh.tv_fastinquiry_daname.setText(lists.get(position).getAsw_unicename()+":");
+//        }
         if (lists.get(position).getAsw_unicename().equals("")){
-            flh.tv_fastinquiry_daname.setText("");
+            flh.rl_fastinquiry_da.setVisibility(View.GONE);
         }else {
             flh.tv_fastinquiry_daname.setText(lists.get(position).getAsw_unicename()+":");
+            flh.tv_fastinquiry_dacontent.setText(lists.get(position).getAsw_content());
         }
-        flh.tv_fastinquiry_dacontent.setText(lists.get(position).getAsw_content());
+//        flh.tv_fastinquiry_dacontent.setText(lists.get(position).getAsw_content());
         final String qid = lists.get(position).getQid();
         MyLog.testLog("我的qid："+qid);
         flh.rl_item_fastinquiry.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +101,6 @@ public class FastInquiryAdapter extends BaseAdapter{
     class FastInquiryHolder {
         private TextView tv_fastinquiry_title,tv_fastinquiry_time,tv_fastinquiry_desc,
                 tv_fastinquiry_conmment,tv_fastinquiry_daname,tv_fastinquiry_dacontent;
-        private RelativeLayout rl_item_fastinquiry;
+        private RelativeLayout rl_item_fastinquiry,rl_fastinquiry_da;
     }
 }

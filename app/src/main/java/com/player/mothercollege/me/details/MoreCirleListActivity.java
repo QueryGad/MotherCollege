@@ -2,7 +2,6 @@ package com.player.mothercollege.me.details;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,6 +29,9 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class MoreCirleListActivity extends BaseActivity{
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             boolean onClick = groupWithClass.get(position).getOnClick();
 //            if (onClick){
-                tv_title.setBackgroundColor(Color.WHITE);
+//                tv_title.setBackgroundColor(Color.WHITE);
 //            }else {
 //                tv_title.setBackgroundColor(Color.GRAY);
 //            }
@@ -86,7 +88,7 @@ public class MoreCirleListActivity extends BaseActivity{
     }
 
     private void netWork() {
-        String uid = PrefUtils.getString(MoreCirleListActivity.this, "uid", "null");
+        String uid = PrefUtils.getString(MoreCirleListActivity.this, "uid", "");
         String apptoken = PrefUtils.getString(this, "apptoken", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL);
         request.add("uid",uid);
@@ -161,7 +163,11 @@ public class MoreCirleListActivity extends BaseActivity{
         }
     }
 
+
+    private View viewContent;
     class ContentAdapter extends BaseAdapter{
+
+
 
         @Override
         public int getCount() {
@@ -180,20 +186,20 @@ public class MoreCirleListActivity extends BaseActivity{
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = null;
+            viewContent = null;
             ContentHolder holder = null;
             if (convertView==null){
-                view = View.inflate(MoreCirleListActivity.this,R.layout.item_morecirle_content,null);
+                viewContent = View.inflate(MoreCirleListActivity.this,R.layout.item_morecirle_content,null);
                 holder = new ContentHolder();
-                holder.iv_head = (ImageView) view.findViewById(R.id.iv_head);
-                holder.tv_content_title = (TextView) view.findViewById(R.id.tv_content_title);
-                holder.tv_viewCount = (TextView) view.findViewById(R.id.tv_viewCount);
-                holder.btn_join = (Button) view.findViewById(R.id.btn_more_join);
-                holder.rl_morecirle = (RelativeLayout) view.findViewById(R.id.rl_morecirle);
-                view.setTag(holder);
+                holder.iv_head = (ImageView) viewContent.findViewById(R.id.iv_head);
+                holder.tv_content_title = (TextView) viewContent.findViewById(R.id.tv_content_title);
+                holder.tv_viewCount = (TextView) viewContent.findViewById(R.id.tv_viewCount);
+                holder.btn_join = (Button) viewContent.findViewById(R.id.btn_more_join);
+                holder.rl_morecirle = (RelativeLayout) viewContent.findViewById(R.id.rl_morecirle);
+                viewContent.setTag(holder);
             }else {
-                view = convertView;
-                holder = (ContentHolder) view.getTag();
+                viewContent = convertView;
+                holder = (ContentHolder) viewContent.getTag();
             }
             glideRequest = Glide.with(MoreCirleListActivity.this);
             glideRequest.load(groupsList.get(position).getIcon())
@@ -227,7 +233,7 @@ public class MoreCirleListActivity extends BaseActivity{
                     startActivity(intent);
                 }
             });
-            return view;
+            return viewContent;
         }
     }
 
@@ -256,7 +262,19 @@ public class MoreCirleListActivity extends BaseActivity{
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
+                Button btn_more_join = (Button) viewContent.findViewById(R.id.btn_more_join);
                 MyLog.testLog("是否加入成功:"+info);
+                try {
+                    JSONObject json = new JSONObject(info);
+                    boolean isSuccess = json.getBoolean("isSuccess");
+                    if (isSuccess){
+                        btn_more_join.setBackgroundResource(R.mipmap.icon_join);
+                    }else {
+                        btn_more_join.setBackgroundResource(R.mipmap.icon_2_join);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

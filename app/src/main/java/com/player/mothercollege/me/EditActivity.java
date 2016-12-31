@@ -57,6 +57,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     private static final int POST_IMAGEPATH_STATE = 002;
     private static final int GET_BASEINFO_DATA = 003;
     private static final int POST_UP = 004;
+    private static final int POST_SEX_DATA = 005;
     private Button btn_back;
     private TextView tv_details_title;
     private LinearLayout ll_me_data_name;
@@ -87,18 +88,24 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         public void toggleToOn(SwitchView view) {
             //打开状态
             view.toggleSwitch(true);
-            postData("0","1");
+            // TODO: 2016/12/30
+            tv_me_data_phone.setText(phone);
+            postData("1");
         }
 
         @Override
         public void toggleToOff(SwitchView view) {
            //关闭状态
             view.toggleSwitch(false);
-            postData("1","0");
+            tv_me_data_phone.setText("***********");
+            postData("0");
         }
     };
     private String uicon;
     private String autograph;
+    private String phone;
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -129,14 +136,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         sv_phone = (SwitchView) findViewById(R.id.sv_phone);
 
         tv_details_title.setText("个人资料");
-        //进行数据回显
-//        Picasso.with(EditActivity.this).load(uicon)
-//                .resize(DensityUtils.dip2px(EditActivity.this,86),DensityUtils.dip2px(EditActivity.this,86))
-//                .centerCrop().into(iv_personal_icon);
-        glideRequest = Glide.with(this);
-        glideRequest.load(uicon)
-                .transform(new GlideCircleTransform(this)).into(iv_personal_icon);
-        tv_me_data_name.setText(uniceName);
+
     }
 
     @Override
@@ -161,8 +161,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(this, "uid", "null");
+        apptoken = PrefUtils.getString(this, "apptoken", "");
+        uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","userinfo");
         request.add("apptoken",apptoken);
@@ -178,7 +178,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 parseJson(info);
-                CacheUtils.saveCache(EditActivity.this,ConfigUtils.COLLEGE_URL + "xgzl",info);
+                MyLog.testLog("修改资料页面:"+info);
+//                CacheUtils.saveCache(EditActivity.this,ConfigUtils.COLLEGE_URL + "xgzl",info);
 
             }
 
@@ -199,14 +200,16 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         PersonHead personHeadBean = gson.fromJson(info, PersonHead.class);
         String uicon = personHeadBean.getUicon(); //头像
         String niceName = personHeadBean.getNiceName();//昵称
-        String phone = personHeadBean.getPhone();//手机号
+        tv_me_data_name.setText(uniceName);
+        //手机号
+        phone = personHeadBean.getPhone();
         boolean isShowPhone = personHeadBean.isIsShowPhone();//是否显示手机号
         //个性签名
         autograph = personHeadBean.getAutograph();
         int sex = personHeadBean.getSex();//性别
 
         if (uicon==null){
-            iv_personal_icon.setImageResource(R.mipmap.head_me_nor);
+            iv_personal_icon.setBackgroundResource(R.mipmap.head_me_nor);
         }else {
             glideRequest = Glide.with(this);
             glideRequest.load(uicon)
@@ -214,7 +217,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         }
 
         tv_me_data_name.setText(niceName);
-        tv_me_data_phone.setText(phone);
+//        tv_me_data_phone.setText(phone);
         tv_me_data_style.setText(autograph);
 
         if (sex==0){
@@ -224,9 +227,15 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         }else {
             tv_me_data_sex.setText("未公开");
         }
-        if (isShowPhone){
-            sv_phone.isOpened();
+        if (isShowPhone==false){
+            sv_phone.setOpened(false);
+            tv_me_data_phone.setText("***********");
+        }else {
+
+            sv_phone.setOpened(true);
+            tv_me_data_phone.setText(phone);
         }
+
     }
 
     @Override
@@ -270,20 +279,24 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.sex_secret:
                 tv_me_data_sex.setText("保密");
-                sex_index = 0;
+                sex_index = -1;
                 PrefUtils.setInt(this,"sex_index",0);
+                postSex(sex_index);
                 alertDialog.dismiss();
                 break;
             case R.id.sex_women:
+                //todo
                 tv_me_data_sex.setText("女");
-                sex_index = 1;
+                sex_index = 0;
                 PrefUtils.setInt(this,"sex_index",1);
+                postSex(sex_index);
                 alertDialog.dismiss();
                 break;
             case R.id.sex_man:
                 tv_me_data_sex.setText("男");
-                sex_index = 2;
+                sex_index = 1;
                 PrefUtils.setInt(this,"sex_index",2);
+                postSex(sex_index);
                 alertDialog.dismiss();
                 break;
             case R.id.ll_me_data_pwd:
@@ -292,6 +305,38 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 break;
 
         }
+    }
+
+    private void postSex(int i) {
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","changeUserInfo");
+        request.add("uid",uid);
+        request.add("ctype","5");
+        request.add("cvalue",i+"");
+        MyLog.testLog("上传性别:"+i);
+        requestQueue.add(POST_SEX_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("性别上传:"+info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     private void showChoosePicDialog() {
@@ -485,14 +530,13 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     }
 
     //手机号是否公开
-    private void postData(String ctype,String cvalue){
-        String apptoken = PrefUtils.getString(EditActivity.this, "apptoken", "");
-        String uid = PrefUtils.getString(EditActivity.this, "uid", "null");
+    private void postData(String cvalue){
+
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.LOGIN_URL, RequestMethod.POST);
-        request.add("apptoken",apptoken);
+        request.add("apptoken", apptoken);
         request.add("op","changeUserInfo");
-        request.add("uid",uid);
-        request.add("ctype",ctype);
+        request.add("uid", uid);
+        request.add("ctype","4");
         request.add("cvalue",cvalue);
         requestQueue.add(POST_PHONE_STATE, request, new OnResponseListener<String>() {
             @Override

@@ -42,7 +42,8 @@
                     android:layout_width="86dp"
                     android:layout_height="86dp"
                     android:layout_marginRight="7dp"
-                    android:src="@mipmap/head_me_nor" />
+                    android:background="@mipmap/head_me_nor"
+                     />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -155,7 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="13dp"
-                        app:isOpened="true" />
+                        app:isOpened="false" />
                 </LinearLayout>
             </LinearLayout>
 
