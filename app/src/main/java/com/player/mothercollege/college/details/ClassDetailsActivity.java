@@ -292,6 +292,8 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private String titleVideo;
     private void initVideo() {
 
+
+
         VideoijkBean ml = new VideoijkBean();
         ml.setUrl(url);
         list.add(ml);
