@@ -209,8 +209,8 @@
             android:name="UMENG_APPKEY"
             android:value="582950fbaed1791185002649" />
         <meta-data
-            android:value="Channel ID"
-            android:name="UMENG_CHANNEL"/>
+            android:value="001"
+            android:name="${UMENG_CHANNEL_VALUE}"/>
 
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
