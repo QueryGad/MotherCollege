@@ -217,6 +217,7 @@ public class SplashActivity extends BaseActivity {
         String deviceId = telephonyManager.getDeviceId();
         if (telephonyManager!=null){
             MyLog.testLog("deviceId："+deviceId);
+            PrefUtils.setString(SplashActivity.this,"deviceId","");
             return deviceId;
         }
         return "";

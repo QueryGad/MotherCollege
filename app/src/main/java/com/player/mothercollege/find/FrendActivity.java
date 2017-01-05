@@ -28,8 +28,10 @@ import com.player.mothercollege.bean.QRBean;
 import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.utils.CacheUtils;
 import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
+import com.squareup.picasso.Picasso;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -171,14 +173,19 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
         QRBean qrBean = gson.fromJson(info, QRBean.class);
         //邀请码
         inviteCode = qrBean.getInviteCode();
-        String qrCode = qrBean.getQrCode(); //二维码
+        String qrCode = qrBean.getQrCode();
+        Picasso.with(FrendActivity.this).load(qrCode)
+                .resize(DensityUtils.dip2px(FrendActivity.this,110),DensityUtils.dip2px(FrendActivity.this,110))
+                .centerCrop().into(iv_find_frend);
+//        String qrCode = qrBean.getQrCode(); //二维码
         tv_yaoqingma.setText("您的邀请码:"+ inviteCode);
-        try {
-            Bitmap bm = qr_code(qrCode,BarcodeFormat.QR_CODE);
-            iv_find_frend.setImageBitmap(bm);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Bitmap bm = qr_code(qrCode,BarcodeFormat.QR_CODE);
+//            iv_find_frend.setImageBitmap(bm);
+//        } catch (WriterException e) {
+//            e.printStackTrace();
+//        }
+
     }
 
     @Override

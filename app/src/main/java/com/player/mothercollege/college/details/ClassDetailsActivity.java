@@ -3,10 +3,12 @@ package com.player.mothercollege.college.details;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.PowerManager;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,6 +38,7 @@ import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.bean.ClassDetailsBean;
+import com.player.mothercollege.bean.TakeVideoBean;
 import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MediaUtils;
@@ -70,6 +73,8 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private static final int POST_CANLE_ZAN = 004;
     private static final int POST_COLLECT = 005;
     private static final int POST_CANLE_COLLECT = 006;
+    private static final int POST_SMARTMONEY_DATA = 007;
+    private static final int POST_TAKEVIDEO_DATA = 100;
     private RequestQueue requestQueue;
     private RadioGroup rg_video;
     private RadioButton rb_frg_details,rb_frg_comment;
@@ -91,6 +96,9 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private List<VideoijkBean> list;
     private PowerManager.WakeLock wakeLock;
     private View rootView;
+
+    private LinearLayout ll_bzzb_dingyue;
+    private Button btn_bzzb_dingyue;
 
     private String sid;
     private String url;
@@ -171,6 +179,9 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
 
         iv_videodetails_zan = (ImageView) findViewById(R.id.iv_videodetails_zan);
         iv_videodetails_collect = (ImageView) findViewById(R.id.iv_videodetails_collect);
+
+        ll_bzzb_dingyue = (LinearLayout) findViewById(R.id.ll_bzzb_dingyue);
+        btn_bzzb_dingyue = (Button) findViewById(R.id.btn_bzzb_dingyue);
         //设置默认
         getSupportFragmentManager().beginTransaction().add(R.id.fl_video,classDetails).commit();
         rb_frg_details.setChecked(true);
@@ -284,15 +295,149 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
             iv_videodetails_collect.setImageResource(R.mipmap.tab_collect);
         }
 
-
-
+        int payType = courseInfo.getPayType();
+        boolean hasBuy = courseInfo.isHasBuy();
+        final int price = courseInfo.getPrice();
+        if (payType==0){
+            //免费
+            ll_bzzb_dingyue.setVisibility(View.GONE);
+            initVideo();
+        }else if (payType==1){
+            //限免
+            ll_bzzb_dingyue.setVisibility(View.GONE);
+            initVideo();
+        }else if (payType==2){
+            //智慧币
+            if (hasBuy){
+                ll_bzzb_dingyue.setVisibility(View.GONE);
+                initVideo();
+            }else {
+                //订阅
+                ll_bzzb_dingyue.setVisibility(View.VISIBLE);
+                btn_bzzb_dingyue.setOnClickListener(new View.OnClickListener() {
+                    AlertDialog dialog = null;
+                    @Override
+                    public void onClick(View v) {
+                        //弹对话框 是否确定订阅
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ClassDetailsActivity.this);
+                        builder.setTitle("温馨提示");
+                        builder.setMessage("是否选择花费"+price+"智慧币订阅此课程?");
+                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //付费凭证
+                                postSmartMoney();
+                            }
+                        });
+                        dialog = builder.show();
+                    }
+                });
+            }
+        }
         initVideo();
+    }
+
+    /**
+     * 请求资源付费凭证
+     */
+    private void postSmartMoney() {
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","GetPayBillno");
+        request.add("uid",uid);
+        request.add("sid",sid);
+        request.add("stype","12");
+        requestQueue.add(POST_SMARTMONEY_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("付费凭证:"+info);
+                try {
+                    JSONObject json = new JSONObject(info);
+                    String billNo = json.getString("billNo");
+                    takeVideo(billNo);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    /**
+     * 订阅课程
+     * @param billno
+     */
+    private void takeVideo(final String billno) {
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","BuyStu");
+        request.add("sid",sid);
+        request.add("stype","11");
+        request.add("uid",uid);
+        request.add("billno",billno);
+        requestQueue.add(POST_TAKEVIDEO_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                MyLog.testLog("订阅是否成功:"+info);
+                Gson gson = new Gson();
+                TakeVideoBean takeVideoBean = gson.fromJson(info, TakeVideoBean.class);
+                boolean isSuccess = takeVideoBean.isIsSuccess();
+                String resultCode = takeVideoBean.getResultCode();
+                if (resultCode.equals("1")){
+                    ll_bzzb_dingyue.setVisibility(View.GONE);
+                    initVideo();
+                }else if (resultCode.equals("2004")){
+                    //未登录  提示登录
+                    Intent intent = new Intent(ClassDetailsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else if (resultCode.equals("3003")){
+                    Toast.makeText(ClassDetailsActivity.this,"智慧币不足,请转至-我的-智慧币-充值,进行充值服务!",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     private String titleVideo;
     private void initVideo() {
-
-
 
         VideoijkBean ml = new VideoijkBean();
         ml.setUrl(url);

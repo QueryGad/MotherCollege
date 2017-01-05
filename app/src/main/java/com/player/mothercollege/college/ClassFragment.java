@@ -76,9 +76,14 @@ public class ClassFragment extends Fragment{
         @Override
         public void OnBannerClick(int position) {
             String sid = banerBean.get(position-1).getSid();
+            String title = banerBean.get(position - 1).getTitle();
+            String url = banerBean.get(position - 1).getVedioUrl();
+            String img = banerBean.get(position - 1).getImg();
             Intent intent = new Intent(getActivity(), ClassDetailsActivity.class);
             intent.putExtra("sid",sid);
-            MyLog.testLog("课堂轮播图:"+sid);
+            intent.putExtra("url",url);
+            intent.putExtra("img",img);
+            intent.putExtra("title",title);
             startActivity(intent);
         }
     };

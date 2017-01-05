@@ -38,6 +38,8 @@ public class SmartMoneyActivity extends BaseActivity implements View.OnClickList
     private SmartMoneyBean smartMoneyBean;
     private int currentNum;
     private RequestQueue requestQueue;
+    private String apptoken;
+    private String uid;
 
     @Override
     public void setContentView() {
@@ -81,12 +83,12 @@ public class SmartMoneyActivity extends BaseActivity implements View.OnClickList
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
-        String uid = PrefUtils.getString(SmartMoneyActivity.this, "uid", "null");
+        apptoken = PrefUtils.getString(this, "apptoken", "");
+        uid = PrefUtils.getString(this, "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
         request.add("op","zhbinfo");
-        request.add("uid",uid);
-        request.add("apptoken",apptoken);
+        request.add("uid", uid);
+        request.add("apptoken", apptoken);
         requestQueue.add(GET_SMARTMONEY_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

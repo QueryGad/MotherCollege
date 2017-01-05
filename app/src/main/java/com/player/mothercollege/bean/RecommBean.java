@@ -7,24 +7,26 @@ import java.util.List;
  */
 public class RecommBean {
     /**
-     * index : 1
-     * title : 张教授教学1
-     * link : #
-     * img : http://121.42.31.133:8201/m/img/1.png
-     * rtype : 1
-     * sid : r1
+     * index : 2
+     * title : 穷样富养不如妈妈的教养
+     * link : null
+     * img : http://121.42.31.133:8201/upload/image/20161220/20161220172807_6602.jpg
+     * rtype : 14
+     * sid : ORI1612050001
+     * vedioUrl : null
      */
 
     private List<BanerBean> baner;
     /**
-     * sid : r40923
-     * editor : 张三
-     * title : 最美中国妈妈
-     * img : http://121.42.31.133:8201/m/img/5.png
-     * aState : 1
+     * sid : BKP1701030001
+     * editor : 周正
+     * title : 2.4成为校园小明星
+     * img : http://121.42.31.133:8201/upload/image/20170103/20170103141618_5445.jpg
+     * aState : 0
      * type : a01
-     * date : 2016-10-01
-     * viewCount : 233
+     * date : 2017-01-03
+     * url : null
+     * viewCount : 118
      */
 
     private List<ListBean> list;
@@ -52,6 +54,7 @@ public class RecommBean {
         private String img;
         private int rtype;
         private String sid;
+        private String vedioUrl;
 
         public int getIndex() {
             return index;
@@ -69,7 +72,7 @@ public class RecommBean {
             this.title = title;
         }
 
-        public String getLink() {
+        public Object getLink() {
             return link;
         }
 
@@ -100,6 +103,14 @@ public class RecommBean {
         public void setSid(String sid) {
             this.sid = sid;
         }
+
+        public String getVedioUrl() {
+            return vedioUrl;
+        }
+
+        public void setVedioUrl(String vedioUrl) {
+            this.vedioUrl = vedioUrl;
+        }
     }
 
     public static class ListBean {
@@ -110,8 +121,8 @@ public class RecommBean {
         private String aState;
         private String type;
         private String date;
+        private String url;
         private String viewCount;
-        private boolean noType;
 
         public String getSid() {
             return sid;
@@ -119,14 +130,6 @@ public class RecommBean {
 
         public void setSid(String sid) {
             this.sid = sid;
-        }
-
-        public boolean getNoType() {
-            return false;
-        }
-
-        public void setNoType(boolean noType) {
-            this.noType = noType;
         }
 
         public String getEditor() {
@@ -175,6 +178,14 @@ public class RecommBean {
 
         public void setDate(String date) {
             this.date = date;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
         }
 
         public String getViewCount() {

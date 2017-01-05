@@ -1,1 +1,1 @@
-include ':app', ':lib:pingpp', ':lib:pingpp_one', ':lib:bdwallet_pay_sdk', ':easeU'
+include ':app', ':easeU', ':lib:pingpp', ':lib:bdwallet_pay_sdk'

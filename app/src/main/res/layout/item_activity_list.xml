@@ -13,13 +13,29 @@
         android:layout_marginBottom="10dp"
         android:textColor="#000"
         android:textSize="18sp"/>
-    <ImageView
-        android:id="@+id/iv_active"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="135dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/icon_jiazai"
-        />
+        >
+        <ImageView
+            android:id="@+id/iv_active"
+            android:layout_width="match_parent"
+            android:layout_height="135dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_jiazai"
+            />
+        <TextView
+            android:id="@+id/tv_active_stop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#aac7c6c6"
+            android:gravity="center"
+            android:text="已结束"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textSize="30sp"/>
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="43dp"

@@ -1,7 +1,6 @@
 package com.player.mothercollege.me;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,8 +19,6 @@ import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.PersonAdapter;
 import com.player.mothercollege.bean.PersonDynamicBean;
 import com.player.mothercollege.bean.PersonHead;
-import com.player.mothercollege.login.LoginActivity;
-import com.player.mothercollege.unity.details.ChatActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -45,6 +42,7 @@ import java.util.List;
 public class HeadIconActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int POST_GUANZHU_DATA = 003;
+    private static final int POST_CANLEGUANZHU_DATA = 004;
     private ImageView iv_refresh;
     private Button btn_refrsh,btn_back;
     private static final int GET_HEADICON_DATA = 001;
@@ -59,6 +57,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     private String toUid;
     private String apptoken;
     private String uid;
+    private boolean isGuan = false;
 
     @Override
     public void setContentView() {
@@ -210,53 +209,109 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         final String snsUid = personHeadBean.getSnsUid();//环信账号
         final boolean isFollow = personHeadBean.isIsFollow();
         boolean isSelf = personHeadBean.isIsSelf();//是否是用户本人
-        if (isSelf){
-           //是用户本人 隐藏关注、聊天两个按钮
+        if (isSelf) {
+            //是用户本人 隐藏关注、聊天两个按钮
             ll_other_zhuanchat.setVisibility(View.GONE);
         }else {
+            //非本人
+            ll_other_zhuanchat.setVisibility(View.VISIBLE);
             if (isFollow){
-                //已关注  不再显示关注按钮
-                ll_other_zhuanchat.setVisibility(View.VISIBLE);
-                tv_otherperson_guanzhu.setVisibility(View.GONE);
+                //已关注
+                tv_otherperson_guanzhu.setText("已关注");
+                isGuan = true;
+
             }else {
-                ll_other_zhuanchat.setVisibility(View.VISIBLE);
-                tv_otherperson_guanzhu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (uid.equals("")){
-                            //未登录  提示登录
-                            Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                        }else {
-//                            Toast.makeText(HeadIconActivity.this,"关注",Toast.LENGTH_SHORT).show();
-                            initGuanZhu(niceName);
-                        }
-                    }
-                });
+                //未关注
+                tv_otherperson_guanzhu.setText("关注");
+                isGuan = false;
             }
-
-
-            tv_otherperson_chat.setOnClickListener(new View.OnClickListener() {
+            tv_otherperson_guanzhu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (uid.equals("")){
-                        //未登录  提示登录
-                        Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                    if (isGuan){
+                        //点击未关注
+                        initCanleGuanZhu(niceName);
+                        isGuan = false;
                     }else {
-//                        Toast.makeText(HeadIconActivity.this,"聊天",Toast.LENGTH_SHORT).show();
-                        if (isFollow){
-                            Intent intent = new Intent(HeadIconActivity.this, ChatActivity.class);
-                            intent.putExtra("snsUid", snsUid);
-                            startActivity(intent);
-                        }else {
-                            Toast.makeText(HeadIconActivity.this,"必须先关注才能聊天哦!",Toast.LENGTH_SHORT).show();
-                        }
-
+                        //点击关注
+                        initGuanZhu(niceName);
+                        isGuan = true;
                     }
                 }
             });
         }
+
+
+//            //显示  已关注与聊天
+//            ll_other_zhuanchat.setVisibility(View.VISIBLE);
+//            tv_otherperson_guanzhu.setText("已关注");//点击取消关注
+//            //点击取消关注
+//            tv_otherperson_guanzhu.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    initCanleGuanZhu(niceName);
+//                }
+//            });
+//
+//            tv_otherperson_chat.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (uid.equals("")){
+//                        //未登录  提示登录
+//                        Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
+//                        startActivity(intent);
+//                    }else {
+////                        Toast.makeText(HeadIconActivity.this,"聊天",Toast.LENGTH_SHORT).show();
+//                        if (isFollow){
+//                            Intent intent = new Intent(HeadIconActivity.this, ChatActivity.class);
+//                            intent.putExtra("snsUid", snsUid);
+//                            startActivity(intent);
+//                        }else {
+//                            Toast.makeText(HeadIconActivity.this,"必须先关注才能聊天哦!",Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    }
+//                }
+//            });
+//        }else {
+//            //显示 未关注与聊天
+//            ll_other_zhuanchat.setVisibility(View.VISIBLE);
+//            tv_otherperson_guanzhu.setText("关注");//点击关注
+//            tv_otherperson_guanzhu.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if (uid.equals("")){
+//                            //未登录  提示登录
+//                            Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
+//                            startActivity(intent);
+//                        }else {
+////                            Toast.makeText(HeadIconActivity.this,"关注",Toast.LENGTH_SHORT).show();
+//                            initGuanZhu(niceName);
+//                        }
+//                    }
+//                });
+//            tv_otherperson_chat.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (uid.equals("")){
+//                        //未登录  提示登录
+//                        Intent intent = new Intent(HeadIconActivity.this, LoginActivity.class);
+//                        startActivity(intent);
+//                    }else {
+////                        Toast.makeText(HeadIconActivity.this,"聊天",Toast.LENGTH_SHORT).show();
+//                        if (isFollow){
+//                            Intent intent = new Intent(HeadIconActivity.this, ChatActivity.class);
+//                            intent.putExtra("snsUid", snsUid);
+//                            startActivity(intent);
+//                        }else {
+//                            Toast.makeText(HeadIconActivity.this,"必须先关注才能聊天哦!",Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    }
+//                }
+//            });
+//        }
 
         //赋值
         if (uicon==null){
@@ -293,6 +348,56 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         tv_person_style.setText(autograph);
     }
 
+    private void initCanleGuanZhu(final String niceName) {
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","tofollow");
+        request.add("optype","unfollow");
+        request.add("uid",uid);
+        request.add("touid",toUid);
+        requestQueue.add(POST_CANLEGUANZHU_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                try {
+                    JSONObject json = new JSONObject(info);
+                    boolean isSuccess = json.getBoolean("isSuccess");
+                    if (isSuccess){
+                        Toast.makeText(HeadIconActivity.this,"取消关注成功",Toast.LENGTH_SHORT).show();
+                        //// TODO: 2017/1/1
+                        tv_otherperson_guanzhu.setText("关注");
+                        try {
+//                            EMClient.getInstance().contactManager().addContact(niceName, "请求添加为好友");
+                            EMClient.getInstance().contactManager().deleteContact(niceName);
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+//                        tv_otherperson_guanzhu.setVisibility(View.GONE);
+                    }else {
+                        Toast.makeText(HeadIconActivity.this,"关注失败",Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
     private void initGuanZhu(final String name) {
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.POST);
         request.add("apptoken",apptoken);
@@ -314,12 +419,14 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                     boolean isSuccess = json.getBoolean("isSuccess");
                     if (isSuccess){
                         Toast.makeText(HeadIconActivity.this,"关注成功",Toast.LENGTH_SHORT).show();
+                        //// TODO: 2017/1/1
+                        tv_otherperson_guanzhu.setText("已关注");
                         try {
                             EMClient.getInstance().contactManager().addContact(name, "请求添加为好友");
                         } catch (HyphenateException e) {
                             e.printStackTrace();
                         }
-                        tv_otherperson_guanzhu.setVisibility(View.GONE);
+//                        tv_otherperson_guanzhu.setVisibility(View.GONE);
                     }else {
                         Toast.makeText(HeadIconActivity.this,"关注失败",Toast.LENGTH_SHORT).show();
                     }

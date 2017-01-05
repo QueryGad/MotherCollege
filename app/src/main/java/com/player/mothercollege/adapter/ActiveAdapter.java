@@ -60,11 +60,13 @@ public class ActiveAdapter extends BaseAdapter{
             holder.tv_active_person = (TextView) view.findViewById(R.id.tv_active_person);
             holder.iv_active = (ImageView) view.findViewById(R.id.iv_active);
             holder.view_active = view.findViewById(R.id.view_active);
+            holder.tv_active_stop = (TextView) view.findViewById(R.id.tv_active_stop);
             view.setTag(holder);
         }else {
             view = convertView;
             holder = (ActiveHolder) view.getTag();
         }
+
 
         holder.tv_active_title.setText(lists.get(position).getTitle());
         Picasso.with(context).load(lists.get(position).getImg())
@@ -85,20 +87,30 @@ public class ActiveAdapter extends BaseAdapter{
             holder.view_active.setVisibility(View.GONE);
         }
 
+        boolean isTimeOver = lists.get(position).isIsTimeOver();
         final String aid = lists.get(position).getAid();
-        holder.iv_active.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ActivityDetailsActivity.class);
-                intent.putExtra("aid",aid);
-                context.startActivity(intent);
-            }
-        });
+
+        if (isTimeOver){
+            holder.tv_active_stop.setVisibility(View.VISIBLE);
+        }else {
+            holder.tv_active_stop.setVisibility(View.GONE);
+            holder.iv_active.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ActivityDetailsActivity.class);
+                    intent.putExtra("aid",aid);
+                    context.startActivity(intent);
+                }
+            });
+        }
+
+
+
         return view;
     }
 
     class ActiveHolder{
-        private TextView tv_active_more,tv_active_title,tv_active_address,tv_active_person;
+        private TextView tv_active_more,tv_active_title,tv_active_address,tv_active_person,tv_active_stop;
         private ImageView iv_active;
         private View view_active;
     }

@@ -210,6 +210,7 @@
                         android:gravity="center"
                         android:text="0"
                         android:textSize="10dp"
+                        android:visibility="gone"
                         android:textColor="#fff"
                         android:background="@mipmap/icon_circle_point"
                         />

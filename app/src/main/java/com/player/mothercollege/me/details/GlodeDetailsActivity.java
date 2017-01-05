@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
@@ -32,7 +31,7 @@ public class GlodeDetailsActivity extends BaseActivity implements View.OnClickLi
     private GlodeDetailsAdapter.OnItemClickListener GlodeDetailsItemListener = new GlodeDetailsAdapter.OnItemClickListener() {
         @Override
         public void onClick(View v, int position, GlodeMoneyBean.DetailBean data) {
-            Toast.makeText(GlodeDetailsActivity.this,position+"",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(GlodeDetailsActivity.this,position+"",Toast.LENGTH_SHORT).show();
         }
     };
 

@@ -76,7 +76,7 @@ public class JieLiFragment extends Fragment{
     private void netWork() {
 
         String apptoken = PrefUtils.getString(getActivity(), "apptoken", "");
-        String uid = PrefUtils.getString(getActivity(), "uid", "null");
+        String uid = PrefUtils.getString(getActivity(), "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.FIND_URL, RequestMethod.GET);
         request.add("apptoken",apptoken);
         request.add("uid",uid);

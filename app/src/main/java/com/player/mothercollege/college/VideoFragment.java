@@ -44,6 +44,8 @@ public class VideoFragment extends Fragment{
     private RequestQueue requestQueue;
     private VideoBean.BzzbBean bzzbBean;
     private VideoBean.SqhgBean sqhgBean;
+    private String apptoken;
+    private String uid;
 
     @Nullable
     @Override
@@ -65,12 +67,12 @@ public class VideoFragment extends Fragment{
     }
 
     private void netWork() {
-        String apptoken = PrefUtils.getString(getActivity(),"apptoken","");
-        String uid = PrefUtils.getString(getActivity(), "uid", "null");
+        apptoken = PrefUtils.getString(getActivity(),"apptoken","");
+        uid = PrefUtils.getString(getActivity(), "uid", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("op","zb");
-        request.add("apptoken",apptoken);
-        request.add("uid",uid);
+        request.add("apptoken", apptoken);
+        request.add("uid", uid);
         requestQueue.add(GET_VIDEO_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -132,6 +134,26 @@ public class VideoFragment extends Fragment{
         TextView title = (TextView) oldView.findViewById(R.id.tv_videoOld_title);
         TextView editor = (TextView) oldView.findViewById(R.id.tv_videoOld_editor);
         TextView viewCount = (TextView) oldView.findViewById(R.id.tv_videoOld_viewCount);
+        TextView tv_videoOld_money = (TextView) oldView.findViewById(R.id.tv_videoOld_money);
+        ImageView iv_videoOld_money = (ImageView) oldView.findViewById(R.id.iv_videoOld_money);
+        String pState = sqhgBean.getPState();
+        int price =(int) sqhgBean.getPrice();
+
+        if (pState.equals("0")){
+            //免费
+            tv_videoOld_money.setVisibility(View.GONE);
+            iv_videoOld_money.setVisibility(View.GONE);
+        }else if (pState.equals("1")){
+            //限免
+            tv_videoOld_money.setVisibility(View.VISIBLE);
+            iv_videoOld_money.setVisibility(View.GONE);
+            tv_videoOld_money.setText("限免");
+        }else if (pState.equals("2")){
+            //收费
+            tv_videoOld_money.setVisibility(View.VISIBLE);
+            iv_videoOld_money.setVisibility(View.VISIBLE);
+            tv_videoOld_money.setText(price+"");
+        }
         Picasso.with(getActivity()).load(sqhgBean.getImg())
                 .resize(DensityUtils.dip2px(getActivity(),116f),DensityUtils.dip2px(getActivity(),63.5f))
                 .centerCrop().into(iv);

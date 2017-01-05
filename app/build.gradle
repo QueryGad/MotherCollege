@@ -80,7 +80,6 @@ dependencies {
     compile 'com.bigkoo:pickerview:2.1.0'
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile files('libs/libammsdk.jar')
     compile 'com.youth.banner:banner:1.4.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile files('libs/tbs_sdk_thirdapp_v2.5.0.1031_36880_sharewithdownload_obfs_20161107_154437.jar')
@@ -102,4 +101,6 @@ dependencies {
     compile 'com.dou361.ijkplayer-x86:jjdxm-ijkplayer-x86:1.0.0'
     //对应ijkplayer的  compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.6.0'
     compile 'com.dou361.ijkplayer-x86_64:jjdxm-ijkplayer-x86_64:1.0.0'
+    compile project(':lib:pingpp')
+    compile files('libs/MobCommons-2016.1012.1447.jar')
 }

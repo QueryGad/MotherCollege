@@ -5,12 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.SmartDetailsAdapter;
 import com.player.mothercollege.bean.SmartMoneyBean;
+import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.view.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class SmartDetailsActivity extends BaseActivity implements View.OnClickLi
     private SmartDetailsAdapter.OnItemClickListener SmartDetailsItemListener = new SmartDetailsAdapter.OnItemClickListener() {
         @Override
         public void onClick(View v, int position, SmartMoneyBean.DetailBean data) {
-            Toast.makeText(SmartDetailsActivity.this,position+"",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(SmartDetailsActivity.this,position+"",Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -42,6 +42,7 @@ public class SmartDetailsActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void initViews() {
         smartMoneyBean = (SmartMoneyBean) getIntent().getSerializableExtra("smartDetails");
+        MyLog.testLog("智慧币明细:"+smartMoneyBean);
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
         rv_smartdetails = (RecyclerView) findViewById(R.id.rv_smartdetails);
@@ -52,16 +53,18 @@ public class SmartDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void initRecycler() {
         detail = smartMoneyBean.getDetail();
-    }
-
-    @Override
-    public void initListeners() {
-        btn_back.setOnClickListener(this);
         SmartDetailsAdapter adapter = new SmartDetailsAdapter(SmartDetailsActivity.this,detail);
         rv_smartdetails.setAdapter(adapter);
         rv_smartdetails.setLayoutManager(new LinearLayoutManager(SmartDetailsActivity.this));
         rv_smartdetails.addItemDecoration(new DividerItemDecoration(SmartDetailsActivity.this,DividerItemDecoration.VERTICAL_LIST));
         adapter.setOnItemClickListener(SmartDetailsItemListener);
+    }
+
+    @Override
+    public void initListeners() {
+        btn_back.setOnClickListener(this);
+
+
     }
 
     @Override

@@ -56,13 +56,20 @@ public class RecommFragment extends Fragment {
             MyLog.testLog("rtype"+rtype);
             String sid = sidBanner.get(position-1);
             if (rtype==11){
-                //跳转直播页面 跳转课程
+                //跳转直播页面
                 Intent intent1 = new Intent(getActivity(), BzzbDeatilsActivity.class);
                 intent1.putExtra("sid",sid);
                 startActivity(intent1);
             }else if (rtype==12){
+                //跳转课程
+                String title = banerBean.get(position-1).getTitle();
+                String url = banerBean.get(position-1).getVedioUrl();
+                String img = banerBean.get(position-1).getImg();
                 Intent intent1 = new Intent(getActivity(), ClassDetailsActivity.class);
                 intent1.putExtra("sid",sid);
+                intent1.putExtra("url",url);
+                intent1.putExtra("img",img);
+                intent1.putExtra("title",title);
                 startActivity(intent1);
             } else if (rtype==13){
                 //读书
@@ -88,6 +95,7 @@ public class RecommFragment extends Fragment {
     };
     private RecommAdapter adapter;
     private View banerView;
+    private RecommBean recommBean;
 
 
     @Nullable
@@ -155,7 +163,7 @@ public class RecommFragment extends Fragment {
 
     private void parseJson(String info) {
         Gson gson = new Gson();
-        RecommBean recommBean = gson.fromJson(info, RecommBean.class);
+        recommBean = gson.fromJson(info, RecommBean.class);
         //轮播图
         banerBean = recommBean.getBaner();
         initBaner();

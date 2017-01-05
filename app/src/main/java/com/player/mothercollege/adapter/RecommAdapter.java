@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.RecommBean;
 import com.player.mothercollege.college.details.BzzbDeatilsActivity;
+import com.player.mothercollege.college.details.ClassDetailsActivity;
 import com.player.mothercollege.college.details.OriginalDetailsActivity;
 import com.player.mothercollege.college.details.ReadBookDetailsActivity;
 import com.player.mothercollege.utils.DensityUtils;
@@ -87,14 +88,16 @@ public class RecommAdapter extends BaseAdapter{
         tv_recomm_viewCount.setText(lists.get(position).getViewCount()+"人已看");
 
         String type = lists.get(position).getType();
+        final String url = lists.get(position).getUrl();
+        final String img = lists.get(position).getImg();
+        final String title = lists.get(position).getTitle();
         final String sid = lists.get(position).getSid();
-        boolean noType = lists.get(position).getNoType();
         
         //分类
         //切割type
         type = type.substring(0,2);
         if (type.equals("a0")){
-            if (noType){
+            if (isOne){
                 iv_recomm_title.setVisibility(View.GONE);
                 tv_recomm_type.setVisibility(View.GONE);
             }else {
@@ -102,7 +105,7 @@ public class RecommAdapter extends BaseAdapter{
                 tv_recomm_type.setVisibility(View.VISIBLE);
                 iv_recomm_title.setImageResource(R.mipmap.ic_college_readbook);
                 tv_recomm_type.setText("读书");
-                noType = true;
+                isOne = true;
             }
 
             ll_recomm_view.addView(viewChild);
@@ -157,8 +160,11 @@ public class RecommAdapter extends BaseAdapter{
                 @Override
                 public void onClick(View v) {
                     //跳转至点播详情
-                    Intent intent = new Intent(context,BzzbDeatilsActivity.class);
+                    Intent intent = new Intent(context,ClassDetailsActivity.class);
                     intent.putExtra("sid",sid);
+                    intent.putExtra("url",url);
+                    intent.putExtra("img",img);
+                    intent.putExtra("title",title);
                     context.startActivity(intent);
                 }
             });

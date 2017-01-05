@@ -1,31 +1,45 @@
 package com.player.mothercollege.me.details;
 
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.SmartPayAdapter;
+import com.player.mothercollege.bean.SmartListBean;
+import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.PrefUtils;
+import com.yolanda.nohttp.NoHttp;
+import com.yolanda.nohttp.RequestMethod;
+import com.yolanda.nohttp.rest.OnResponseListener;
+import com.yolanda.nohttp.rest.Request;
+import com.yolanda.nohttp.rest.RequestQueue;
+import com.yolanda.nohttp.rest.Response;
+
+import java.util.List;
 
 
 /**
  * Created by Administrator on 2016/10/7.
  */
-public class SmartPayActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class SmartPayActivity extends BaseActivity implements View.OnClickListener{
 
+    private static final int POST_LIST_DATA = 001;
     private Button btn_back;
     private TextView tv_details_title;
     private GridView gv_smartpay;
-    private String [] muchs = {"50","100","200","300","500","1000","2000","5000","10000"};
-    private String [] money = {"￥5","￥10","￥20","￥30","￥50","￥100","￥200","￥500","￥1000"};
+    private String [] muchs = {"300","600","1500","3500","6000","10000"};
+    private String [] money = {"￥30","￥50","￥98","￥198","￥298","￥488"};
+    private RequestQueue requestQueue;
+    private String apptoken;
 
     @Override
     public void setContentView() {
         setContentView(R.layout.act_me_smartpay);
+        requestQueue = NoHttp.newRequestQueue();
     }
 
     @Override
@@ -40,14 +54,50 @@ public class SmartPayActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void initListeners() {
         btn_back.setOnClickListener(this);
-        gv_smartpay.setOnItemClickListener(this);
     }
 
     @Override
     public void initData() {
-        SmartPayAdapter adapter = new SmartPayAdapter(muchs,money,this);
-        gv_smartpay.setAdapter(adapter);
+        netWork();
+    }
 
+    private void netWork() {
+        apptoken = PrefUtils.getString(SmartPayActivity.this, "apptoken", "");
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.PAY, RequestMethod.POST);
+        request.add("apptoken",apptoken);
+        request.add("op","goodlist");
+        requestQueue.add(POST_LIST_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                parseJson(info);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+
+    }
+
+    private void parseJson(String info) {
+        Gson gson = new Gson();
+        SmartListBean smartListBean = gson.fromJson(info, SmartListBean.class);
+        List<SmartListBean.PayGoodListBean> payGoodList = smartListBean.getPayGoodList();
+
+        SmartPayAdapter adapter = new SmartPayAdapter(payGoodList,muchs,money,this);
+        gv_smartpay.setAdapter(adapter);
     }
 
     @Override
@@ -59,8 +109,5 @@ public class SmartPayActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this,"充值"+position,Toast.LENGTH_SHORT).show();
-    }
+
 }
