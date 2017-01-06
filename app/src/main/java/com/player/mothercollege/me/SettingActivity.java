@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hyphenate.chat.EMClient;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.login.LoginActivity;
@@ -100,6 +101,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent2 = new Intent(SettingActivity.this, LoginActivity.class);
                         PrefUtils.setString(SettingActivity.this,"uid","");
+                        EMClient.getInstance().logout(true);
                         intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent2);
                         alertDialog.dismiss();

@@ -340,7 +340,6 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
                 });
             }
         }
-        initVideo();
     }
 
     /**

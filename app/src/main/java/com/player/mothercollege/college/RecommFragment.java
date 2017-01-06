@@ -1,7 +1,9 @@
 package com.player.mothercollege.college;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -23,7 +25,7 @@ import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideImageLoader;
-import com.player.mothercollege.view.PullToRefreshHeaderListView;
+import com.player.mothercollege.view.MyUpRefreshListview;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -40,11 +42,11 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/11/18.
  */
-public class RecommFragment extends Fragment {
+public class RecommFragment extends Fragment implements MyUpRefreshListview.OnRefreshListener{
 
     private static final int GET_RECOMM_DATA = 001;
     private View view;
-    private PullToRefreshHeaderListView lv_recomm;
+    private MyUpRefreshListview lv_recomm;
     private RequestQueue requestQueue;
     private List<RecommBean.BanerBean> banerBean = new ArrayList<>();
     private List<Integer> rtypes = new ArrayList<>();
@@ -109,18 +111,11 @@ public class RecommFragment extends Fragment {
     }
 
     private void initView() {
-        lv_recomm = (PullToRefreshHeaderListView) view.findViewById(R.id.lv_recomm);
+        lv_recomm = (MyUpRefreshListview) view.findViewById(R.id.lv_recomm);
 
         banerView = View.inflate(getActivity(), R.layout.head_college_recomm,null);
         lv_recomm.addHeaderView(banerView);
 
-        lv_recomm.setOnRefreshListener(new PullToRefreshHeaderListView.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //刷新数据
-                netWork();
-            }
-        });
     }
 
     private void initData() {
@@ -145,13 +140,12 @@ public class RecommFragment extends Fragment {
                 String info = response.get();
                 Log.e("推荐页面:",info);
                 parseJson(info);
-                //收起控件
-                lv_recomm.onRefreshComplete(true);
+
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-                lv_recomm.onRefreshComplete(false);
+
             }
 
             @Override
@@ -203,4 +197,21 @@ public class RecommFragment extends Fragment {
 
     }
 
+    @Override
+    public void onDownPullRefresh() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                SystemClock.sleep(500);
+                netWork();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                lv_recomm.hideHeaderView();
+            }
+        }.execute();
+    }
 }

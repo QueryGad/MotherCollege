@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="90dp"
+            android:layout_marginRight="10dp">
+
+            <ImageView
+                android:id="@+id/iv_listview_header_arrow"
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:minWidth="30dp"
+                android:src="@mipmap/refresharrow" />
+
+            <ProgressBar
+                android:id="@+id/pb_listview_header"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:indeterminateDrawable="@drawable/custom_progress_2"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_listview_header_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="下拉刷新"
+                android:textColor="#f00"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_listview_header_last_update_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="最近刷新: 12:56:12"
+                android:textSize="11sp" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

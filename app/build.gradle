@@ -53,63 +53,43 @@ android {
     }
 
     productFlavors{
-        "001"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "001"]
+        "360"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "360"]
         }
-        "002"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "002"]
+        "google"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "google"]
         }
-        "003"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "003"]
+        "tencent"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent"]
         }
-        "004"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "004"]
+        "baidu"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
         }
-        "005"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "005"]
+        "91"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "91"]
         }
-        "006"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "006"]
+        "wandoujia"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
         }
-        "007"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "007"]
+        "xiaomi"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
         }
-        "008"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "008"]
+        "meizu"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "meizu"]
         }
-        "009"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "009"]
+        "oppo"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "oppo"]
         }
-        "010"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "010"]
+        "lenovo"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "lenovo"]
         }
-        "011"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "011"]
+        "huawei"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "huawei"]
         }
-        "012"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "012"]
+        "anzhi"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "anzhi"]
         }
-        "013"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "013"]
-        }
-        "014"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "014"]
-        }
-        "015"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "015"]
-        }
-        "016"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "016"]
-        }
-        "017"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "017"]
-        }
-        "018"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "018"]
-        }
-        "019"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "019"]
-        }
+
     }
 
 

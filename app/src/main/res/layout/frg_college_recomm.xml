@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <com.player.mothercollege.view.PullToRefreshHeaderListView
+        <!--<com.player.mothercollege.view.PullToRefreshHeaderListView-->
+            <!--android:id="@+id/lv_recomm"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:cacheColorHint="@color/transprant"-->
+            <!--android:divider="#0000"-->
+            <!--android:dividerHeight="0.5dp"-->
+            <!--android:listSelector="@color/transprant"/>-->
+
+        <com.player.mothercollege.view.MyUpRefreshListview
             android:id="@+id/lv_recomm"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

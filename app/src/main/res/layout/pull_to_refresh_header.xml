@@ -6,9 +6,8 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:paddingTop="10dp">
+        android:layout_marginLeft="90dp"
+        android:layout_marginRight="10dp">
         <ImageView
             android:id="@+id/iv_pull_arrow"
             android:layout_width="wrap_content"
@@ -19,9 +18,9 @@
             android:id="@+id/pb_pull_loading"
             android:visibility="invisible"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_gravity="center"
-            android:indeterminateDrawable="@drawable/custom_progress"
+            android:indeterminateDrawable="@mipmap/refresharrow"
             />
     </FrameLayout>
     <LinearLayout
@@ -35,14 +34,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="下拉刷新"
-            android:textSize="18sp"
+            android:textSize="13sp"
             android:textColor="#f00"/>
         <TextView
             android:id="@+id/tv_pull_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2017-01-01"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:layout_marginTop="3dp"
             android:textColor="#a000"/>
     </LinearLayout>
