@@ -24,7 +24,7 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone"
          />
-    <ListView
+    <com.player.mothercollege.view.MyUpMoreListview
         android:id="@+id/lv_headicon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

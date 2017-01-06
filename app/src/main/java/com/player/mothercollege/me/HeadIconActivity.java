@@ -1,11 +1,12 @@
 package com.player.mothercollege.me;
 
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
+import com.player.mothercollege.view.MyUpMoreListview;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -33,21 +35,23 @@ import com.yolanda.nohttp.rest.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/10/25.
  * 个人主页
  */
-public class HeadIconActivity extends BaseActivity implements View.OnClickListener {
+public class HeadIconActivity extends BaseActivity implements View.OnClickListener,MyUpMoreListview.OnRefreshListener {
 
     private static final int POST_GUANZHU_DATA = 003;
     private static final int POST_CANLEGUANZHU_DATA = 004;
+    private static final int GET_MORE_DATA = 005;
     private ImageView iv_refresh;
     private Button btn_refrsh,btn_back;
     private static final int GET_HEADICON_DATA = 001;
     private static final int GET_DYNAMIC_DATA = 002;
-    private ListView lv_headicon;
+    private MyUpMoreListview lv_headicon;
     private RequestManager glideRequest;
     private RequestQueue requestQueue;
     private View personHeadView;
@@ -58,6 +62,12 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     private String apptoken;
     private String uid;
     private boolean isGuan = false;
+
+    int lastIndex=0;
+    boolean isRefresh = true;
+    private int endNo;
+    private List<PersonDynamicBean.TrendsBean> trendsList;
+    private PersonAdapter adapter;
 
     @Override
     public void setContentView() {
@@ -74,10 +84,16 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         iv_refresh = (ImageView) findViewById(R.id.iv_refresh);
         btn_refrsh = (Button) findViewById(R.id.btn_refrsh);
         btn_back = (Button) findViewById(R.id.btn_back);
-        lv_headicon = (ListView) findViewById(R.id.lv_headicon);
+        lv_headicon = (MyUpMoreListview) findViewById(R.id.lv_headicon);
         tv_otherperson_guanzhu = (TextView) findViewById(R.id.tv_otherperson_guanzhu);
         tv_otherperson_chat = (TextView) findViewById(R.id.tv_otherperson_chat);
         ll_other_zhuanchat = (LinearLayout) findViewById(R.id.ll_other_zhuanchat);
+
+        lv_headicon.setOnRefreshListener(this);
+//        if(isRefresh){
+//            initData();
+//        }
+
     }
 
     @Override
@@ -95,7 +111,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         request.add("op","tiezilist");
         request.add("uid",toUid);
         request.add("apptoken",apptoken);
-        request.add("lastindex","0");
+        request.add("lastIndex",lastIndex+"");
         requestQueue.add(GET_DYNAMIC_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -161,6 +177,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         Gson gson = new Gson();
         PersonHead personHeadBean = gson.fromJson(info, PersonHead.class);
         initHead(personHeadBean);
+        lv_headicon.addHeaderView(personHeadView);
         netWork2();//帖子
     }
 
@@ -175,10 +192,15 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
      * 我的动态
      */
     private void initDynamic(PersonDynamicBean personDynamicBean) {
-        List<PersonDynamicBean.TrendsBean> trendsList = personDynamicBean.getTrends();
-        PersonAdapter adapter = new PersonAdapter(HeadIconActivity.this,trendsList,uid);
-        lv_headicon.setAdapter(adapter);
-        lv_headicon.addHeaderView(personHeadView);
+
+        if (personDynamicBean!=null){
+            endNo = personDynamicBean.getLastIndex();//目标索引
+            infos = personDynamicBean.getTrends();
+            adapter = new PersonAdapter(this,infos,toUid);
+            lv_headicon.setAdapter(adapter);
+
+        }
+
     }
 
     /**
@@ -239,6 +261,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                     }
                 }
             });
+
         }
 
 
@@ -454,5 +477,70 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onLoadingMore() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                SystemClock.sleep(500);
+                setAddMoreData();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                lv_headicon.hideFooterView();
+            }
+        }.execute();
+    }
+
+    private void setAddMoreData() {
+        lastIndex = endNo;
+        sendAddHomeLvRequest();
+    }
+
+    private List<PersonDynamicBean.TrendsBean> infos = new ArrayList<>();
+    private void sendAddHomeLvRequest() {
+            Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
+            request.add("op","tiezilist");
+            request.add("uid",toUid);
+            request.add("apptoken",apptoken);
+            request.add("lastIndex",lastIndex+"");
+        requestQueue.add(GET_MORE_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                Gson gson = new Gson();
+                PersonDynamicBean personDynamicBean = gson.fromJson(info, PersonDynamicBean.class);
+                if (lastIndex!=0) {
+                    endNo = personDynamicBean.getLastIndex();
+                    lastIndex = endNo;
+                    trendsList = personDynamicBean.getTrends();
+                    infos.addAll(trendsList);
+                    adapter.notifyDataSetChanged();
+                } else {
+//                    toast("没有更多数据");
+                    Toast.makeText(HeadIconActivity.this,"没有更多数据了",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 }

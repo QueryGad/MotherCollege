@@ -2,10 +2,9 @@ package com.player.mothercollege.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,32 +21,49 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/10/10.
  */
-public class JieLiAdapter extends RecyclerView.Adapter<JieLiAdapter.JieLiViewHolder>{
-    private List<JieLiBean.UsersBean> jieLilist = new ArrayList<>();
-    private LayoutInflater mInflater;
+public class JieLiAdapter extends BaseAdapter{
+    private List<JieLiBean.UsersBean> lists = new ArrayList<>();
     private RequestManager glideRequest;
     private Context context;
-    private OnItemClickListener listener;
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.listener = listener;
-    }
 
-    public JieLiAdapter(List list,Context context) {
+
+    public JieLiAdapter(List lists,Context context) {
         super();
-        this.jieLilist = list;
+        this.lists = lists;
         this.context = context;
     }
 
+
     @Override
-    public JieLiViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        mInflater = LayoutInflater.from(parent.getContext());
-        View view = mInflater.inflate(R.layout.item_find_jieli,null);
-        return new JieLiViewHolder(view);
+    public int getCount() {
+        return lists.size();
     }
 
     @Override
-    public void onBindViewHolder(JieLiViewHolder holder, int position) {
-        String uIcon = jieLilist.get(position).getUIcon();
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view = null;
+        ViewHolder holder = null;
+        if (convertView ==null){
+            view = View.inflate(context, R.layout.item_find_jieli,null);
+            holder = new ViewHolder();
+            holder.iv_find_jieli = (ImageView) view.findViewById(R.id.iv_find_jieli);
+            holder.tv_find_jieli = (TextView) view.findViewById(R.id.tv_find_jieli);
+            view.setTag(holder);
+        }else {
+            view = convertView;
+            holder = (ViewHolder) view.getTag();
+        }
+        String uIcon = lists.get(position).getUIcon();
         if (uIcon==null){
             holder.iv_find_jieli.setImageResource(R.mipmap.head_group);
         }else {
@@ -55,8 +71,7 @@ public class JieLiAdapter extends RecyclerView.Adapter<JieLiAdapter.JieLiViewHol
             glideRequest.load(uIcon)
                     .transform(new GlideCircleTransform(context)).into(holder.iv_find_jieli);
         }
-
-        final String uid = jieLilist.get(position).getUid();
+        final String uid = lists.get(position).getUid();
         holder.iv_find_jieli.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,33 +80,12 @@ public class JieLiAdapter extends RecyclerView.Adapter<JieLiAdapter.JieLiViewHol
                 context.startActivity(intent);
             }
         });
-        holder.tv_find_jieli.setText(jieLilist.get(position).getUniceName());
+        holder.tv_find_jieli.setText(lists.get(position).getUniceName());
+        return view;
     }
 
-    @Override
-    public int getItemCount() {
-        return jieLilist.size();
-    }
-
-    class JieLiViewHolder extends RecyclerView.ViewHolder{
+    private class ViewHolder{
         private ImageView iv_find_jieli;
         private TextView tv_find_jieli;
-        public JieLiViewHolder(View itemView) {
-            super(itemView);
-            iv_find_jieli = (ImageView) itemView.findViewById(R.id.iv_find_jieli);
-            tv_find_jieli = (TextView) itemView.findViewById(R.id.tv_find_jieli);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener!=null){
-                        listener.onClick(v,getLayoutPosition(),jieLilist.get(getLayoutPosition()));
-                    }
-                }
-            });
-        }
-    }
-
-    public interface OnItemClickListener{
-        void onClick(View v, int position, JieLiBean.UsersBean data);
     }
 }

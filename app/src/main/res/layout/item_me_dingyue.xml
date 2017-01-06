@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="***人已订阅"
+                android:text="人已订阅"
                 android:textColor="#f00"
                 android:textSize="14sp" />
 

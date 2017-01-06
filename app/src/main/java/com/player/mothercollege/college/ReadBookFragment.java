@@ -165,7 +165,7 @@ public class ReadBookFragment extends Fragment implements MyUpDownListView.OnRef
     private void sendAddHomeLvRequest() {
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.COLLEGE_URL, RequestMethod.GET);
         request.add("op","ds");
-        request.add("lastIndex",lastIndex+"");//++
+        request.add("lastIndex",lastIndex+"");
         request.add("apptoken", apptoken);
         requestQueue.add(002, request, new OnResponseListener<String>() {
             @Override
@@ -178,9 +178,9 @@ public class ReadBookFragment extends Fragment implements MyUpDownListView.OnRef
                 String info = response.get();
                 Gson gson = new Gson();
                 ReadBookBean readBookBean = gson.fromJson(info, ReadBookBean.class);
-//                infos.addAll(booksList);
                 if (readBookBean !=null) {
                     endNo = readBookBean.getEndNo();
+                    lastIndex = endNo;
                     booksList = readBookBean.getBooks();
                     infos.addAll(booksList);
                     adapter.notifyDataSetChanged();

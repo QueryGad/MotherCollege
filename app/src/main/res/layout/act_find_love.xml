@@ -33,21 +33,12 @@
             android:layout_marginTop="305dp"
             android:background="@drawable/btn_refresh"
             android:visibility="gone" />
-        <com.cjj.MaterialRefreshLayout
-            android:id="@+id/refresh_love"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            app:overlay="true"
-            app:wave_show="true"
-            app:wave_color="#90ffffff"
-            app:progress_colors="@array/material_colors"
-            app:wave_height_type="higher">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_find_love"
+
+            <com.player.mothercollege.view.MyUpDownListView
+                android:id="@+id/lv_find_love"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-        </com.cjj.MaterialRefreshLayout>
+
     </FrameLayout>
 
 

@@ -3,10 +3,11 @@ package com.player.mothercollege.me.details;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
+import com.player.mothercollege.view.MyUpMoreListview;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -29,26 +31,35 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/11/3.
  * 圈子详情
  */
-public class CirleDetailsActivity extends BaseActivity implements View.OnClickListener {
+public class CirleDetailsActivity extends BaseActivity implements View.OnClickListener,MyUpMoreListview.OnRefreshListener{
 
     private static final int GET_CIRLEDETAILS_DATA = 001;
     private static final int GET_CIRLEDETAILSTITLE_DATA = 002;
     private static final int POST_CANLEGUANZHU_DATA = 003;
     private static final int POST_ADDGUANZHU_DATA = 004;
+    private static final int GET_MORE_DATA = 005;
     private Button btn_back;
     private TextView tv_details_title;
-    private ListView lv_cirledetails;
+    private MyUpMoreListview lv_cirledetails;
     private RequestQueue requestQueue;
     private String groupId;
     private RequestManager glideRequest;
     private ImageView iv_cirle_edit;
     private ProgressDialog pd;
+
+    int lastIndex=0;
+    boolean isRefresh = true;
+    private int endNo;
+    private String apptoken;
+    private List<CirleArticleBean.TrendsBean> trendsList;
+    private CirleArticleAdapter adapter;
 
     @Override
     public void setContentView() {
@@ -63,8 +74,10 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
 
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
-        lv_cirledetails = (ListView) findViewById(R.id.lv_cirledetails);
+        lv_cirledetails = (MyUpMoreListview) findViewById(R.id.lv_cirledetails);
         iv_cirle_edit = (ImageView) findViewById(R.id.iv_cirle_edit);
+
+        lv_cirledetails.setOnRefreshListener(this);
     }
 
     @Override
@@ -119,10 +132,10 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void netWorkDetails() {
-        String apptoken = PrefUtils.getString(this, "apptoken", "");
+        apptoken = PrefUtils.getString(this, "apptoken", "");
         Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
-        request.add("apptoken",apptoken);
-        request.add("lastIndex","0");
+        request.add("apptoken", apptoken);
+        request.add("lastIndex",lastIndex+"");
         request.add("groupNo",groupId);
         request.add("op","GroupTrends");
         requestQueue.add(GET_CIRLEDETAILS_DATA, request, new OnResponseListener<String>() {
@@ -153,10 +166,15 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
     private void parseJsonDetails(String info){
         Gson gson = new Gson();
         CirleArticleBean cirleArticleBean = gson.fromJson(info, CirleArticleBean.class);
-        int lastIndex = cirleArticleBean.getLastIndex();
-        List<CirleArticleBean.TrendsBean> trendsList = cirleArticleBean.getTrends();
-        CirleArticleAdapter adapter = new CirleArticleAdapter(CirleDetailsActivity.this,trendsList);
-        lv_cirledetails.setAdapter(adapter);
+
+        if (cirleArticleBean!=null){
+            endNo = cirleArticleBean.getLastIndex();//目标索引
+            infos = cirleArticleBean.getTrends();
+            adapter = new CirleArticleAdapter(this,infos);
+            lv_cirledetails.setAdapter(adapter);
+        }
+
+
     }
 
     private void initHead(final CirleNameDetailsBean cirleNameDetailsBean) {
@@ -185,7 +203,7 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
                     iv_cirle_hasjoin.setImageResource(R.mipmap.icon_2_join);
                     iv_cirle_edit.setVisibility(View.GONE);
                     postCanleGuanZhu(groupId);
-
+                    iv_cirle_hasjoin.setOnClickListener(null);
                 }
             });
         }else {
@@ -252,6 +270,7 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
                 String info = response.get();
                 MyLog.testLog("返回结果:"+info);
                 Toast.makeText(CirleDetailsActivity.this,"已退出该群!",Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -299,4 +318,70 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
             }
         });
     }
+
+    @Override
+    public void onLoadingMore() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                SystemClock.sleep(500);
+                setAddMoreData();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                lv_cirledetails.hideFooterView();
+            }
+        }.execute();
+    }
+
+    private void setAddMoreData() {
+        lastIndex = endNo;
+        sendAddHomeLvRequest();
+    }
+
+    private List<CirleArticleBean.TrendsBean> infos = new ArrayList<>();
+    private void sendAddHomeLvRequest() {
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
+        request.add("apptoken", apptoken);
+        request.add("lastIndex",lastIndex+"");
+        request.add("groupNo",groupId);
+        request.add("op","GroupTrends");
+        requestQueue.add(GET_MORE_DATA, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                Gson gson = new Gson();
+                CirleArticleBean cirleArticleBean = gson.fromJson(info, CirleArticleBean.class);
+                if (lastIndex!=0) {
+                    endNo = cirleArticleBean.getLastIndex();
+                    lastIndex = endNo;
+                    trendsList = cirleArticleBean.getTrends();
+                    infos.addAll(trendsList);
+                    adapter.notifyDataSetChanged();
+                } else {
+//                    toast("没有更多数据");
+                    Toast.makeText(CirleDetailsActivity.this,"没有更多数据了",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
 }

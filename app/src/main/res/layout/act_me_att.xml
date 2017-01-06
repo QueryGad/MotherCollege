@@ -27,8 +27,8 @@
             android:layout_marginTop="305dp"
             android:background="@drawable/btn_refresh"
             android:visibility="gone" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_att"
+        <com.player.mothercollege.view.MyUpDownListView
+            android:id="@+id/lv_att"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </FrameLayout>

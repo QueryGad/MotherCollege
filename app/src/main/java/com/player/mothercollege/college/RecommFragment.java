@@ -115,6 +115,7 @@ public class RecommFragment extends Fragment implements MyUpRefreshListview.OnRe
 
         banerView = View.inflate(getActivity(), R.layout.head_college_recomm,null);
         lv_recomm.addHeaderView(banerView);
+        lv_recomm.setOnRefreshListener(this);
 
     }
 

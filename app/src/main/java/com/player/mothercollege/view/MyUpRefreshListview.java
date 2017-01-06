@@ -50,10 +50,6 @@ public class MyUpRefreshListview extends ListView implements AbsListView.OnScrol
         this.setOnScrollListener(this);
     }
 
-    public MyUpRefreshListview(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
     /**
      * 初始化头布局
      */
