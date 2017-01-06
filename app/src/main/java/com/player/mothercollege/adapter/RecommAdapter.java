@@ -29,10 +29,7 @@ public class RecommAdapter extends BaseAdapter{
 
     private Context context;
     private List<RecommBean.ListBean> lists = new ArrayList<>();
-    boolean isOne = false;
-    boolean isTwo = false;
-    boolean isThree = false;
-    boolean isFour = false;
+
     public RecommAdapter(Context context, List lists) {
         super();
         this.context = context;
@@ -97,17 +94,10 @@ public class RecommAdapter extends BaseAdapter{
         //切割type
         type = type.substring(0,2);
         if (type.equals("a0")){
-            if (isOne){
-                iv_recomm_title.setVisibility(View.GONE);
-                tv_recomm_type.setVisibility(View.GONE);
-            }else {
-                iv_recomm_title.setVisibility(View.VISIBLE);
-                tv_recomm_type.setVisibility(View.VISIBLE);
-                iv_recomm_title.setImageResource(R.mipmap.ic_college_readbook);
-                tv_recomm_type.setText("读书");
-                isOne = true;
-            }
-
+            iv_recomm_title.setVisibility(View.VISIBLE);
+            tv_recomm_type.setVisibility(View.VISIBLE);
+            iv_recomm_title.setImageResource(R.mipmap.ic_college_readbook);
+            tv_recomm_type.setText("读书");
             ll_recomm_view.addView(viewChild);
             ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -120,18 +110,10 @@ public class RecommAdapter extends BaseAdapter{
                 }
             });
         }else if (type.equals("a1")){
-            if (isTwo){
-                iv_recomm_title.setVisibility(View.GONE);
-                tv_recomm_type.setVisibility(View.GONE);
-
-                isTwo = true;
-            }else {
-                iv_recomm_title.setVisibility(View.VISIBLE);
-                tv_recomm_type.setVisibility(View.VISIBLE);
-                iv_recomm_title.setImageResource(R.mipmap.ic_college_zhibo);
-                tv_recomm_type.setText("直播");
-            }
-
+            iv_recomm_title.setVisibility(View.VISIBLE);
+            tv_recomm_type.setVisibility(View.VISIBLE);
+            iv_recomm_title.setImageResource(R.mipmap.ic_college_zhibo);
+            tv_recomm_type.setText("直播");
             ll_recomm_view.addView(viewChild);
             ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -143,18 +125,10 @@ public class RecommAdapter extends BaseAdapter{
                 }
             });
         }else if (type.equals("a2")){
-            if (isThree){
-                iv_recomm_title.setVisibility(View.GONE);
-                tv_recomm_type.setVisibility(View.GONE);
-
-                isThree = true;
-            }else {
-                iv_recomm_title.setVisibility(View.VISIBLE);
-                tv_recomm_type.setVisibility(View.VISIBLE);
-                iv_recomm_title.setImageResource(R.mipmap.ic_college_class);
-                tv_recomm_type.setText("课堂");
-            }
-
+            iv_recomm_title.setVisibility(View.VISIBLE);
+            tv_recomm_type.setVisibility(View.VISIBLE);
+            iv_recomm_title.setImageResource(R.mipmap.ic_college_class);
+            tv_recomm_type.setText("课堂");
             ll_recomm_view.addView(viewChild);
             ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -169,19 +143,10 @@ public class RecommAdapter extends BaseAdapter{
                 }
             });
         }else if (type.equals("a3")){
-            if (isFour){
-                iv_recomm_title.setVisibility(View.GONE);
-                tv_recomm_type.setVisibility(View.GONE);
-
-                isFour = true;
-            }else {
-                iv_recomm_title.setVisibility(View.VISIBLE);
-                tv_recomm_type.setVisibility(View.VISIBLE);
-                iv_recomm_title.setImageResource(R.mipmap.ic_college_yuanchuang);
-                tv_recomm_type.setText("原创");
-
-            }
-
+            iv_recomm_title.setVisibility(View.VISIBLE);
+            tv_recomm_type.setVisibility(View.VISIBLE);
+            iv_recomm_title.setImageResource(R.mipmap.ic_college_yuanchuang);
+            tv_recomm_type.setText("原创");
             ll_recomm_view.addView(viewChild);
             ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
