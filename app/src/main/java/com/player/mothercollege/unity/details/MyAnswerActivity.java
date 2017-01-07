@@ -124,6 +124,7 @@ public class MyAnswerActivity extends BaseActivity implements View.OnClickListen
                 try {
                     JSONObject json = new JSONObject(info);
                     boolean isSuccess = json.getBoolean("isSuccess");
+                    String resultInfo = json.getString("resultInfo");
                     if (isSuccess){
                         //回答成功
                         Toast.makeText(MyAnswerActivity.this,"回答成功!",Toast.LENGTH_SHORT).show();
@@ -133,7 +134,7 @@ public class MyAnswerActivity extends BaseActivity implements View.OnClickListen
                         finish();
                     }else {
                         //回答失败
-                        Toast.makeText(MyAnswerActivity.this,"回答失败,请稍候再试!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyAnswerActivity.this,resultInfo,Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

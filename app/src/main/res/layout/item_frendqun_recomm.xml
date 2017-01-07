@@ -5,15 +5,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/white"
-    android:padding="5dp">
-    <TextView
-        android:id="@+id/tv_frend_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:textSize="16sp"
-        android:text="好友推荐"/>
+    >
+
     <LinearLayout
+        android:id="@+id/ll_user"
         android:layout_width="match_parent"
         android:layout_marginTop="3dp"
         android:layout_height="60dp"
@@ -33,12 +28,7 @@
             android:textColor="#000"
             android:textSize="15sp"
             android:text="mingzi"/>
-        <ImageView
-            android:id="@+id/iv_frendqun_vip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:src="@mipmap/icon_angel"/>
+
     </LinearLayout>
 
 </LinearLayout>

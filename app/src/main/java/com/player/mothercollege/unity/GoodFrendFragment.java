@@ -8,19 +8,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
-import com.player.mothercollege.adapter.FootGoodFrendAdapter;
-import com.player.mothercollege.adapter.FrendQunAdatpter;
 import com.player.mothercollege.bean.FrendQunRecommBean;
+import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.unity.details.FrendMessageActivity;
 import com.player.mothercollege.unity.details.ListAddressActivity;
 import com.player.mothercollege.unity.details.QunChatActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
+import com.player.mothercollege.view.GlideCircleTransform;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -28,7 +33,6 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,9 +43,13 @@ public class GoodFrendFragment extends Fragment implements View.OnClickListener 
 
     private static final int GET_RECOMM_DATA = 001;
     private View view;
+    private LinearLayout ll_user_view,ll_group_view;
     private RequestQueue requestQueue;
-    private ListView lv_goodfrend;
-    private List<FrendQunRecommBean.RecommendGroupBean> recommendGroupList = new ArrayList<>();
+    private RequestManager glideRequest;
+    private List<FrendQunRecommBean.RecommendGroupBean> recommendGroup;
+    private List<FrendQunRecommBean.RecommendUsersBean> recommendUsers;
+    private Button btn_unity_message,btn_unity_addresslist,btn_unity_qunchat;
+
 
     @Nullable
     @Override
@@ -55,19 +63,18 @@ public class GoodFrendFragment extends Fragment implements View.OnClickListener 
 
     private void initView() {
 
-        lv_goodfrend = (ListView) view.findViewById(R.id.lv_goodfrend);
-        initHeader();
-        initFoot();
+        ll_user_view = (LinearLayout) view.findViewById(R.id.ll_user_view);
+        ll_group_view = (LinearLayout) view.findViewById(R.id.ll_group_view);
+        btn_unity_message = (Button) view.findViewById(R.id.btn_unity_message);
+        btn_unity_addresslist = (Button) view.findViewById(R.id.btn_unity_addresslist);
+        btn_unity_qunchat = (Button) view.findViewById(R.id.btn_unity_qunchat);
 
+        btn_unity_message.setOnClickListener(this);
+        btn_unity_addresslist.setOnClickListener(this);
+        btn_unity_qunchat.setOnClickListener(this);
     }
 
-    private void initFoot() {
-        View footView = View.inflate(getContext(),R.layout.foot_unity_frend,null);
-        ListView lv_foot_frend = (ListView) footView.findViewById(R.id.lv_foot_frend);
-        FootGoodFrendAdapter adapter = new FootGoodFrendAdapter(getActivity(),recommendGroupList);
-        lv_foot_frend.setAdapter(adapter);
-        lv_goodfrend.addFooterView(footView);
-    }
+
 
     private void initData() {
         netWork();
@@ -108,23 +115,59 @@ public class GoodFrendFragment extends Fragment implements View.OnClickListener 
     private void parseJson(String info) {
         Gson gson = new Gson();
         FrendQunRecommBean frendQunRecommBean = gson.fromJson(info, FrendQunRecommBean.class);
-        List<FrendQunRecommBean.RecommendUsersBean> recommendUsersList = frendQunRecommBean.getRecommendUsers();
-        recommendGroupList = frendQunRecommBean.getRecommendGroup();
-        FrendQunAdatpter adatpter = new FrendQunAdatpter(getContext(),recommendUsersList);
-        lv_goodfrend.setAdapter(adatpter);
+        //群推荐
+        recommendGroup = frendQunRecommBean.getRecommendGroup();
+        //好友推荐
+        recommendUsers = frendQunRecommBean.getRecommendUsers();
+        initRecommendUsers();
+        initRecommendGroup();
     }
 
-    private void initHeader(){
-        View headerView = View.inflate(getContext(),R.layout.head_unity_frend,null);
-        Button btn_unity_message = (Button) headerView.findViewById(R.id.btn_unity_message);
-        Button btn_unity_addresslist = (Button) headerView.findViewById(R.id.btn_unity_addresslist);
-        Button btn_unity_qunchat = (Button) headerView.findViewById(R.id.btn_unity_qunchat);
+    private void initRecommendUsers() {
+        for (int i =0;i<recommendUsers.size();i++){
+            View viewUsers = View.inflate(getActivity(),R.layout.item_frendqun_recomm,null);
+            ImageView iv_frend_icon = (ImageView) viewUsers.findViewById(R.id.iv_frend_icon);
+            TextView tv_frend_name = (TextView) viewUsers.findViewById(R.id.tv_frend_name);
+            LinearLayout ll_user = (LinearLayout) viewUsers.findViewById(R.id.ll_user);
+            glideRequest = Glide.with(this);
+            glideRequest.load(recommendUsers.get(i).getIcon())
+                    .transform(new GlideCircleTransform(getActivity())).into(iv_frend_icon);
+            tv_frend_name.setText(recommendUsers.get(i).getNiceName());
+            final String toUid = recommendUsers.get(i).getUid();
 
-        btn_unity_message.setOnClickListener(this);
-        btn_unity_addresslist.setOnClickListener(this);
-        btn_unity_qunchat.setOnClickListener(this);
-        lv_goodfrend.addHeaderView(headerView);
+            ll_user.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), HeadIconActivity.class);
+                    intent.putExtra("toUid",toUid);
+                    startActivity(intent);
+                }
+            });
+            ll_user_view.addView(viewUsers);
+        }
     }
+
+    private void initRecommendGroup() {
+        for (int i =0;i<recommendGroup.size();i++){
+            View viewGroup = View.inflate(getActivity(),R.layout.item_frendqun_qun,null);
+            ImageView iv_qun_icon = (ImageView) viewGroup.findViewById(R.id.iv_qun_icon);
+            TextView tv_qun_name = (TextView) viewGroup.findViewById(R.id.tv_qun_name);
+            LinearLayout ll_item_qun = (LinearLayout) viewGroup.findViewById(R.id.ll_item_qun);
+            ImageView iv_qun_join = (ImageView) viewGroup.findViewById(R.id.iv_qun_join);
+            glideRequest = Glide.with(this);
+            glideRequest.load(recommendUsers.get(i).getIcon())
+                    .transform(new GlideCircleTransform(getActivity())).into(iv_qun_icon);
+            tv_qun_name.setText(recommendGroup.get(i).getGroupName());
+            ll_item_qun.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(),"群推荐",Toast.LENGTH_SHORT).show();
+                }
+            });
+            ll_group_view.addView(viewGroup);
+        }
+    }
+
 
     @Override
     public void onClick(View v) {

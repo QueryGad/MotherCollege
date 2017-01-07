@@ -90,9 +90,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         ll_other_zhuanchat = (LinearLayout) findViewById(R.id.ll_other_zhuanchat);
 
         lv_headicon.setOnRefreshListener(this);
-//        if(isRefresh){
-//            initData();
-//        }
+
 
     }
 
