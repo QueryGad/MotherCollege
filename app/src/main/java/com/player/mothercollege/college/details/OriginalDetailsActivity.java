@@ -309,6 +309,7 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                     InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                     // 显示评论框
+                    comment_content.requestFocus();
                     ll_persondeatials_line.setVisibility(View.GONE);
                     rl_comment.setVisibility(View.VISIBLE);
                 }

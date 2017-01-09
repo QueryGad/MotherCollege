@@ -232,6 +232,9 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
             case R.id.view_share_frend:
                 Toast.makeText(FrendActivity.this,"母亲大学堂",Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.btn_canle:
+                dialog.dismiss();
+                break;
 
         }
     }

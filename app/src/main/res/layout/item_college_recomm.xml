@@ -8,26 +8,118 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/iv_recomm_title"
-            android:layout_width="24dp"
-            android:layout_height="18dp"
-            android:src="@mipmap/ic_college_readbook"/>
-        <TextView
-            android:id="@+id/tv_recomm_type"
-            android:layout_marginLeft="7dp"
-            android:layout_width="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/ll_recomm_ds_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:text="读书"/>
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/ic_college_readbook"/>
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="读书"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="7dp"
+            android:id="@+id/ll_recomm_dsview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
     </LinearLayout>
+
+
     <LinearLayout
-        android:layout_marginTop="7dp"
-        android:id="@+id/ll_recomm_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/ll_recomm_zb_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/ic_college_zhibo"/>
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="直播"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="7dp"
+            android:id="@+id/ll_recomm_zbview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/ll_recomm_kt_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/ic_college_class"/>
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="课堂"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="7dp"
+            android:id="@+id/ll_recomm_ktview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/ll_recomm_yc_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/ic_college_yuanchuang"/>
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="原创"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="7dp"
+            android:id="@+id/ll_recomm_ycview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -19,7 +19,7 @@
         android:id="@+id/indicator_unity"
         android:background="#fff"
         android:layout_width="match_parent"
-        android:layout_height="26dp"/>
+        android:layout_height="28dp"/>
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_unity"
         android:layout_width="match_parent"

@@ -102,6 +102,7 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
     public void setContentView() {
         setContentView(R.layout.act_me_postmessage);
         requestQueue = NoHttp.newRequestQueue();
+        pd = new ProgressDialog(CirlePostMessageActivity.this);
     }
 
     @Override
@@ -160,6 +161,22 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
             if (photos != null) {
 
                 selectedPhotos.addAll(photos);
+            }
+
+            for (int i = 0;i<photos.size();i++){
+//                postImageArr.clear();
+                String photoLocation = photos.get(i).toString();  //所选图片路径
+                MyLog.testLog("压缩前图片路径:"+photoLocation);
+                //压缩图片
+                Bitmap compressedImage = PicUtils.getimage(photoLocation);
+                String newPic = ImagePostUtils.bitmaptoString(compressedImage); //转换后64位图
+                String png = photoLocation.substring(photoLocation.lastIndexOf("."));
+                png = png.substring(1,png.length());
+                MyLog.testLog("png:"+png);
+//          String location = ImagePostUtils.imageBASE64(photoLocation);//转换为64位编码格式的图片路径
+                String postImage = png+"|"+newPic;
+//          MyLog.testLog("转换后路径:"+postImage);
+                postImageArr.add(postImage);
             }
 
             photoAdapter.notifyDataSetChanged();
@@ -240,28 +257,6 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
     }
 
     private  void postMessage(String title,String content){
-        pd = new ProgressDialog(CirlePostMessageActivity.this);
-        pd.show();
-        for (int i = 0;i<photos.size();i++){
-
-//                postImageArr.clear();
-            String photoLocation = photos.get(i).toString();  //所选图片路径
-            MyLog.testLog("压缩前图片路径:"+photoLocation);
-            //压缩图片
-            Bitmap compressedImage = PicUtils.getimage(photoLocation);
-            String newPic = ImagePostUtils.bitmaptoString(compressedImage); //转换后64位图
-
-            String png = photoLocation.substring(photoLocation.lastIndexOf("."));
-            png = png.substring(1,png.length());
-            MyLog.testLog("png:"+png);
-//            String location = ImagePostUtils.imageBASE64(photoLocation);//转换为64位编码格式的图片路径
-
-            String postImage = png+"|"+newPic;
-//            MyLog.testLog("转换后路径:"+postImage);
-            postImageArr.add(postImage);
-        }
-
-
         String imgs="";
         for (int i =0;i<postImageArr.size();i++){
             String img = postImageArr.get(i);
@@ -285,7 +280,8 @@ public class CirlePostMessageActivity extends BaseActivity implements View.OnCli
         requestQueue.add(POST_MESSAGE_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-
+                pd.show();
+                pd.setTitle("正在上传中，请稍候！");
             }
 
             @Override

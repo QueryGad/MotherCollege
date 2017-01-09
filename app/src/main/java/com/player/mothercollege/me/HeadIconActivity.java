@@ -194,7 +194,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         if (personDynamicBean!=null){
             endNo = personDynamicBean.getLastIndex();//目标索引
             infos = personDynamicBean.getTrends();
-            adapter = new PersonAdapter(this,infos,toUid);
+            adapter = new PersonAdapter(this,infos,uid);
             lv_headicon.setAdapter(adapter);
 
         }

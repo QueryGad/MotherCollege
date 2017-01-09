@@ -513,6 +513,9 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
             case R.id.view_share_frend:
                 Toast.makeText(ClassDetailsActivity.this,"母亲大学堂",Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.btn_canle:
+                dialog.dismiss();
+                break;
             case R.id.ll_videodetails_comment: //评论
                 if (uid.equals("")){
                     //未登录  提示登录
@@ -523,6 +526,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
                 InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 // 显示评论框
+                comment_content.requestFocus();
                 ll_persondeatials_line.setVisibility(View.GONE);
                 rl_comment.setVisibility(View.VISIBLE);
                 }
