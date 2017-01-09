@@ -34,6 +34,7 @@ import com.player.mothercollege.adapter.ActivityReveiwAdapter;
 import com.player.mothercollege.bean.ActivityApplyBean;
 import com.player.mothercollege.bean.ActivityDetailsBean;
 import com.player.mothercollege.login.LoginActivity;
+import com.player.mothercollege.me.HeadIconActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -768,6 +769,7 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
             View view = View.inflate(ActivityDetailsActivity.this, R.layout.item_details_personzan,null);
             ImageView iv_person_zan = (ImageView) view.findViewById(R.id.iv_person_zan);
             String uicon = activityDetailsBean.getLikes().get(position).getUicon();
+            final String toUid = activityDetailsBean.getLikes().get(position).getUid();
             if (uicon==null){
                 iv_person_zan.setImageResource(R.mipmap.head_me_nor);
             }else {
@@ -775,6 +777,15 @@ public class ActivityDetailsActivity extends BaseActivity implements View.OnClic
                 glideRequest.load(uicon)
                         .transform(new GlideCircleTransform(ActivityDetailsActivity.this)).into(iv_person_zan);
             }
+
+            iv_person_zan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ActivityDetailsActivity.this, HeadIconActivity.class);
+                    intent.putExtra("toUid",toUid);
+                    startActivity(intent);
+                }
+            });
 
             return view;
         }

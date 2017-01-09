@@ -148,16 +148,16 @@ public class PersonAdapter extends BaseAdapter{
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage("确认删除此贴?");
 
-                    builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            deleteArticle(tid);
-                        }
-                    });
-                    builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                        }
+                    });
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteArticle(tid);
                         }
                     });
                     builder.show();
@@ -177,6 +177,7 @@ public class PersonAdapter extends BaseAdapter{
         request.add("uid",selfuid);
         request.add("trendno",tid);
         request.add("apptoken",apptoken);
+        MyLog.testLog("删帖参数: uid:"+selfuid+",trendno:"+tid+",apptoken:"+apptoken);
         requestQueue.add(001, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

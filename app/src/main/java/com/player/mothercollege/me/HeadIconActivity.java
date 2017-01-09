@@ -1,6 +1,7 @@
 package com.player.mothercollege.me;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.player.mothercollege.activity.BaseActivity;
 import com.player.mothercollege.adapter.PersonAdapter;
 import com.player.mothercollege.bean.PersonDynamicBean;
 import com.player.mothercollege.bean.PersonHead;
+import com.player.mothercollege.unity.details.ChatActivity;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -239,7 +241,6 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                 //已关注
                 tv_otherperson_guanzhu.setText("已关注");
                 isGuan = true;
-
             }else {
                 //未关注
                 tv_otherperson_guanzhu.setText("关注");
@@ -256,6 +257,19 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                         //点击关注
                         initGuanZhu(niceName);
                         isGuan = true;
+                    }
+                }
+            });
+            tv_otherperson_chat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isFollow){
+                        //聊天
+                        Intent intent = new Intent(HeadIconActivity.this, ChatActivity.class);
+                        intent.putExtra("snsUid",snsUid);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(HeadIconActivity.this,"必须关注后才可以聊天哦!",Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -440,7 +454,6 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                     boolean isSuccess = json.getBoolean("isSuccess");
                     if (isSuccess){
                         Toast.makeText(HeadIconActivity.this,"关注成功",Toast.LENGTH_SHORT).show();
-                        //// TODO: 2017/1/1
                         tv_otherperson_guanzhu.setText("已关注");
                         try {
                             EMClient.getInstance().contactManager().addContact(name, "请求添加为好友");

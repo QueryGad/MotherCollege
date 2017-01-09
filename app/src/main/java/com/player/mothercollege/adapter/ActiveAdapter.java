@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.ActiveBean;
@@ -92,6 +93,12 @@ public class ActiveAdapter extends BaseAdapter{
 
         if (isTimeOver){
             holder.tv_active_stop.setVisibility(View.VISIBLE);
+            holder.iv_active.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context,"该活动已结束,请查看其它活动!",Toast.LENGTH_SHORT).show();
+                }
+            });
         }else {
             holder.tv_active_stop.setVisibility(View.GONE);
             holder.iv_active.setOnClickListener(new View.OnClickListener() {

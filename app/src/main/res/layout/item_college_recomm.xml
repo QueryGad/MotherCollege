@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp"
+    android:padding="3dp"
     android:background="@color/white"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="vertical">
         <LinearLayout
             android:id="@+id/ll_recomm_ds_title"
@@ -27,7 +28,7 @@
                 android:text="读书"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="3dp"
             android:id="@+id/ll_recomm_dsview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,6 +39,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="vertical">
         <LinearLayout
             android:id="@+id/ll_recomm_zb_title"
@@ -57,7 +59,7 @@
                 android:text="直播"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="3dp"
             android:id="@+id/ll_recomm_zbview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,6 +69,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="vertical">
         <LinearLayout
             android:id="@+id/ll_recomm_kt_title"
@@ -86,7 +89,7 @@
                 android:text="课堂"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="3dp"
             android:id="@+id/ll_recomm_ktview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,6 +99,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="vertical">
         <LinearLayout
             android:id="@+id/ll_recomm_yc_title"
@@ -115,7 +119,7 @@
                 android:text="原创"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="3dp"
             android:id="@+id/ll_recomm_ycview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

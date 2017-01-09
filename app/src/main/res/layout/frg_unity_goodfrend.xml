@@ -2,7 +2,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_content"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,6 +10,7 @@
         <LinearLayout
             android:id="@+id/rg_unity_frend"
             android:layout_width="match_parent"
+            android:background="@color/bg_content"
             android:layout_height="80dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -48,11 +48,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingLeft="5dp"
                 android:text="好友推荐"
                 android:textColor="#000"
                 android:textSize="16sp"/>
@@ -65,18 +66,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#000"
+                android:paddingLeft="5dp"
+                android:background="@color/white"
                 android:text="群推荐"
                 android:textSize="16sp"/>
             <LinearLayout
                 android:id="@+id/ll_group_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:orientation="vertical" />
         </LinearLayout>
 

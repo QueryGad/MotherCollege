@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
@@ -161,4 +162,28 @@ public class MainActivity extends BaseActivity{
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (isPressedBackOnce){
+            //已经点击了一次
+            second = System.currentTimeMillis();
+            if (second-first>2000){
+                //重新进行第一次点击
+                Toast.makeText(MainActivity.this,"再点一次退出",Toast.LENGTH_SHORT).show();
+                isPressedBackOnce = true;
+                first = System.currentTimeMillis();
+            }else {
+                //直接退出
+                finish();;
+                isPressedBackOnce = false;
+                first =0;
+                second =0;
+            }
+        }else {
+            //没有点击
+            Toast.makeText(MainActivity.this,"再点一次退出",Toast.LENGTH_SHORT).show();
+            isPressedBackOnce = true;
+            first = System.currentTimeMillis();
+        }
+    }
 }

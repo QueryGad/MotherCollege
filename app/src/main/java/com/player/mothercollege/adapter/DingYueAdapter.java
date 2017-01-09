@@ -5,7 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.DingYueBean;
@@ -54,6 +56,7 @@ public class DingYueAdapter extends BaseAdapter{
             holder.iv_me_dingyue = (ImageView) view.findViewById(R.id.iv_me_dingyue);
             holder.tv_me_dingyue_title = (TextView) view.findViewById(R.id.tv_me_dingyue_title);
             holder.tv_me_dingyue_viewCount = (TextView) view.findViewById(R.id.tv_me_dingyue_viewCount);
+            holder.ll_me_dingyue = (LinearLayout) view.findViewById(R.id.ll_me_dingyue);
             view.setTag(holder);
         }else {
             view = convertView;
@@ -65,6 +68,13 @@ public class DingYueAdapter extends BaseAdapter{
         holder.tv_me_dingyue_title.setText(lists.get(position).getTitle());
 
         holder.tv_me_dingyue_viewCount.setText(lists.get(position).getViewCount()+"人已订阅");
+        final String sid = lists.get(position).getSid();
+        holder.ll_me_dingyue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"跳转至课堂链接",Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
@@ -72,5 +82,6 @@ public class DingYueAdapter extends BaseAdapter{
         private ImageView iv_me_dingyue;
         private TextView tv_me_dingyue_title;
         private TextView tv_me_dingyue_viewCount;
+        private LinearLayout ll_me_dingyue;
     }
 }
