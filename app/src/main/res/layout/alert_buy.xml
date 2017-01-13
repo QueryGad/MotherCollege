@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_bzzb_dingyue"
+    android:layout_height="180dip"
+    android:layout_width="match_parent"
+    android:background="#000"
+    android:gravity="center"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="#fff"
+        android:text="提示:\n订阅后可观看该课程全部课程"/>
+    <Button
+        android:id="@+id/btn_bzzb_dingyue"
+        android:layout_marginTop="10dp"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:textSize="16sp"
+        android:textColor="#fff"
+        android:background="@color/cmbkb_red"
+        android:text="订阅"/>
+</LinearLayout>

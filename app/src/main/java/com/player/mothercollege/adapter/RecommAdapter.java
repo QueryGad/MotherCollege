@@ -17,7 +17,6 @@ import com.player.mothercollege.college.details.ClassDetailsActivity;
 import com.player.mothercollege.college.details.OriginalDetailsActivity;
 import com.player.mothercollege.college.details.ReadBookDetailsActivity;
 import com.player.mothercollege.utils.DensityUtils;
-import com.player.mothercollege.utils.MyLog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,6 +29,11 @@ public class RecommAdapter extends BaseAdapter{
 
     private Context context;
     private List<RecommBean.ListBean> lists = new ArrayList<>();
+    private List<RecommBean.ListBean> reads = new ArrayList<>();
+    private List<RecommBean.ListBean> videos = new ArrayList<>();
+    private List<RecommBean.ListBean> classs = new ArrayList<>();
+    private List<RecommBean.ListBean> originals = new ArrayList<>();
+
 
     public RecommAdapter(Context context, List lists) {
         super();
@@ -56,31 +60,15 @@ public class RecommAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View view = View.inflate(context, R.layout.item_college_recomm,null);
-
-        LinearLayout ll_recomm_ds_title = (LinearLayout) view.findViewById(R.id.ll_recomm_ds_title);
-        LinearLayout ll_recomm_zb_title = (LinearLayout) view.findViewById(R.id.ll_recomm_zb_title);
-        LinearLayout ll_recomm_kt_title = (LinearLayout) view.findViewById(R.id.ll_recomm_kt_title);
-        LinearLayout ll_recomm_yc_title = (LinearLayout) view.findViewById(R.id.ll_recomm_yc_title);
-
-        LinearLayout ll_recomm_dsview = (LinearLayout) view.findViewById(R.id.ll_recomm_dsview);
-        LinearLayout ll_recomm_zbview = (LinearLayout) view.findViewById(R.id.ll_recomm_zbview);
-        LinearLayout ll_recomm_ktview = (LinearLayout) view.findViewById(R.id.ll_recomm_ktview);
-        LinearLayout ll_recomm_ycview = (LinearLayout) view.findViewById(R.id.ll_recomm_ycview);
-
-
-        View viewChild = View.inflate(context,R.layout.adapter_recommd_list,null);
-        ImageView iv_recomm = (ImageView) viewChild.findViewById(R.id.iv_recomm);
-        TextView tv_recomm_title = (TextView) viewChild.findViewById(R.id.tv_recomm_title);
-        TextView tv_recomm_date = (TextView) viewChild.findViewById(R.id.tv_recomm_date);
-        TextView tv_recomm_money = (TextView) viewChild.findViewById(R.id.tv_recomm_money);
-        TextView tv_recomm_editor = (TextView) viewChild.findViewById(R.id.tv_recomm_editor);
-        TextView tv_recomm_viewCount = (TextView) viewChild.findViewById(R.id.tv_recomm_viewCount);
-        LinearLayout ll_college_recomm = (LinearLayout) viewChild.findViewById(R.id.ll_college_recomm);
-        Picasso.with(context).load(lists.get(position).getImg())
-                .resize(DensityUtils.dip2px(context,116f),DensityUtils.dip2px(context,63.5f))
-                .centerCrop().into(iv_recomm);
-        tv_recomm_title.setText(lists.get(position).getTitle());
-        tv_recomm_date.setText(lists.get(position).getDate());
+        ImageView iv_recomm_type = (ImageView) view.findViewById(R.id.iv_recomm_type);
+        TextView tv_recomm_type = (TextView) view.findViewById(R.id.tv_recomm_type);
+        LinearLayout ll_college_recomm = (LinearLayout) view.findViewById(R.id.ll_college_recomm);
+        ImageView iv_recomm = (ImageView) view.findViewById(R.id.iv_recomm);
+        TextView tv_recomm_date = (TextView) view.findViewById(R.id.tv_recomm_date);
+        TextView tv_recomm_title = (TextView) view.findViewById(R.id.tv_recomm_title);
+        TextView tv_recomm_editor = (TextView) view.findViewById(R.id.tv_recomm_editor);
+        TextView tv_recomm_viewCount = (TextView) view.findViewById(R.id.tv_recomm_viewCount);
+        TextView tv_recomm_money = (TextView) view.findViewById(R.id.tv_recomm_money);
         String aState = lists.get(position).getAState();
         if (aState.equals("0")){
             tv_recomm_money.setVisibility(View.GONE);
@@ -89,6 +77,11 @@ public class RecommAdapter extends BaseAdapter{
         }else if (aState.equals("2")){
             tv_recomm_money.setText("收费");
         }
+        Picasso.with(context).load(lists.get(position).getImg())
+                .resize(DensityUtils.dip2px(context,116f),DensityUtils.dip2px(context,63.5f))
+                .centerCrop().into(iv_recomm);
+        tv_recomm_title.setText(lists.get(position).getTitle());
+        tv_recomm_date.setText(lists.get(position).getDate());
         tv_recomm_editor.setText(lists.get(position).getEditor());
         tv_recomm_editor.setTextColor(Color.RED);
         tv_recomm_viewCount.setText(lists.get(position).getViewCount()+"人已看");
@@ -101,15 +94,23 @@ public class RecommAdapter extends BaseAdapter{
 
         //分类
         //切割type
+        reads.clear();
+        videos.clear();
+        classs.clear();
+        originals.clear();
         type = type.substring(0,2);
         if (type.equals("a0")){
+            reads.add(lists.get(position));
+            if (reads.size()==1){
+                iv_recomm_type.setVisibility(View.VISIBLE);
+                tv_recomm_type.setVisibility(View.VISIBLE);
+                iv_recomm_type.setImageResource(R.mipmap.ic_college_readbook);
+                tv_recomm_type.setText("读书");
+            }else {
+                iv_recomm_type.setVisibility(View.GONE);
+                tv_recomm_type.setVisibility(View.GONE);
+            }
 
-            ll_recomm_ds_title.setVisibility(View.VISIBLE);
-            ll_recomm_zb_title.setVisibility(View.GONE);
-            ll_recomm_kt_title.setVisibility(View.GONE);
-            ll_recomm_yc_title.setVisibility(View.GONE);
-
-            ll_recomm_dsview.addView(viewChild);
             ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -117,17 +118,20 @@ public class RecommAdapter extends BaseAdapter{
                     Intent intent = new Intent(context,ReadBookDetailsActivity.class);
                     intent.putExtra("sid",sid);
                     context.startActivity(intent);
-
                 }
             });
         }else if (type.equals("a1")){
+            videos.add(lists.get(position));
+            if (videos.size()==1){
+                iv_recomm_type.setVisibility(View.VISIBLE);
+                tv_recomm_type.setVisibility(View.VISIBLE);
+                iv_recomm_type.setImageResource(R.mipmap.ic_college_zhibo);
+                tv_recomm_type.setText("直播");
+            }else {
+                iv_recomm_type.setVisibility(View.GONE);
+                tv_recomm_type.setVisibility(View.GONE);
+            }
 
-            ll_recomm_ds_title.setVisibility(View.GONE);
-            ll_recomm_zb_title.setVisibility(View.VISIBLE);
-            ll_recomm_kt_title.setVisibility(View.GONE);
-            ll_recomm_yc_title.setVisibility(View.GONE);
-
-            ll_recomm_zbview.addView(viewChild);
             ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -138,13 +142,17 @@ public class RecommAdapter extends BaseAdapter{
                 }
             });
         }else if (type.equals("a2")){
+            classs.add(lists.get(position));
+            if (classs.size()==1){
+                iv_recomm_type.setVisibility(View.VISIBLE);
+                tv_recomm_type.setVisibility(View.VISIBLE);
+                iv_recomm_type.setImageResource(R.mipmap.ic_college_class);
+                tv_recomm_type.setText("课堂");
+            }else {
+                iv_recomm_type.setVisibility(View.GONE);
+                tv_recomm_type.setVisibility(View.GONE);
+            }
 
-            ll_recomm_ds_title.setVisibility(View.GONE);
-            ll_recomm_zb_title.setVisibility(View.GONE);
-            ll_recomm_kt_title.setVisibility(View.VISIBLE);
-            ll_recomm_yc_title.setVisibility(View.GONE);
-
-            ll_recomm_ktview.addView(viewChild);
             ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -158,13 +166,17 @@ public class RecommAdapter extends BaseAdapter{
                 }
             });
         }else if (type.equals("a3")){
-            MyLog.testLog("消除");
-            ll_recomm_ds_title.setVisibility(View.GONE);
-            ll_recomm_zb_title.setVisibility(View.GONE);
-            ll_recomm_kt_title.setVisibility(View.GONE);
-            ll_recomm_yc_title.setVisibility(View.VISIBLE);
+            originals.add(lists.get(position));
+            if (originals.size()==1){
+                iv_recomm_type.setVisibility(View.VISIBLE);
+                tv_recomm_type.setVisibility(View.VISIBLE);
+                iv_recomm_type.setImageResource(R.mipmap.ic_college_yuanchuang);
+                tv_recomm_type.setText("原创");
+            }else {
+                iv_recomm_type.setVisibility(View.GONE);
+                tv_recomm_type.setVisibility(View.GONE);
+            }
 
-            ll_recomm_ycview.addView(viewChild);
             ll_college_recomm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -175,6 +187,7 @@ public class RecommAdapter extends BaseAdapter{
                 }
             });
         }
+
         return view;
     }
 

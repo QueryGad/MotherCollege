@@ -151,6 +151,7 @@
         android:layout_height="48.5dp"
         android:gravity="center_vertical"
         android:clickable="true"
+        android:visibility="gone"
         android:background="@drawable/press_selector"
         android:orientation="horizontal">
         <ImageView

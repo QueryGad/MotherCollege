@@ -24,12 +24,18 @@ public class FrendMessageActivity extends BaseActivity{
 
     @Override
     public void initViews() {
+
+
         fl_message = (FrameLayout) findViewById(R.id.fl_message);
         conversationListFragment = new EaseConversationListFragment();
+//        EMClient.getInstance().chatManager().getConversation();
+
         conversationListFragment.setConversationListItemClickListener(new EaseConversationListFragment.EaseConversationListItemClickListener() {
             @Override
             public void onListItemClicked(EMConversation conversation) {
-                startActivity(new Intent(FrendMessageActivity.this,ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID,conversation.getUserName()));
+
+                startActivity(new Intent(FrendMessageActivity.this,ChatActivity.class)
+                        .putExtra(EaseConstant.EXTRA_USER_ID,conversation.getUserName()));
             }
         });
         getSupportFragmentManager().beginTransaction().add(R.id.fl_message,conversationListFragment).commit();

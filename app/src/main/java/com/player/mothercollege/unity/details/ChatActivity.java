@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 
 import com.hyphenate.easeui.EaseConstant;
-import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
@@ -26,6 +25,7 @@ public class ChatActivity extends BaseActivity {
     public void initViews() {
 
         String snsUid = getIntent().getStringExtra("snsUid");
+        String niceName = getIntent().getStringExtra("niceName");
 
         fl_chat = (FrameLayout) findViewById(R.id.fl_chat);
 
@@ -36,7 +36,6 @@ public class ChatActivity extends BaseActivity {
         args.putInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         args.putString(EaseConstant.EXTRA_USER_ID, snsUid);
         chatFragment.setArguments(args);
-        EaseUI easeUI = EaseUI.getInstance();
 
         getSupportFragmentManager().beginTransaction().add(R.id.fl_chat, chatFragment).commit();
     }

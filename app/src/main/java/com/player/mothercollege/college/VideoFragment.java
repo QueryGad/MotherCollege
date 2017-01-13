@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
@@ -88,7 +89,7 @@ public class VideoFragment extends Fragment{
 
             @Override
             public void onFailed(int what, Response<String> response) {
-
+                Toast.makeText(getActivity(),"网络已断开,请检查您的网络!",Toast.LENGTH_SHORT).show();
             }
 
             @Override

@@ -646,6 +646,7 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
             ImageView iv_person_zan = (ImageView) view.findViewById(R.id.iv_person_zan);
             zlistList = readBookDetailsBean.getZlist();
             String uicon = zlistList.get(position).getUicon();
+            final String toUid = zlistList.get(position).getUid();
             if (uicon==null){
                 iv_person_zan.setImageResource(R.mipmap.head_me_nor);
             }else {
@@ -659,6 +660,7 @@ public class OriginalDetailsActivity extends BaseActivity implements View.OnClic
                 public void onClick(View v) {
                     //点击头像进入他人主页
                     Intent intent = new Intent(OriginalDetailsActivity.this, HeadIconActivity.class);
+                    intent.putExtra("toUid", toUid);
                     startActivity(intent);
                 }
             });

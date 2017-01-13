@@ -267,6 +267,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                         //聊天
                         Intent intent = new Intent(HeadIconActivity.this, ChatActivity.class);
                         intent.putExtra("snsUid",snsUid);
+                        intent.putExtra("niceName",niceName);
                         startActivity(intent);
                     }else {
                         Toast.makeText(HeadIconActivity.this,"必须关注后才可以聊天哦!",Toast.LENGTH_SHORT).show();
@@ -404,7 +405,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                     boolean isSuccess = json.getBoolean("isSuccess");
                     if (isSuccess){
                         Toast.makeText(HeadIconActivity.this,"取消关注成功",Toast.LENGTH_SHORT).show();
-                        //// TODO: 2017/1/1
+
                         tv_otherperson_guanzhu.setText("关注");
                         try {
 //                            EMClient.getInstance().contactManager().addContact(niceName, "请求添加为好友");

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.adapter.ZhuanJiaAdapter;
 import com.player.mothercollege.bean.ZhuanJiaBean;
+import com.player.mothercollege.utils.CacheUtils;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -72,6 +74,10 @@ public class ZhuanJiaFragment extends Fragment implements MyUpDownListView.OnRef
     }
 
     private void initData() {
+        String cacheJson = CacheUtils.getCache(getActivity(), ConfigUtils.UNITY_URL + "unity_zhuanjia");
+        if (!TextUtils.isEmpty(cacheJson)){
+            parseJson(cacheJson);
+        }
         netWork();
     }
 
@@ -94,6 +100,7 @@ public class ZhuanJiaFragment extends Fragment implements MyUpDownListView.OnRef
                 String info = response.get();
                 MyLog.testLog("专家咨询"+info);
                 parseJson(info);
+                CacheUtils.saveCache(getActivity(),ConfigUtils.UNITY_URL + "unity_zhuanjia",info);
             }
 
             @Override

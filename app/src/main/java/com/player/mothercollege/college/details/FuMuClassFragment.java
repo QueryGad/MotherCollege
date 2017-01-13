@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.ClassBean;
+import com.player.mothercollege.utils.CacheUtils;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -57,6 +59,10 @@ public class FuMuClassFragment extends Fragment{
     }
 
     private void initData() {
+        String cacheJson = CacheUtils.getCache(getActivity(), ConfigUtils.COLLEGE_URL + "class_fumu");
+        if (!TextUtils.isEmpty(cacheJson)){
+            parseJson(cacheJson);
+        }
         netWork();
     }
 
@@ -78,6 +84,7 @@ public class FuMuClassFragment extends Fragment{
                 String info = response.get();
                 MyLog.testLog("课堂数据"+info);
                 parseJson(info);
+                CacheUtils.saveCache(getActivity(),ConfigUtils.COLLEGE_URL + "class_fumu",info);
             }
 
             @Override

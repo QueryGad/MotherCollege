@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -41,6 +42,7 @@ import com.player.mothercollege.bean.ClassDetailsBean;
 import com.player.mothercollege.bean.TakeVideoBean;
 import com.player.mothercollege.login.LoginActivity;
 import com.player.mothercollege.utils.ConfigUtils;
+import com.player.mothercollege.utils.DensityUtils;
 import com.player.mothercollege.utils.MediaUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -64,7 +66,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/12/6.
  */
-public class ClassDetailsActivity extends BaseActivity implements View.OnClickListener {
+public class ClassDetailsActivity extends BaseActivity implements View.OnClickListener,ClassDetailsFragment.ItemListener {
 
 
     private static final int GET_CLASS_DETAILS_DATA = 001;
@@ -97,11 +99,10 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private PowerManager.WakeLock wakeLock;
     private View rootView;
 
-    private LinearLayout ll_bzzb_dingyue;
-    private Button btn_bzzb_dingyue;
+    private PopupWindow popupWindow;
+
 
     private String sid;
-    private String url;
     private RadioGroup.OnCheckedChangeListener ClassDeatilsListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -120,6 +121,8 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     private String uid;
     private List<ClassDetailsBean.VideosBean> videosList = new ArrayList<>();
     private String imgVideo;
+    private int price;
+    private boolean hasBuy;
 
     @Override
     public void setContentView() {
@@ -180,8 +183,6 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         iv_videodetails_zan = (ImageView) findViewById(R.id.iv_videodetails_zan);
         iv_videodetails_collect = (ImageView) findViewById(R.id.iv_videodetails_collect);
 
-        ll_bzzb_dingyue = (LinearLayout) findViewById(R.id.ll_bzzb_dingyue);
-        btn_bzzb_dingyue = (Button) findViewById(R.id.btn_bzzb_dingyue);
         //设置默认
         getSupportFragmentManager().beginTransaction().add(R.id.fl_video,classDetails).commit();
         rb_frg_details.setChecked(true);
@@ -276,6 +277,40 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
+    private void buyDialog(){
+        View viewDialog = View.inflate(this,R.layout.alert_buy,null);
+        popupWindow = new PopupWindow(viewDialog, WindowManager.LayoutParams.MATCH_PARENT,
+                DensityUtils.dip2px(ClassDetailsActivity.this,180));
+        popupWindow.setContentView(viewDialog);
+        Button btn_bzzb_dingyue = (Button) viewDialog.findViewById(R.id.btn_bzzb_dingyue);
+        btn_bzzb_dingyue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //弹对话框 是否确定订阅
+                AlertDialog.Builder builder = new AlertDialog.Builder(ClassDetailsActivity.this);
+
+                builder.setTitle("温馨提示");
+                builder.setMessage("是否选择花费"+price+"智慧币订阅此课程?");
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //付费凭证
+                        postSmartMoney();
+                    }
+                });
+                dialog = builder.show();
+            }
+        });
+        View rootView = LayoutInflater.from(ClassDetailsActivity.this).inflate(R.layout.act_college_bzzbdetails,null);
+        popupWindow.showAtLocation(viewDialog,Gravity.TOP,0,0);
+    }
+
     private void parseJson(String info) {
         Gson gson = new Gson();
         ClassDetailsBean classDetailsBean = gson.fromJson(info, ClassDetailsBean.class);
@@ -296,48 +331,21 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
         }
 
         int payType = courseInfo.getPayType();
-        boolean hasBuy = courseInfo.isHasBuy();
-        final int price = courseInfo.getPrice();
+        hasBuy = courseInfo.isHasBuy();
+        price = courseInfo.getPrice();
         if (payType==0){
             //免费
-            ll_bzzb_dingyue.setVisibility(View.GONE);
-            initVideo();
+            initVideo(url,titleVideo,imgVideo);
         }else if (payType==1){
             //限免
-            ll_bzzb_dingyue.setVisibility(View.GONE);
-            initVideo();
+            initVideo(url,titleVideo,imgVideo);
         }else if (payType==2){
             //智慧币
             if (hasBuy){
-                ll_bzzb_dingyue.setVisibility(View.GONE);
-                initVideo();
+                initVideo(url,titleVideo,imgVideo);
             }else {
                 //订阅
-                ll_bzzb_dingyue.setVisibility(View.VISIBLE);
-                btn_bzzb_dingyue.setOnClickListener(new View.OnClickListener() {
-                    AlertDialog dialog = null;
-                    @Override
-                    public void onClick(View v) {
-                        //弹对话框 是否确定订阅
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ClassDetailsActivity.this);
-                        builder.setTitle("温馨提示");
-                        builder.setMessage("是否选择花费"+price+"智慧币订阅此课程?");
-                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //付费凭证
-                                postSmartMoney();
-                            }
-                        });
-                        dialog = builder.show();
-                    }
-                });
+                buyDialog();
             }
         }
     }
@@ -411,14 +419,16 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
                 boolean isSuccess = takeVideoBean.isIsSuccess();
                 String resultCode = takeVideoBean.getResultCode();
                 if (resultCode.equals("1")){
-                    ll_bzzb_dingyue.setVisibility(View.GONE);
-                    initVideo();
+                    initVideo(url,titleVideo,imgVideo);
                 }else if (resultCode.equals("2004")){
                     //未登录  提示登录
                     Intent intent = new Intent(ClassDetailsActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }else if (resultCode.equals("3003")){
                     Toast.makeText(ClassDetailsActivity.this,"智慧币不足,请转至-我的-智慧币-充值,进行充值服务!",Toast.LENGTH_SHORT).show();
+                }else if (resultCode.equals("2001")){
+                    Toast.makeText(ClassDetailsActivity.this,"订阅失败,请稍候重试!",Toast.LENGTH_SHORT).show();
+
                 }
 
             }
@@ -436,11 +446,13 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private String titleVideo;
-    private void initVideo() {
+    private String url;
+    private void initVideo(String urls, String titles, final String imgs) {
 
         VideoijkBean ml = new VideoijkBean();
-        ml.setUrl(url);
-        list.add(ml);
+        ml.setUrl(urls);
+        MyLog.testLog("url地址:"+urls);
+//        list.add(ml);
         player = new PlayerView(this){
             @Override
             public PlayerView toggleProcessDurationOrientation() {
@@ -453,7 +465,7 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
                 return super.setPlaySource(list);
             }
         }
-                .setTitle(titleVideo)
+                .setTitle(titles)
                 .setProcessDurationOrientation(PlayStateParams.PROCESS_PORTRAIT)
                 .setScaleType(PlayStateParams.fillparent)
                 .forbidTouch(false)
@@ -463,13 +475,13 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onShowThumbnail(ImageView ivThumbnail) {
                         Glide.with(ClassDetailsActivity.this)
-                                .load(imgVideo)
+                                .load(imgs)
                                 .placeholder(R.color.cl_default)
                                 .error(R.color.cl_error)
                                 .into(ivThumbnail);
                     }
                 })
-                .setPlaySource(list)
+                .setPlaySource(urls)
                 .setChargeTie(true,60)
                 .startPlay();
     }
@@ -846,4 +858,13 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
 
+    @Override
+    public void sendContent(String sid, String urls, String titles,String imgs) {
+
+        MyLog.testLog("是否拿到数据:"+sid+","+urls+","+titles+","+imgs);
+        if (hasBuy){
+            initVideo(urls,titles,imgs);
+        }
+
+    }
 }

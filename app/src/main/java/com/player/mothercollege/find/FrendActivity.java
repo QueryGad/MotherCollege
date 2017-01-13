@@ -1,6 +1,7 @@
 package com.player.mothercollege.find;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -59,6 +60,8 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
     private String inviteCode;
     private String apptoken;
     private String uid;
+
+    private ProgressDialog pd;
 
     @Override
     public void setContentView() {
@@ -145,15 +148,16 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
         requestQueue.add(GET_QR_DATA, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-
+                pd = new ProgressDialog(FrendActivity.this);
+                pd.show();
             }
 
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("二维码页面:"+info);
-                CacheUtils.saveCache(FrendActivity.this,ConfigUtils.COLLEGE_URL + "qr_code",info);
                 parseJson(info);
+                CacheUtils.saveCache(FrendActivity.this,ConfigUtils.COLLEGE_URL + "qr_code",info);
             }
 
             @Override
@@ -163,7 +167,7 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void onFinish(int what) {
-
+                pd.dismiss();
             }
         });
     }

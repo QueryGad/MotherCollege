@@ -55,6 +55,8 @@ public class PersonAdapter extends BaseAdapter{
         apptoken = PrefUtils.getString(context, "apptoken", "");
     }
 
+
+
     @Override
     public int getCount() {
         return lists.size();
@@ -158,6 +160,8 @@ public class PersonAdapter extends BaseAdapter{
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             deleteArticle(tid);
+                            lists.remove(position);
+                            notifyDataSetChanged();
                         }
                     });
                     builder.show();
@@ -188,6 +192,7 @@ public class PersonAdapter extends BaseAdapter{
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("删除帖子:"+info);
+                notifyDataSetChanged();
             }
 
             @Override

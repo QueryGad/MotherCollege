@@ -6,32 +6,29 @@ import java.util.List;
  * Created by Administrator on 2016/10/18.
  */
 public class DingYueBean {
+
     /**
-     * currentPageSize : 5
-     * lastIndex : 5
-     * myPayClass : [{"date":"2016-10-18","editor":"斯琴高娃","img":"http://121.42.31.133:8201/m/img/8.png","sid":"s00335","title":"端正孩子的从众心里","viewCount":972},{"date":"2016-10-18","editor":"李峰","img":"http://121.42.31.133:8201/m/img/8.png","sid":"s00353","title":"亲子解读","viewCount":275},{"date":"2016-10-18","editor":"孙正茂","img":"http://121.42.31.133:8201/m/img/3.png","sid":"s00915","title":"最美中国妈妈","viewCount":961},{"date":"2016-10-18","editor":"曾丽友","img":"http://121.42.31.133:8201/m/img/5.png","sid":"s00209","title":"心理营养大餐","viewCount":533},{"date":"2016-10-18","editor":"万长春","img":"http://121.42.31.133:8201/m/img/1.png","sid":"s00705","title":"心理营养大餐","viewCount":50}]
+     * lastIndex : 2
+     * currentPageSize : 2
+     * myPayClass : [{"sid":"COU1611180002","buyCount":2,"editor":"","title":"课程标题（有课时数据）","stype":12,"img":"http://localhost:8765/upload/image/20161117/20161117194630_2730.jpg","vtype":0,"date":"2016-12-04","url":"http://200036379.vod.myqcloud.com/200036379_dfde072c4f3b4d5c91ec4c47b8bc59e3.f220.av.m3u8","viewCount":0}]
      */
 
-    private int currentPageSize;
     private int lastIndex;
+    private int currentPageSize;
     /**
-     * date : 2016-10-18
-     * editor : 斯琴高娃
-     * img : http://121.42.31.133:8201/m/img/8.png
-     * sid : s00335
-     * title : 端正孩子的从众心里
-     * viewCount : 972
+     * sid : COU1611180002
+     * buyCount : 2
+     * editor :
+     * title : 课程标题（有课时数据）
+     * stype : 12
+     * img : http://localhost:8765/upload/image/20161117/20161117194630_2730.jpg
+     * vtype : 0
+     * date : 2016-12-04
+     * url : http://200036379.vod.myqcloud.com/200036379_dfde072c4f3b4d5c91ec4c47b8bc59e3.f220.av.m3u8
+     * viewCount : 0
      */
 
     private List<MyPayClassBean> myPayClass;
-
-    public int getCurrentPageSize() {
-        return currentPageSize;
-    }
-
-    public void setCurrentPageSize(int currentPageSize) {
-        this.currentPageSize = currentPageSize;
-    }
 
     public int getLastIndex() {
         return lastIndex;
@@ -39,6 +36,14 @@ public class DingYueBean {
 
     public void setLastIndex(int lastIndex) {
         this.lastIndex = lastIndex;
+    }
+
+    public int getCurrentPageSize() {
+        return currentPageSize;
+    }
+
+    public void setCurrentPageSize(int currentPageSize) {
+        this.currentPageSize = currentPageSize;
     }
 
     public List<MyPayClassBean> getMyPayClass() {
@@ -50,19 +55,31 @@ public class DingYueBean {
     }
 
     public static class MyPayClassBean {
-        private String date;
-        private String editor;
-        private String img;
         private String sid;
+        private int buyCount;
+        private String editor;
         private String title;
+        private int stype;
+        private String img;
+        private int vtype;
+        private String date;
+        private String url;
         private int viewCount;
 
-        public String getDate() {
-            return date;
+        public String getSid() {
+            return sid;
         }
 
-        public void setDate(String date) {
-            this.date = date;
+        public void setSid(String sid) {
+            this.sid = sid;
+        }
+
+        public int getBuyCount() {
+            return buyCount;
+        }
+
+        public void setBuyCount(int buyCount) {
+            this.buyCount = buyCount;
         }
 
         public String getEditor() {
@@ -73,6 +90,22 @@ public class DingYueBean {
             this.editor = editor;
         }
 
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public int getStype() {
+            return stype;
+        }
+
+        public void setStype(int stype) {
+            this.stype = stype;
+        }
+
         public String getImg() {
             return img;
         }
@@ -81,20 +114,28 @@ public class DingYueBean {
             this.img = img;
         }
 
-        public String getSid() {
-            return sid;
+        public int getVtype() {
+            return vtype;
         }
 
-        public void setSid(String sid) {
-            this.sid = sid;
+        public void setVtype(int vtype) {
+            this.vtype = vtype;
         }
 
-        public String getTitle() {
-            return title;
+        public String getDate() {
+            return date;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
         }
 
         public int getViewCount() {

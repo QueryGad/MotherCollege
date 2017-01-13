@@ -1,16 +1,17 @@
 package com.player.mothercollege.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.player.mothercollege.R;
 import com.player.mothercollege.bean.DingYueBean;
+import com.player.mothercollege.college.details.ClassDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -69,10 +70,18 @@ public class DingYueAdapter extends BaseAdapter{
 
         holder.tv_me_dingyue_viewCount.setText(lists.get(position).getViewCount()+"人已订阅");
         final String sid = lists.get(position).getSid();
+        final String title = lists.get(position).getTitle();
+        final String img = lists.get(position).getImg();
+        final String url = lists.get(position).getUrl();
         holder.ll_me_dingyue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"跳转至课堂链接",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, ClassDetailsActivity.class);
+                intent.putExtra("sid",sid);
+                intent.putExtra("url",url);
+                intent.putExtra("img",img);
+                intent.putExtra("title",title);
+                context.startActivity(intent);
             }
         });
         return view;

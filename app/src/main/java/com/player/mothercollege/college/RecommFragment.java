@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
@@ -21,6 +23,7 @@ import com.player.mothercollege.college.details.OriginalDetailsActivity;
 import com.player.mothercollege.college.details.ReadBookDetailsActivity;
 import com.player.mothercollege.find.MarketActivity;
 import com.player.mothercollege.unity.details.ActivityDetailsActivity;
+import com.player.mothercollege.utils.CacheUtils;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -120,6 +123,10 @@ public class RecommFragment extends Fragment implements MyUpRefreshListview.OnRe
     }
 
     private void initData() {
+        String cacheJson = CacheUtils.getCache(getActivity(), ConfigUtils.COLLEGE_URL + "college_recomm");
+        if (!TextUtils.isEmpty(cacheJson)){
+            parseJson(cacheJson);
+        }
         netWork();
     }
 
@@ -141,12 +148,12 @@ public class RecommFragment extends Fragment implements MyUpRefreshListview.OnRe
                 String info = response.get();
                 Log.e("推荐页面:",info);
                 parseJson(info);
-
+                CacheUtils.saveCache(getActivity(),ConfigUtils.COLLEGE_URL + "college_recomm",info);
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-
+                Toast.makeText(getActivity(),"网络已断开,请检查您的网络!",Toast.LENGTH_SHORT).show();
             }
 
             @Override

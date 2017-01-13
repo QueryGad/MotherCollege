@@ -23,7 +23,7 @@ import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
 import com.player.mothercollege.view.GlideCircleTransform;
-import com.player.mothercollege.view.MyUpMoreListview;
+import com.player.mothercollege.view.MyUpDownListView;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -38,7 +38,7 @@ import java.util.List;
  * Created by Administrator on 2016/11/3.
  * 圈子详情
  */
-public class CirleDetailsActivity extends BaseActivity implements View.OnClickListener,MyUpMoreListview.OnRefreshListener{
+public class CirleDetailsActivity extends BaseActivity implements View.OnClickListener,MyUpDownListView.OnRefreshListener{
 
     private static final int GET_CIRLEDETAILS_DATA = 001;
     private static final int GET_CIRLEDETAILSTITLE_DATA = 002;
@@ -47,7 +47,7 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
     private static final int GET_MORE_DATA = 005;
     private Button btn_back;
     private TextView tv_details_title;
-    private MyUpMoreListview lv_cirledetails;
+    private MyUpDownListView lv_cirledetails;
     private RequestQueue requestQueue;
     private String groupId;
     private RequestManager glideRequest;
@@ -74,10 +74,11 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
 
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
-        lv_cirledetails = (MyUpMoreListview) findViewById(R.id.lv_cirledetails);
+        lv_cirledetails = (MyUpDownListView) findViewById(R.id.lv_cirledetails);
         iv_cirle_edit = (ImageView) findViewById(R.id.iv_cirle_edit);
 
         lv_cirledetails.setOnRefreshListener(this);
+
     }
 
     @Override
@@ -320,6 +321,25 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
+    public void onDownPullRefresh() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                SystemClock.sleep(500);
+                lastIndex = 0;
+                netWorkDetails();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                lv_cirledetails.hideHeaderView();
+            }
+        }.execute();
+    }
+
+    @Override
     public void onLoadingMore() {
         new AsyncTask<Void, Void, Void>() {
 
@@ -384,4 +404,9 @@ public class CirleDetailsActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        netWorkDetails();
+    }
 }

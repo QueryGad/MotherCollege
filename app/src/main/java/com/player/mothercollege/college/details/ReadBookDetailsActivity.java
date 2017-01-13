@@ -666,6 +666,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
             View view = View.inflate(ReadBookDetailsActivity.this, R.layout.item_details_personzan,null);
             iv_person_zan = (ImageView) view.findViewById(R.id.iv_person_zan);
             String uicon = readBookDetailsBean.getZlist().get(position).getUicon();
+            final String toUid = readBookDetailsBean.getZlist().get(position).getUid();
             if (uicon==null){
                 iv_person_zan.setImageResource(R.mipmap.head_me_nor);
             }else {
@@ -679,7 +680,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                 public void onClick(View v) {
                     //点击头像进入他人主页
                     Intent intent = new Intent(ReadBookDetailsActivity.this, HeadIconActivity.class);
-
+                    intent.putExtra("toUid", toUid);
                     startActivity(intent);
                 }
             });

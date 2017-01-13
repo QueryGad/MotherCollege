@@ -50,12 +50,13 @@ public class ListAddressActivity extends BaseActivity{
         contactListFragment = new EaseContactListFragment();
 
         //需要设置联系人列表才能启动fragment；
-        new Thread(){
-            @Override
-            public void run() {
-                contactListFragment.setContactsMap(getContacts());
-            }
-        }.start();
+        contactListFragment.setContactsMap(getContacts());
+//        new Thread(){
+//            @Override
+//            public void run() {
+//                contactListFragment.setContactsMap(getContacts());
+//            }
+//        }.start();
 
         //设置点击事件
         contactListFragment.setContactListItemClickListener(new EaseContactListFragment.EaseContactListItemClickListener() {
@@ -109,18 +110,23 @@ public class ListAddressActivity extends BaseActivity{
 //                        contacts.put("myFriends",myFriends.get(i));
                     String icon = myFriends.get(i).getIcon();
                     String niceName = myFriends.get(i).getNiceName();
+                    String snsUid = myFriends.get(i).getSnsUid();
                     user = new EaseUser(niceName);
                     user.setInitialLetter(niceName);
                     user.setAvatar(icon);
+                    contacts.put(snsUid,new EaseUser(snsUid));
                 }
-
                 try {
                     List<String> userNames =  EMClient.getInstance().contactManager().getAllContactsFromServer();
+
                     for (String userId : userNames){
                         contacts.put(userId,new EaseUser(userId));
+                        MyLog.testLog("userId:"+userId);
+                        MyLog.testLog("走到了吗");
                     }
                 } catch (HyphenateException e) {
-                    e.printStackTrace();
+                    MyLog.testLog("我被cathc");
+
                 }
 
 //                contacts.put("myFriends",user);

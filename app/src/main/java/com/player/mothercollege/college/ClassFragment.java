@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.player.mothercollege.R;
@@ -18,6 +20,7 @@ import com.player.mothercollege.college.details.ClassDetailsActivity;
 import com.player.mothercollege.college.details.FuMuClassFragment;
 import com.player.mothercollege.college.details.FuQiClassFragment;
 import com.player.mothercollege.college.details.XinLingClassFragment;
+import com.player.mothercollege.utils.CacheUtils;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
 import com.player.mothercollege.utils.PrefUtils;
@@ -123,6 +126,10 @@ public class ClassFragment extends Fragment{
     }
 
     private void initData() {
+        String cacheJson = CacheUtils.getCache(getActivity(), ConfigUtils.COLLEGE_URL + "college_class");
+        if (!TextUtils.isEmpty(cacheJson)){
+            parseJson(cacheJson);
+        }
         netWork();
         //设置OnCheck监听事件
         rg_college_class.setOnCheckedChangeListener(ClassCheckListener);
@@ -146,11 +153,12 @@ public class ClassFragment extends Fragment{
                 String info = response.get();
                 MyLog.testLog("课堂数据"+info);
                 parseJson(info);
+                CacheUtils.saveCache(getActivity(),ConfigUtils.COLLEGE_URL + "college_class",info);
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-
+                Toast.makeText(getActivity(),"网络已断开,请检查您的网络!",Toast.LENGTH_SHORT).show();
             }
 
             @Override

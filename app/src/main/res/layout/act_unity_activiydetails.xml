@@ -20,11 +20,11 @@
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_above="@+id/ll_activitydeatials_line"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="#EEE" />
+        android:background="#000" />
 
     <LinearLayout
         android:id="@+id/ll_activitydeatials_line"
