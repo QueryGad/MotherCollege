@@ -102,7 +102,10 @@ public class GoodFrendFragment extends Fragment implements View.OnClickListener 
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("好友群推荐页面:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override
@@ -129,7 +132,7 @@ public class GoodFrendFragment extends Fragment implements View.OnClickListener 
     }
 
     private void initRecommendUsers() {
-        for (int i =0;i<recommendUsers.size();i++){
+        for ( int i =0;i<recommendUsers.size();i++){
             View viewUsers = View.inflate(getActivity(),R.layout.item_frendqun_recomm,null);
             ImageView iv_frend_icon = (ImageView) viewUsers.findViewById(R.id.iv_frend_icon);
             TextView tv_frend_name = (TextView) viewUsers.findViewById(R.id.tv_frend_name);
@@ -145,6 +148,7 @@ public class GoodFrendFragment extends Fragment implements View.OnClickListener 
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), HeadIconActivity.class);
                     intent.putExtra("toUid",toUid);
+
                     startActivity(intent);
                 }
             });
@@ -154,97 +158,82 @@ public class GoodFrendFragment extends Fragment implements View.OnClickListener 
 
     private void initRecommendGroup() {
 
-        for (int i =0;i<recommendGroup.size();i++){
+        for ( int i =0;i<recommendGroup.size();i++){
             View viewGroup = View.inflate(getActivity(),R.layout.item_frendqun_qun,null);
             ImageView iv_qun_icon = (ImageView) viewGroup.findViewById(R.id.iv_qun_icon);
             TextView tv_qun_name = (TextView) viewGroup.findViewById(R.id.tv_qun_name);
             iv_qun_join = (ImageView) viewGroup.findViewById(R.id.iv_qun_join);
 
             glideRequest = Glide.with(this);
-            glideRequest.load(recommendUsers.get(i).getIcon())
+            glideRequest.load(recommendGroup.get(i).getGroupIcon())
                     .transform(new GlideCircleTransform(getActivity())).into(iv_qun_icon);
             tv_qun_name.setText(recommendGroup.get(i).getGroupName());
             final String groupId = recommendGroup.get(i).getGroupId();
             final int currentUserJoinState = recommendGroup.get(i).getCurrentUserJoinState();
-
-            if (currentUserJoinState==0){
-                //未加入
-                iv_qun_join.setImageResource(R.mipmap.icon_2_join);
-            }else if (currentUserJoinState==1){
-                //审核中
-                iv_qun_join.setImageResource(R.mipmap.icon_applying_join);
-            }else if (currentUserJoinState==2){
-                //通过
-                iv_qun_join.setImageResource(R.mipmap.icon_join);
-            }
-
             iv_qun_join.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (currentUserJoinState==0){
-                       //申请加入群
-                        requestQun(groupId);
-                    }else if (currentUserJoinState==1){
-                        iv_qun_join.setOnClickListener(new View.OnClickListener() {
+                        //未加入
+                        iv_qun_join.setImageResource(R.mipmap.icon_2_join);
+                        //申请加入群
+                        Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.POST);
+                        request.add("apptoken",apptoken);
+                        request.add("op","joinImGroup");
+                        request.add("uid",uid);
+                        request.add("gid",groupId);
+                        requestQueue.add(POST_CANQUN_DATA, request, new OnResponseListener<String>() {
                             @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getActivity(),"正在审核中，请求管理员通过!",Toast.LENGTH_SHORT).show();
+                            public void onStart(int what) {
+
+                            }
+
+                            @Override
+                            public void onSucceed(int what, Response<String> response) {
+                                String info = response.get();
+                                Gson gson = new Gson();
+                                JiaQunBean jiaQunBean = gson.fromJson(info, JiaQunBean.class);
+                                boolean isSuccess = jiaQunBean.isIsSuccess();
+                                String resultInfo = jiaQunBean.getResultInfo();
+                                if (isSuccess){
+                                    iv_qun_join.setImageResource(R.mipmap.icon_join);
+                                }else {
+                                    Toast.makeText(getActivity(),resultInfo,Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailed(int what, Response<String> response) {
+
+                            }
+
+                            @Override
+                            public void onFinish(int what) {
+
                             }
                         });
+                    }else if (currentUserJoinState==1){
+                        //审核中
+                        iv_qun_join.setImageResource(R.mipmap.icon_applying_join);
+                        Toast.makeText(getActivity(),"正在审核中，请求管理员通过!",Toast.LENGTH_SHORT).show();
                     }else if (currentUserJoinState==2){
+                        //通过
+                        iv_qun_join.setImageResource(R.mipmap.icon_join);
                         iv_qun_join.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(getActivity(),"已加入该群!跳转群聊天!",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),"已加入,请在群聊中查看",Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                 }
             });
             ll_group_view.addView(viewGroup);
-
         }
 
     }
 
-    private void requestQun(String groupId) {
-        Request<String> request = NoHttp.createStringRequest(ConfigUtils.UNITY_URL, RequestMethod.POST);
-        request.add("apptoken",apptoken);
-        request.add("op","joinImGroup");
-        request.add("uid",uid);
-        request.add("gid",groupId);
-        MyLog.testLog("gid:"+groupId);
-        requestQueue.add(POST_CANQUN_DATA, request, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
 
-            }
-
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                String info = response.get();
-                Gson gson = new Gson();
-                JiaQunBean jiaQunBean = gson.fromJson(info, JiaQunBean.class);
-                boolean isSuccess = jiaQunBean.isIsSuccess();
-                String resultInfo = jiaQunBean.getResultInfo();
-                if (isSuccess){
-                    iv_qun_join.setImageResource(R.mipmap.icon_join);
-                }else {
-                    Toast.makeText(getActivity(),resultInfo,Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-
-            }
-
-            @Override
-            public void onFinish(int what) {
-
-            }
-        });
-    }
 
 
     @Override

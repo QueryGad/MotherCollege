@@ -147,7 +147,10 @@ public class RecommFragment extends Fragment implements MyUpRefreshListview.OnRe
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 Log.e("推荐页面:",info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
                 CacheUtils.saveCache(getActivity(),ConfigUtils.COLLEGE_URL + "college_recomm",info);
             }
 

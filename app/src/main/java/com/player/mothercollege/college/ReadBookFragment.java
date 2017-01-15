@@ -96,7 +96,10 @@ public class ReadBookFragment extends Fragment implements MyUpDownListView.OnRef
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("读书页面"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
                 CacheUtils.saveCache(getActivity(),ConfigUtils.COLLEGE_URL + "college_readbook",info);
             }
 

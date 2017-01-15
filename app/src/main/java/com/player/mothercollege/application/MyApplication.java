@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.lzy.ninegrid.NineGridView;
 import com.player.mothercollege.R;
 import com.squareup.picasso.Picasso;
@@ -17,12 +18,17 @@ import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.yolanda.nohttp.NoHttp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by Administrator on 2016/10/24.
  */
 public class MyApplication extends Application{
+
+    public static  Map<String,EaseUser> CONTENTLIST = new HashMap<>();
 
     {
         PlatformConfig.setWeixin("wx5d8221afabe4cb19", "8a4ba69af30f67e7ee534a49b3bb16b1");

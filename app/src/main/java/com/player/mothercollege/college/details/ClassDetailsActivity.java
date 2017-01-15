@@ -488,37 +488,43 @@ public class ClassDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private boolean orZan=true;
     private boolean orCollect = true;
+    private String shareUrl = "http://shouji.360tpcdn.com/170106/f1b68817e5b5db3721a3c5d74b1aa443/com.player.mothercollege_1.apk";
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.view_share_pengyou:
                 new ShareAction(ClassDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
-                        .withText("母亲大学堂视频分享")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！"+shareUrl)
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.view_share_wechat:
                 new ShareAction(ClassDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN)
-                        .withText("母亲大学堂视频分享")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！"+shareUrl)
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.view_share_sina:
                 new ShareAction(ClassDetailsActivity.this).setPlatform(SHARE_MEDIA.SINA)
-                        .withText("母亲大学堂视频分享")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！"+shareUrl)
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.view_share_space:
                 new ShareAction(ClassDetailsActivity.this).setPlatform(SHARE_MEDIA.QZONE)
-                        .withText("母亲大学堂视频分享")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！"+shareUrl)
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.view_share_qq:
                 new ShareAction(ClassDetailsActivity.this).setPlatform(SHARE_MEDIA.QQ)
-                        .withText("母亲大学堂视频分享")
+                        .withText("有爱还不够，教育孩子先教好自己！我正在母亲大学堂学习， " +
+                                "名师亲授，在线互动，你也快来吧！"+shareUrl)
                         .setCallback(umShareListener)
                         .share();
                 break;

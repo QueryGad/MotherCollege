@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     >
     <LinearLayout
+        android:id="@+id/ll_find_love_itme"
         android:layout_width="match_parent"
         android:layout_height="63dp"
         android:gravity="center_vertical"

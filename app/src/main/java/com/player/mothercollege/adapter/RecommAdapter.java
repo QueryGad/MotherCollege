@@ -94,10 +94,6 @@ public class RecommAdapter extends BaseAdapter{
 
         //分类
         //切割type
-        reads.clear();
-        videos.clear();
-        classs.clear();
-        originals.clear();
         type = type.substring(0,2);
         if (type.equals("a0")){
             reads.add(lists.get(position));

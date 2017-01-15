@@ -112,16 +112,19 @@ public class HotArticleFragment extends Fragment implements MyUpDownListView.OnR
     }
 
     private void parseJson(String info){
+        if (info!=null){
             Gson gson = new Gson();
             hotArticleBean = gson.fromJson(info, HotArticleBean.class);
             trendsList = hotArticleBean.getTrends();
 
-        if (hotArticleBean!=null){
-            endNo = hotArticleBean.getLastIndex();//目标索引
-            infos = hotArticleBean.getTrends();
-            adapter = new HotArticleAdapter(getActivity(),infos);
-            lv_hotarticle.setAdapter(adapter);
+            if (hotArticleBean!=null){
+                endNo = hotArticleBean.getLastIndex();//目标索引
+                infos = hotArticleBean.getTrends();
+                adapter = new HotArticleAdapter(getActivity(),infos);
+                lv_hotarticle.setAdapter(adapter);
+            }
         }
+
     }
 
 

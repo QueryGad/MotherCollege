@@ -126,7 +126,7 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener,M
         Gson gson = new Gson();
         LoveBean loveBean = gson.fromJson(info, LoveBean.class);
         //最后传入下标
-        int lastIndex = loveBean.getLastIndex();
+        lastIndex = loveBean.getLastIndex();
 
 
         if (loveBean!=null){

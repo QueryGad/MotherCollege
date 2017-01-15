@@ -83,8 +83,11 @@ public class VideoFragment extends Fragment{
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
+
                 MyLog.testLog("直播页面:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
             }
 
             @Override

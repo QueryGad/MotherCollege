@@ -106,7 +106,10 @@ public class ActivityFragment extends Fragment implements MyUpDownListView.OnRef
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 Log.e("========",info);
-                parseJsonCity(info);
+                if (info!=null){
+                    parseJsonCity(info);
+                }
+
             }
 
             @Override

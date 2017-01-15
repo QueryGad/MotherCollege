@@ -99,7 +99,9 @@ public class ZhuanJiaFragment extends Fragment implements MyUpDownListView.OnRef
                 btn_refrsh.setVisibility(View.GONE);
                 String info = response.get();
                 MyLog.testLog("专家咨询"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
                 CacheUtils.saveCache(getActivity(),ConfigUtils.UNITY_URL + "unity_zhuanjia",info);
             }
 

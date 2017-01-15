@@ -24,17 +24,17 @@ public class ChatActivity extends BaseActivity {
     @Override
     public void initViews() {
 
-        String snsUid = getIntent().getStringExtra("snsUid");
-        String niceName = getIntent().getStringExtra("niceName");
-
         fl_chat = (FrameLayout) findViewById(R.id.fl_chat);
-
+        String username = getIntent().getStringExtra(EaseConstant.EXTRA_USER_ID);
+        int chatType = getIntent().getIntExtra("chatType",0);
+        String niceName = getIntent().getStringExtra("niceName");
         //new出EaseChatFragment或其子类的实例
         EaseChatFragment chatFragment = new EaseChatFragment();
         //传入参数
         Bundle args = new Bundle();
         args.putInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
-        args.putString(EaseConstant.EXTRA_USER_ID, snsUid);
+        args.putString(EaseConstant.EXTRA_USER_ID, username);
+        args.putString("niceName", niceName);
         chatFragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().add(R.id.fl_chat, chatFragment).commit();

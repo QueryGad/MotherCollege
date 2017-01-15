@@ -101,7 +101,10 @@ public class FastFragment extends Fragment implements View.OnClickListener,MyUpD
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("快速咨询:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
                 CacheUtils.saveCache(getActivity(),ConfigUtils.UNITY_URL + "unity_fast",info);
             }
 

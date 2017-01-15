@@ -1,16 +1,16 @@
 package com.player.mothercollege.unity.details;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.FrameLayout;
 
 import com.google.gson.Gson;
-import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseContactListFragment;
-import com.hyphenate.exceptions.HyphenateException;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
+import com.player.mothercollege.application.MyApplication;
 import com.player.mothercollege.bean.ListAddressBean;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -24,6 +24,7 @@ import com.yolanda.nohttp.rest.Response;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ public class ListAddressActivity extends BaseActivity{
     private RequestQueue requestQueue;
 
 
+
     @Override
     public void setContentView() {
         setContentView(R.layout.act_unity_listaddress);
@@ -48,21 +50,21 @@ public class ListAddressActivity extends BaseActivity{
         fl_listaddress = (FrameLayout) findViewById(R.id.fl_listaddress);
 
         contactListFragment = new EaseContactListFragment();
-
+        Bundle bundle = new Bundle();
+        bundle.putString("title","通讯录");
+        contactListFragment.setArguments(bundle);
         //需要设置联系人列表才能启动fragment；
-        contactListFragment.setContactsMap(getContacts());
-//        new Thread(){
-//            @Override
-//            public void run() {
-//                contactListFragment.setContactsMap(getContacts());
-//            }
-//        }.start();
+        getContacts();
 
         //设置点击事件
         contactListFragment.setContactListItemClickListener(new EaseContactListFragment.EaseContactListItemClickListener() {
             @Override
             public void onListItemClicked(EaseUser user) {
-                startActivity(new Intent(ListAddressActivity.this, ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID, user.getUsername()));
+                Intent intent = new Intent(ListAddressActivity.this,ChatActivity.class);
+                intent.putExtra(EaseConstant.EXTRA_USER_ID,user.getUsername());
+                intent.putExtra("chatType",EaseConstant.CHATTYPE_SINGLE);
+                intent.putExtra("niceName",user.getNick());
+                startActivity(intent);
             }
         });
         getSupportFragmentManager().beginTransaction().add(R.id.fl_listaddress,contactListFragment).commit();
@@ -79,7 +81,7 @@ public class ListAddressActivity extends BaseActivity{
 
     }
 
-    public Map<String,EaseUser> getContacts() {
+    public void getContacts() {
         String apptoken = PrefUtils.getString(this, "apptoken", "");
         String uid = PrefUtils.getString(this, "uid", "");
         final Map<String,EaseUser> contacts = new HashMap<>();
@@ -107,30 +109,25 @@ public class ListAddressActivity extends BaseActivity{
                 myFriends = listAddressBean.getMyFriends();
                 myGroups = listAddressBean.getMyGroups();
                 for (int i = 0;i<myFriends.size();i++){
-//                        contacts.put("myFriends",myFriends.get(i));
                     String icon = myFriends.get(i).getIcon();
                     String niceName = myFriends.get(i).getNiceName();
                     String snsUid = myFriends.get(i).getSnsUid();
-                    user = new EaseUser(niceName);
+                    user = new EaseUser(snsUid);
+                    user.setNick(niceName);
                     user.setInitialLetter(niceName);
                     user.setAvatar(icon);
-                    contacts.put(snsUid,new EaseUser(snsUid));
+                    contacts.put(snsUid,user);
                 }
-                try {
-                    List<String> userNames =  EMClient.getInstance().contactManager().getAllContactsFromServer();
-
-                    for (String userId : userNames){
-                        contacts.put(userId,new EaseUser(userId));
-                        MyLog.testLog("userId:"+userId);
-                        MyLog.testLog("走到了吗");
-                    }
-                } catch (HyphenateException e) {
-                    MyLog.testLog("我被cathc");
-
+                MyApplication.CONTENTLIST = contacts;
+                EaseConstant.CHANGLIANG = contacts;
+                Iterator<Map.Entry<String, EaseUser>> iterator = contacts.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<String, EaseUser> entry = iterator.next();
+                    EaseUser user = entry.getValue();
                 }
 
-//                contacts.put("myFriends",user);
-
+                contactListFragment.setContactsMap(contacts);
+                contactListFragment.setUpView();
             }
 
             @Override
@@ -143,6 +140,6 @@ public class ListAddressActivity extends BaseActivity{
 
             }
         });
-        return contacts;
+
     }
 }
