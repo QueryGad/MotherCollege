@@ -96,7 +96,10 @@ public class ClassDetailsFragment extends Fragment implements View.OnClickListen
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("课堂详情页:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override

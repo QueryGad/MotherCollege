@@ -30,7 +30,6 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.SET_DEBUG_APP" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
@@ -65,6 +64,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="LCO3eDqTsyezcFcup2oG2vC9eQ45rDVZ"/>
         <!--&lt;!&ndash; 设置环信应用的AppKey &ndash;&gt;-->
          <meta-data android:name="EASEMOB_APPKEY"  android:value="1107161008178614#muqinapp" />
          <!-- 声明SDK所需的service SDK核心功能-->
@@ -307,6 +307,18 @@
         //消息
         <activity android:name=".unity.details.FrendMessageActivity" android:screenOrientation="portrait"/>
         <activity android:name=".unity.details.ChatActivity" android:screenOrientation="portrait"/>
+        <!-- 显示下载大图页面 -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" >
+        </activity>
+        <!-- 地图 -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" >
+        </activity>
         //通讯录
         <activity android:name=".unity.details.ListAddressActivity" android:screenOrientation="portrait"/>
         //群聊

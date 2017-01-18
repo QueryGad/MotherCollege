@@ -150,7 +150,6 @@ public class RecommFragment extends Fragment implements MyUpRefreshListview.OnRe
                 if (info!=null){
                     parseJson(info);
                 }
-
                 CacheUtils.saveCache(getActivity(),ConfigUtils.COLLEGE_URL + "college_recomm",info);
             }
 

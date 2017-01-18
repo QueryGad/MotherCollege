@@ -15,8 +15,8 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/share_icon_pengyou"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:src="@mipmap/icon_circle"/>
             <TextView
@@ -35,8 +35,8 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/share_icon_wechat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:src="@mipmap/icon_wechat"/>
             <TextView
@@ -55,8 +55,8 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/share_icon_sina"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:src="@mipmap/icon_microblog"/>
             <TextView
@@ -68,13 +68,6 @@
                 android:text="新浪"
                 />
         </RelativeLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
         <RelativeLayout
             android:id="@+id/view_share_space"
             android:layout_width="0dp"
@@ -82,8 +75,8 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/share_icon_space"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:src="@mipmap/icon_space"/>
             <TextView
@@ -101,8 +94,8 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/share_icon_qq"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:src="@mipmap/icon_qq"/>
             <TextView
@@ -113,26 +106,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="QQ"/>
         </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/view_share_frend"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <ImageView
-                android:id="@+id/share_icon_frend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:src="@mipmap/icon_chat"/>
-            <TextView
-                android:id="@+id/share_name_frend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/share_icon_frend"
-                android:layout_centerHorizontal="true"
-                android:text="母亲大学堂"
-                />
-        </RelativeLayout>
+
     </LinearLayout>
     <View
         android:layout_width="match_parent"

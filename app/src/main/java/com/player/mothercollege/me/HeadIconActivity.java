@@ -50,6 +50,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     private static final int POST_GUANZHU_DATA = 003;
     private static final int POST_CANLEGUANZHU_DATA = 004;
     private static final int GET_MORE_DATA = 005;
+    private static final int GET_MY_ICON = 006;
     private ImageView iv_refresh;
     private Button btn_refrsh,btn_back;
     private static final int GET_HEADICON_DATA = 001;
@@ -74,6 +75,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
     private String snsUid;
     private boolean isFollow;
     private String niceName;
+    private String uicon;
 
     @Override
     public void setContentView() {
@@ -222,7 +224,8 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
         TextView tv_person_phone = (TextView) personHeadView.findViewById(R.id.tv_person_phone);
         TextView tv_person_style = (TextView) personHeadView.findViewById(R.id.tv_person_style);
 
-        String uicon = personHeadBean.getUicon(); //头像
+        //头像
+        uicon = personHeadBean.getUicon();
         //昵称
         niceName = personHeadBean.getNiceName();
         boolean isVip = personHeadBean.isIsVip();//是否VIP
@@ -275,6 +278,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                         intent.putExtra(EaseConstant.EXTRA_USER_ID,snsUid);
                         intent.putExtra("chatType",EaseConstant.CHATTYPE_SINGLE);
                         intent.putExtra("niceName",niceName);
+                        intent.putExtra("niceIcon", uicon);
                         startActivity(intent);
                     }else {
                         Toast.makeText(HeadIconActivity.this,"必须关注后才可以聊天哦!",Toast.LENGTH_SHORT).show();
@@ -286,14 +290,20 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
 
 
         //赋值
-        if (uicon==null){
+        if (uicon ==null){
             iv_person_icon.setImageResource(R.mipmap.head_homepage_others);
             iv_person_icon.setBackgroundResource(R.mipmap.head_me_nor);
         }else {
             glideRequest = Glide.with(this);
             glideRequest.load(uicon).transform(
                     new GlideCircleTransform(HeadIconActivity.this)).into(iv_person_icon);
+            EaseConstant.USER_ICON = uicon;
+            //获取下自己的头像  让自己使用
+            String myIcon = getMyIcon();
+            EaseConstant.MY_ICON = myIcon;
         }
+
+
 
         tv_person_name.setText(niceName);
         if (isVip){
@@ -406,6 +416,7 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
                                 intent.putExtra(EaseConstant.EXTRA_USER_ID,snsUid);
                                 intent.putExtra("chatType",EaseConstant.CHATTYPE_SINGLE);
                                 intent.putExtra("niceName",niceName);
+                                intent.putExtra("niceIcon",uicon);
                                 startActivity(intent);
                             }
                         });
@@ -507,5 +518,40 @@ public class HeadIconActivity extends BaseActivity implements View.OnClickListen
 
             }
         });
+    }
+    String myIcon = null;
+    public String getMyIcon() {
+
+        Request<String> request = NoHttp.createStringRequest(ConfigUtils.ME_URL, RequestMethod.GET);
+        request.add("op","userinfo");
+        request.add("uid",uid);
+        request.add("apptoken",apptoken);
+        request.add("toUid",uid);
+        requestQueue.add(GET_MY_ICON, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                String info = response.get();
+                Gson gson = new Gson();
+                PersonHead personHeadBean = gson.fromJson(info, PersonHead.class);
+                String uicon = personHeadBean.getUicon();
+                myIcon = uicon;
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+        return myIcon;
     }
 }

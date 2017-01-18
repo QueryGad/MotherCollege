@@ -10,6 +10,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseContactListFragment;
 import com.player.mothercollege.R;
 import com.player.mothercollege.activity.BaseActivity;
+import com.player.mothercollege.application.MyApplication;
 import com.player.mothercollege.bean.ListAddressBean;
 import com.player.mothercollege.utils.ConfigUtils;
 import com.player.mothercollege.utils.MyLog;
@@ -23,6 +24,7 @@ import com.yolanda.nohttp.rest.Response;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -98,23 +100,33 @@ public class QunChatActivity extends BaseActivity{
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("联系人页面:"+info);
-                Gson gson = new Gson();
-                ListAddressBean listAddressBean = gson.fromJson(info, ListAddressBean.class);
-                myFriends = listAddressBean.getMyFriends();
-                myGroups = listAddressBean.getMyGroups();
-                  for (int i = 0;i<myGroups.size();i++){
-                    String icon = myGroups.get(i).getGroupIcon();
-                    String niceName = myGroups.get(i).getGroupName();
-                    String snsUid = myGroups.get(i).getSnsGroupID();
-                    user = new EaseUser(snsUid);
-                    user.setNick(niceName);
-                    user.setInitialLetter(niceName);
-                    user.setAvatar(icon);
-                    contacts.put(snsUid,user);
+                if (info!=null){
+                    Gson gson = new Gson();
+                    ListAddressBean listAddressBean = gson.fromJson(info, ListAddressBean.class);
+                    myFriends = listAddressBean.getMyFriends();
+                    myGroups = listAddressBean.getMyGroups();
+                    for (int i = 0;i<myGroups.size();i++){
+                        String icon = myGroups.get(i).getGroupIcon();
+                        String niceName = myGroups.get(i).getGroupName();
+                        String snsUid = myGroups.get(i).getSnsGroupID();
+                        user = new EaseUser(snsUid);
+                        user.setNick(niceName);
+                        user.setInitialLetter(niceName);
+                        user.setAvatar(icon);
+                        contacts.put(snsUid,user);
+                    }
+
+                    MyApplication.CONTENTLIST = contacts;
+                    EaseConstant.CHANGLIANG = contacts;
+                    Iterator<Map.Entry<String, EaseUser>> iterator = contacts.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<String, EaseUser> entry = iterator.next();
+                        EaseUser user = entry.getValue();
+                    }
+                    contactListFragment.setContactsMap(contacts);
+                    contactListFragment.setUpView();
                 }
 
-                contactListFragment.setContactsMap(contacts);
-                contactListFragment.setUpView();
             }
 
             @Override

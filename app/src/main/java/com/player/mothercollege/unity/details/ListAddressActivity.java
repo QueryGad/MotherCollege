@@ -37,8 +37,6 @@ public class ListAddressActivity extends BaseActivity{
     private EaseContactListFragment contactListFragment;
     private RequestQueue requestQueue;
 
-
-
     @Override
     public void setContentView() {
         setContentView(R.layout.act_unity_listaddress);
@@ -104,31 +102,35 @@ public class ListAddressActivity extends BaseActivity{
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("联系人页面:"+info);
-                Gson gson = new Gson();
-                ListAddressBean listAddressBean = gson.fromJson(info, ListAddressBean.class);
-                myFriends = listAddressBean.getMyFriends();
-                myGroups = listAddressBean.getMyGroups();
-                for (int i = 0;i<myFriends.size();i++){
-                    String icon = myFriends.get(i).getIcon();
-                    String niceName = myFriends.get(i).getNiceName();
-                    String snsUid = myFriends.get(i).getSnsUid();
-                    user = new EaseUser(snsUid);
-                    user.setNick(niceName);
-                    user.setInitialLetter(niceName);
-                    user.setAvatar(icon);
-                    contacts.put(snsUid,user);
+                if (info!=null){
+                    Gson gson = new Gson();
+                    ListAddressBean listAddressBean = gson.fromJson(info, ListAddressBean.class);
+                    myFriends = listAddressBean.getMyFriends();
+                    myGroups = listAddressBean.getMyGroups();
+                    for (int i = 0;i<myFriends.size();i++){
+                        String icon = myFriends.get(i).getIcon();
+                        String niceName = myFriends.get(i).getNiceName();
+                        String snsUid = myFriends.get(i).getSnsUid();
+                        user = new EaseUser(snsUid);
+                        user.setNick(niceName);
+                        user.setInitialLetter(niceName);
+                        user.setAvatar(icon);
+                        contacts.put(snsUid,user);
+                    }
+                    MyApplication.CONTENTLIST = contacts;
+                    EaseConstant.CHANGLIANG = contacts;
+                    Iterator<Map.Entry<String, EaseUser>> iterator = contacts.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<String, EaseUser> entry = iterator.next();
+                        EaseUser user = entry.getValue();
                 }
-                MyApplication.CONTENTLIST = contacts;
-                EaseConstant.CHANGLIANG = contacts;
-                Iterator<Map.Entry<String, EaseUser>> iterator = contacts.entrySet().iterator();
-                while (iterator.hasNext()) {
-                    Map.Entry<String, EaseUser> entry = iterator.next();
-                    EaseUser user = entry.getValue();
+                    contactListFragment.setContactsMap(contacts);
+                    contactListFragment.setUpView();
                 }
 
-                contactListFragment.setContactsMap(contacts);
-                contactListFragment.setUpView();
             }
+
+
 
             @Override
             public void onFailed(int what, Response<String> response) {

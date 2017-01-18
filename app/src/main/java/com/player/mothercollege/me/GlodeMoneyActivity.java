@@ -91,7 +91,10 @@ public class GlodeMoneyActivity extends BaseActivity implements View.OnClickList
                 String info = response.get();
                 MyLog.testLog("金币页面"+info);
                 CacheUtils.saveCache(GlodeMoneyActivity.this,ConfigUtils.COLLEGE_URL + "glode",info);
-                parseJson(info);
+
+                if (info!=null){
+                    parseJson(info);
+                }
             }
 
             @Override

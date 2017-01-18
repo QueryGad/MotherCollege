@@ -48,27 +48,22 @@ public class FrendMessageActivity extends BaseActivity {
         fl_message = (FrameLayout) findViewById(R.id.fl_message);
         if (EaseConstant.CHANGLIANG!=null&&EaseConstant.CHANGLIANG.size()>0){
             conversationListFragment = new EaseConversationListFragment();
-
             conversationListFragment.setConversationListItemClickListener(new EaseConversationListFragment.EaseConversationListItemClickListener() {
                 @Override
                 public void onListItemClicked(EMConversation conversation) {
-                    if (conversation.isGroup()){
-                        if(conversation.getType() == EMConversation.EMConversationType.ChatRoom){
-
-                        }else{
-                            Intent intent = new Intent(FrendMessageActivity.this,ChatActivity.class);
-                            intent.putExtra(EaseConstant.EXTRA_USER_ID,conversation.getUserName());
-                            intent.putExtra("chatType",EaseConstant.CHATTYPE_GROUP);
-                            intent.putExtra("niceName",conversation.getUserName());
-                            startActivity(intent);
-                        }
+                    if(conversation.getType() == EMConversation.EMConversationType.GroupChat){
+                        Intent intent = new Intent(FrendMessageActivity.this,ChatActivity.class);
+                        intent.putExtra(EaseConstant.EXTRA_USER_ID,conversation.getUserName());
+                        intent.putExtra("chatType",EaseConstant.CHATTYPE_GROUP);
+                        intent.putExtra("niceName",conversation.getUserName());
+                        startActivity(intent);
+                    }else {
+                        Intent intent = new Intent(FrendMessageActivity.this,ChatActivity.class);
+                        intent.putExtra(EaseConstant.EXTRA_USER_ID,conversation.getUserName());
+                        intent.putExtra("chatType",EaseConstant.CHATTYPE_SINGLE);
+                        intent.putExtra("niceName",conversation.getUserName());
+                        startActivity(intent);
                     }
-                    Intent intent = new Intent(FrendMessageActivity.this,ChatActivity.class);
-                    intent.putExtra(EaseConstant.EXTRA_USER_ID,conversation.getUserName());
-
-                    intent.putExtra("chatType",EaseConstant.CHATTYPE_SINGLE);
-                    intent.putExtra("niceName",conversation.getUserName());
-                    startActivity(intent);
                 }
             });
             getSupportFragmentManager().beginTransaction().add(R.id.fl_message,conversationListFragment).commit();
@@ -95,47 +90,50 @@ public class FrendMessageActivity extends BaseActivity {
                 public void onSucceed(int what, Response<String> response) {
                     String info = response.get();
                     MyLog.testLog("联系人页面:"+info);
-                    Gson gson = new Gson();
-                    ListAddressBean listAddressBean = gson.fromJson(info, ListAddressBean.class);
-                    myFriends = listAddressBean.getMyFriends();
-                    myGroups = listAddressBean.getMyGroups();
-                    for (int i = 0;i<myFriends.size();i++){
-                        String icon = myFriends.get(i).getIcon();
-                        String niceName = myFriends.get(i).getNiceName();
-                        String snsUid = myFriends.get(i).getSnsUid();
-                        user = new EaseUser(snsUid);
-                        user.setNick(niceName);
-                        user.setInitialLetter(niceName);
-                        user.setAvatar(icon);
-                        contacts.put(snsUid,user);
+                    if (info!=null){
+                        Gson gson = new Gson();
+                        ListAddressBean listAddressBean = gson.fromJson(info, ListAddressBean.class);
+                        myFriends = listAddressBean.getMyFriends();
+                        myGroups = listAddressBean.getMyGroups();
+                        for (int i = 0;i<myFriends.size();i++){
+                            String icon = myFriends.get(i).getIcon();
+                            String niceName = myFriends.get(i).getNiceName();
+                            String snsUid = myFriends.get(i).getSnsUid();
+                            user = new EaseUser(snsUid);
+                            user.setNick(niceName);
+                            user.setInitialLetter(niceName);
+                            user.setAvatar(icon);
+                            contacts.put(snsUid,user);
 
-                    }
-                    for (int i = 0;i<myGroups.size();i++){
-                        String icon = myGroups.get(i).getGroupIcon();
-                        String niceName = myGroups.get(i).getGroupName();
-                        String snsUid = myGroups.get(i).getSnsGroupID();
-                        user = new EaseUser(snsUid);
-                        user.setNick(niceName);
-                        user.setInitialLetter(niceName);
-                        user.setAvatar(icon);
-                        contacts.put(snsUid,user);
-                    }
-
-                    MyApplication.CONTENTLIST = contacts;
-                    EaseConstant.CHANGLIANG = contacts;
-                    conversationListFragment = new EaseConversationListFragment();
-                    getSupportFragmentManager().beginTransaction().add(R.id.fl_message,conversationListFragment).commit();
-                    conversationListFragment.setConversationListItemClickListener(new EaseConversationListFragment.EaseConversationListItemClickListener() {
-                        @Override
-                        public void onListItemClicked(EMConversation conversation) {
-
-                            Intent intent = new Intent(FrendMessageActivity.this,ChatActivity.class);
-                            intent.putExtra(EaseConstant.EXTRA_USER_ID,conversation.getUserName());
-                            intent.putExtra("chatType",EaseConstant.CHATTYPE_SINGLE);
-                            intent.putExtra("niceName",conversation.getUserName());
-                            startActivity(intent);
                         }
-                    });
+                        for (int i = 0;i<myGroups.size();i++){
+                            String icon = myGroups.get(i).getGroupIcon();
+                            String niceName = myGroups.get(i).getGroupName();
+                            String snsUid = myGroups.get(i).getSnsGroupID();
+                            user = new EaseUser(snsUid);
+                            user.setNick(niceName);
+                            user.setInitialLetter(niceName);
+                            user.setAvatar(icon);
+                            contacts.put(snsUid,user);
+                        }
+
+                        MyApplication.CONTENTLIST = contacts;
+                        EaseConstant.CHANGLIANG = contacts;
+                        conversationListFragment = new EaseConversationListFragment();
+                        getSupportFragmentManager().beginTransaction().add(R.id.fl_message,conversationListFragment).commit();
+                        conversationListFragment.setConversationListItemClickListener(new EaseConversationListFragment.EaseConversationListItemClickListener() {
+                            @Override
+                            public void onListItemClicked(EMConversation conversation) {
+
+                                Intent intent = new Intent(FrendMessageActivity.this,ChatActivity.class);
+                                intent.putExtra(EaseConstant.EXTRA_USER_ID,conversation.getUserName());
+                                intent.putExtra("chatType",EaseConstant.CHATTYPE_SINGLE);
+                                intent.putExtra("niceName",conversation.getUserName());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
 
                 }
 

@@ -83,7 +83,10 @@ public class FuQiClassFragment extends Fragment{
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("课堂数据"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
                 CacheUtils.saveCache(getActivity(),ConfigUtils.COLLEGE_URL + "class_fuqi",info);
             }
 

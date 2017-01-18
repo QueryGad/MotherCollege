@@ -24,4 +24,25 @@
         android:id="@+id/lv_jilu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <LinearLayout
+        android:id="@+id/ll_jilu_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_sorry"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:text="还没有任何浏览记录!"/>
+    </LinearLayout>
 </FrameLayout>

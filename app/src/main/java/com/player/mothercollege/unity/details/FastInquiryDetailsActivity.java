@@ -95,7 +95,10 @@ public class FastInquiryDetailsActivity extends BaseActivity implements View.OnC
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("快速咨询详情"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override

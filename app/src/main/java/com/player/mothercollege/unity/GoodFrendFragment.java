@@ -67,7 +67,6 @@ public class GoodFrendFragment extends Fragment implements View.OnClickListener 
     }
 
     private void initView() {
-
         ll_user_view = (LinearLayout) view.findViewById(R.id.ll_user_view);
         ll_group_view = (LinearLayout) view.findViewById(R.id.ll_group_view);
         btn_unity_message = (Button) view.findViewById(R.id.btn_unity_message);
@@ -157,12 +156,11 @@ public class GoodFrendFragment extends Fragment implements View.OnClickListener 
     }
 
     private void initRecommendGroup() {
-
         for ( int i =0;i<recommendGroup.size();i++){
             View viewGroup = View.inflate(getActivity(),R.layout.item_frendqun_qun,null);
             ImageView iv_qun_icon = (ImageView) viewGroup.findViewById(R.id.iv_qun_icon);
             TextView tv_qun_name = (TextView) viewGroup.findViewById(R.id.tv_qun_name);
-            iv_qun_join = (ImageView) viewGroup.findViewById(R.id.iv_qun_join);
+            final ImageView iv_qun_join = (ImageView) viewGroup.findViewById(R.id.iv_qun_join);
 
             glideRequest = Glide.with(this);
             glideRequest.load(recommendGroup.get(i).getGroupIcon())

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -45,6 +46,7 @@ public class JieLiFragment extends Fragment implements MyUpDownListView.OnRefres
     private Button btn_refrsh;
     private String apptoken;
     private String uid;
+    private LinearLayout ll_jieli_no;
 
     int lastIndex=0;
     boolean isRefresh = true;
@@ -70,6 +72,7 @@ public class JieLiFragment extends Fragment implements MyUpDownListView.OnRefres
         lv_find_jieli = (MyUpDownListView) view.findViewById(R.id.lv_find_jieli);
         iv_refresh = (ImageView) view.findViewById(R.id.iv_refresh);
         btn_refrsh = (Button) view.findViewById(R.id.btn_refrsh);
+        ll_jieli_no = (LinearLayout) view.findViewById(R.id.ll_jieli_no);
 
         lv_find_jieli.setOnRefreshListener(this);
     }
@@ -99,7 +102,10 @@ public class JieLiFragment extends Fragment implements MyUpDownListView.OnRefres
                 btn_refrsh.setVisibility(View.GONE);
                 String info = response.get();
                 MyLog.testLog("爱心接力:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override
@@ -128,8 +134,13 @@ public class JieLiFragment extends Fragment implements MyUpDownListView.OnRefres
         if (jieLiBean!=null){
             endNo = jieLiBean.getLastIndex();//目标索引
             infos = jieLiBean.getUsers();
-            adapter = new JieLiAdapter(infos,getActivity());
-            lv_find_jieli.setAdapter(adapter);
+            if (infos.size()==0){
+                ll_jieli_no.setVisibility(View.VISIBLE);
+            }else {
+                adapter = new JieLiAdapter(infos,getActivity());
+                lv_find_jieli.setAdapter(adapter);
+            }
+
         }
     }
 

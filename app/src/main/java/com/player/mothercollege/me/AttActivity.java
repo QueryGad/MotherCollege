@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class AttActivity extends BaseActivity implements View.OnClickListener,My
     private MyUpDownListView lv_att;
     private ImageView iv_refresh;
     private Button btn_refrsh;
+    private LinearLayout ll_guanzhu_no;
     private List<AttBean.UsersBean> usersList = new ArrayList<>();
     private RequestQueue requestQueue;
 
@@ -65,6 +67,7 @@ public class AttActivity extends BaseActivity implements View.OnClickListener,My
         lv_att = (MyUpDownListView) findViewById(R.id.lv_att);
         iv_refresh = (ImageView) findViewById(R.id.iv_refresh);
         btn_refrsh = (Button) findViewById(R.id.btn_refrsh);
+        ll_guanzhu_no = (LinearLayout) findViewById(R.id.ll_guanzhu_no);
 
         tv_details_title.setText("我的关注");
         lv_att.setOnRefreshListener(this);
@@ -104,7 +107,10 @@ public class AttActivity extends BaseActivity implements View.OnClickListener,My
                 btn_refrsh.setVisibility(View.GONE);
                 String info = response.get();
                 MyLog.testLog("我的关注:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override
@@ -132,8 +138,13 @@ public class AttActivity extends BaseActivity implements View.OnClickListener,My
         if (attBean!=null){
             endNo = attBean.getLastIndex();//目标索引
             infos = attBean.getUsers();
-            adapter = new AttAdapter(this,infos);
-            lv_att.setAdapter(adapter);
+            if (infos.size()==0){
+                ll_guanzhu_no.setVisibility(View.VISIBLE);
+            }else {
+                adapter = new AttAdapter(this,infos);
+                lv_att.setAdapter(adapter);
+            }
+
         }
 
     }

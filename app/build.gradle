@@ -56,20 +56,38 @@ android {
         "360"{
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "360"]
         }
-        "google"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "google"]
-        }
-        "tencent"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent"]
+        "anzhi"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "anzhi"]
         }
         "baidu"{
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
         }
-        "91"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "91"]
+        "tencent"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent"]
+        }
+        "pp"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "pp"]
         }
         "wandoujia"{
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+        }
+        "sougou"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "sougou"]
+        }
+        "jifeng"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "jifeng"]
+        }
+        "yingyonghui"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yingyonghui"]
+        }
+        "youyi"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "youyi"]
+        }
+        "maopao"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "maopao"]
+        }
+        "huawei"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "huawei"]
         }
         "xiaomi"{
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
@@ -80,16 +98,24 @@ android {
         "oppo"{
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "oppo"]
         }
+        "vivo"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "vivo"]
+        }
         "lenovo"{
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "lenovo"]
         }
-        "huawei"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "huawei"]
+        "smartisan"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "smartisan"]
         }
-        "anzhi"{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "anzhi"]
+        "gionee"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "gionee"]
         }
-
+        "lemall"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "lemall"]
+        }
+        "dianxin"{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dianxin"]
+        }
     }
 
 

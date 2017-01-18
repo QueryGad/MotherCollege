@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -42,6 +43,7 @@ public class DingYueFragment extends Fragment implements MyUpDownListView.OnRefr
     private MyUpDownListView lv_dingyue;
     private ImageView iv_refresh;
     private Button btn_refrsh;
+    private LinearLayout ll_dingyue_no;
     private RequestQueue requestQueue;
 
     int lastIndex=0;
@@ -70,6 +72,7 @@ public class DingYueFragment extends Fragment implements MyUpDownListView.OnRefr
         lv_dingyue = (MyUpDownListView) view.findViewById(R.id.lv_dingyue);
         iv_refresh = (ImageView) view.findViewById(R.id.iv_refresh);
         btn_refrsh = (Button) view.findViewById(R.id.btn_refrsh);
+        ll_dingyue_no = (LinearLayout) view.findViewById(R.id.ll_dingyue_no);
 
         lv_dingyue.setOnRefreshListener(this);
     }
@@ -98,7 +101,10 @@ public class DingYueFragment extends Fragment implements MyUpDownListView.OnRefr
                 btn_refrsh.setVisibility(View.GONE);
                 String info = response.get();
                 MyLog.testLog("我的订阅:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override
@@ -127,8 +133,13 @@ public class DingYueFragment extends Fragment implements MyUpDownListView.OnRefr
         if (dingYueBean!=null){
             endNo = dingYueBean.getLastIndex();//目标索引
             infos = dingYueBean.getMyPayClass();
-            adapter = new DingYueAdapter(getActivity(),infos);
-            lv_dingyue.setAdapter(adapter);
+            if (infos.size()==0){
+                ll_dingyue_no.setVisibility(View.VISIBLE);
+            }else {
+                adapter = new DingYueAdapter(getActivity(),infos);
+                lv_dingyue.setAdapter(adapter);
+            }
+
         }
 
     }

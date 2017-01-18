@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.player.mothercollege.R;
@@ -27,6 +28,7 @@ public class GlodeDetailsActivity extends BaseActivity implements View.OnClickLi
     private TextView tv_details_title;
     private RecyclerView rv_glodedetails;
     private GlodeMoneyBean glodeMoneyBean;
+    private LinearLayout ll_glode_no;
     private List<GlodeMoneyBean.DetailBean> detail = new ArrayList<>();
     private GlodeDetailsAdapter.OnItemClickListener GlodeDetailsItemListener = new GlodeDetailsAdapter.OnItemClickListener() {
         @Override
@@ -48,6 +50,7 @@ public class GlodeDetailsActivity extends BaseActivity implements View.OnClickLi
         btn_back = (Button) findViewById(R.id.btn_back);
         tv_details_title = (TextView) findViewById(R.id.tv_details_title);
         rv_glodedetails = (RecyclerView) findViewById(R.id.rv_glodedetails);
+        ll_glode_no = (LinearLayout) findViewById(R.id.ll_glode_no);
 
         tv_details_title.setText("金币明细");
         initRecycler();
@@ -55,11 +58,16 @@ public class GlodeDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void initRecycler() {
         detail = glodeMoneyBean.getDetail();
-        GlodeDetailsAdapter adapter = new GlodeDetailsAdapter(GlodeDetailsActivity.this,detail);
-        rv_glodedetails.setAdapter(adapter);
-        rv_glodedetails.setLayoutManager(new LinearLayoutManager(GlodeDetailsActivity.this));
-        rv_glodedetails.addItemDecoration(new DividerItemDecoration(GlodeDetailsActivity.this,DividerItemDecoration.VERTICAL_LIST));
-        adapter.setOnItemClickListener(GlodeDetailsItemListener);
+        if (detail.size()==0){
+            ll_glode_no.setVisibility(View.VISIBLE);
+        }else {
+            GlodeDetailsAdapter adapter = new GlodeDetailsAdapter(GlodeDetailsActivity.this,detail);
+            rv_glodedetails.setAdapter(adapter);
+            rv_glodedetails.setLayoutManager(new LinearLayoutManager(GlodeDetailsActivity.this));
+            rv_glodedetails.addItemDecoration(new DividerItemDecoration(GlodeDetailsActivity.this,DividerItemDecoration.VERTICAL_LIST));
+            adapter.setOnItemClickListener(GlodeDetailsItemListener);
+        }
+
     }
 
     @Override

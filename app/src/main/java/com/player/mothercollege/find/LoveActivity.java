@@ -100,7 +100,10 @@ public class LoveActivity extends BaseActivity implements View.OnClickListener,M
                 btn_refrsh.setVisibility(View.GONE);
                 String info = response.get();
                 MyLog.testLog("爱心大使:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override

@@ -95,7 +95,10 @@ public class CollectActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
-                parseJson(info);
+
+                if (info!=null){
+                    parseJson(info);
+                }
                 MyLog.testLog("我的收藏"+info);
             }
 

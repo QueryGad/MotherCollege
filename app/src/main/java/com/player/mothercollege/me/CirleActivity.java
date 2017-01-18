@@ -81,7 +81,10 @@ public class CirleActivity extends BaseActivity implements View.OnClickListener 
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("我的圈子:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override

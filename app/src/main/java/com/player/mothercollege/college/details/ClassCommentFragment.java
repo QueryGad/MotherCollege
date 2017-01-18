@@ -72,7 +72,10 @@ public class ClassCommentFragment extends Fragment{
             @Override
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override

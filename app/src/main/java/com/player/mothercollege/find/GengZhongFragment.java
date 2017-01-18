@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -53,6 +54,7 @@ public class GengZhongFragment extends Fragment implements MyUpDownListView.OnRe
     private String uid;
     private GengZhongAdapter adapter;
     private List<GengZhongBean.UsersBean> usersList;
+    private LinearLayout ll_gengzhong_no;
 
     @Nullable
     @Override
@@ -71,6 +73,7 @@ public class GengZhongFragment extends Fragment implements MyUpDownListView.OnRe
         lv_find_gengzhong = (MyUpDownListView) view.findViewById(R.id.lv_find_gengzhong);
         iv_refresh = (ImageView) view.findViewById(R.id.iv_refresh);
         btn_refrsh = (Button) view.findViewById(R.id.btn_refrsh);
+        ll_gengzhong_no = (LinearLayout) view.findViewById(R.id.ll_gengzhong_no);
 
         lv_find_gengzhong.setOnRefreshListener(this);
     }
@@ -99,7 +102,10 @@ public class GengZhongFragment extends Fragment implements MyUpDownListView.OnRe
                 btn_refrsh.setVisibility(View.GONE);
                 String info = response.get();
                 MyLog.testLog("耕种福田:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override
@@ -128,8 +134,13 @@ public class GengZhongFragment extends Fragment implements MyUpDownListView.OnRe
         if (gengZhongBean!=null){
             endNo = gengZhongBean.getLastIndex();//目标索引
             infos = gengZhongBean.getUsers();
-            adapter = new GengZhongAdapter(infos,getActivity());
-            lv_find_gengzhong.setAdapter(adapter);
+            if (infos.size()==0){
+                ll_gengzhong_no.setVisibility(View.VISIBLE);
+            }else {
+                adapter = new GengZhongAdapter(infos,getActivity());
+                lv_find_gengzhong.setAdapter(adapter);
+            }
+
         }
 
     }

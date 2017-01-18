@@ -110,14 +110,12 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
         RelativeLayout sina = (RelativeLayout) view.findViewById(R.id.view_share_sina);
         RelativeLayout space = (RelativeLayout) view.findViewById(R.id.view_share_space);
         RelativeLayout qq = (RelativeLayout) view.findViewById(R.id.view_share_qq);
-        RelativeLayout frend = (RelativeLayout) view.findViewById(R.id.view_share_frend);
         Button btn_canle = (Button) view.findViewById(R.id.btn_canle);
         pengyou.setOnClickListener(this);
         wechat.setOnClickListener(this);
         sina.setOnClickListener(this);
         space.setOnClickListener(this);
         qq.setOnClickListener(this);
-        frend.setOnClickListener(this);
         btn_canle.setOnClickListener(this);
         // 设置相关位置，一定要在 show()之后  
         Window window = dialog.getWindow();
@@ -156,7 +154,9 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("二维码页面:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
                 CacheUtils.saveCache(FrendActivity.this,ConfigUtils.COLLEGE_URL + "qr_code",info);
             }
 
@@ -232,9 +232,6 @@ public class FrendActivity extends BaseActivity implements View.OnClickListener 
                                 "名师亲授，在线互动，你也快来吧！输入我的邀请码："+inviteCode+"，有惊喜哦！")
                         .setCallback(umShareListener)
                         .share();
-                break;
-            case R.id.view_share_frend:
-                Toast.makeText(FrendActivity.this,"母亲大学堂",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_canle:
                 dialog.dismiss();

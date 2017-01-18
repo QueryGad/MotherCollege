@@ -93,6 +93,7 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
     private List<ReadBookDetailsBean.ZlistBean> zlistList;
     private String uid;
     private String apptoken;
+    private String title;
 
     @Override
     public void setContentView() {
@@ -179,7 +180,10 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
             public void onSucceed(int what, Response<String> response) {
                 String info = response.get();
                 MyLog.testLog("读书详情页面:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override
@@ -226,8 +230,8 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         TextView tv_textdetails_comment = (TextView) view.findViewById(R.id.tv_textdetails_comment);
         GridView gr_textdetails_head = (GridView) view.findViewById(R.id.gr_textdetails_head);
         web_textdetails = (WebView) view.findViewById(R.id.web_textdetails);
-
-        tv_textdetails_title.setText(readBookDetailsBean.getTitle());
+        title = readBookDetailsBean.getTitle();
+        tv_textdetails_title.setText(title);
         tv_textdetails_time.setText("发布时间:"+readBookDetailsBean.getDate());
         tv_textdetails_viewCount.setText("浏览人数:"+readBookDetailsBean.getViewCount());
         tv_textdetails_zan.setText(readBookDetailsBean.getZlist().size()+"");
@@ -359,14 +363,15 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
 
                 break;
             case R.id.view_share_pengyou:
+                MyLog.testLog("朋友圈分享:"+content);
                 new ShareAction(ReadBookDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
-                        .withTargetUrl(content)
+                        .withText(content)
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.view_share_wechat:
                 new ShareAction(ReadBookDetailsActivity.this).setPlatform(SHARE_MEDIA.WEIXIN)
-                        .withTargetUrl(content)
+                        .withText(content)
                         .setCallback(umShareListener)
                         .share();
                 break;
@@ -387,9 +392,6 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
                         .withTargetUrl(content)
                         .setCallback(umShareListener)
                         .share();
-                break;
-            case R.id.view_share_frend:
-                Toast.makeText(ReadBookDetailsActivity.this,"母亲大学堂",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_canle:
                 dialog.dismiss();
@@ -626,14 +628,12 @@ public class ReadBookDetailsActivity extends BaseActivity implements View.OnClic
         RelativeLayout sina = (RelativeLayout) view.findViewById(R.id.view_share_sina);
         RelativeLayout space = (RelativeLayout) view.findViewById(R.id.view_share_space);
         RelativeLayout qq = (RelativeLayout) view.findViewById(R.id.view_share_qq);
-        RelativeLayout frend = (RelativeLayout) view.findViewById(R.id.view_share_frend);
         Button btn_canle = (Button) view.findViewById(R.id.btn_canle);
         pengyou.setOnClickListener(this);
         wechat.setOnClickListener(this);
         sina.setOnClickListener(this);
         space.setOnClickListener(this);
         qq.setOnClickListener(this);
-        frend.setOnClickListener(this);
         btn_canle.setOnClickListener(this);
         // 设置相关位置，一定要在 show()之后  
         Window window = dialog.getWindow();

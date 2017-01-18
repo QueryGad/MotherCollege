@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class FansActivity extends BaseActivity implements View.OnClickListener,M
     private Button btn_refrsh;
     private List<FansBean.UsersBean> usersList = new ArrayList<>();
     private RequestQueue requestQueue;
+    private LinearLayout ll_fans_no;
 
     int lastIndex=0;
     boolean isRefresh = true;
@@ -63,6 +65,7 @@ public class FansActivity extends BaseActivity implements View.OnClickListener,M
         lv_fans = (MyUpDownListView) findViewById(R.id.lv_fans);
         iv_refresh = (ImageView) findViewById(R.id.iv_refresh);
         btn_refrsh = (Button) findViewById(R.id.btn_refrsh);
+        ll_fans_no = (LinearLayout) findViewById(R.id.ll_fans_no);
 
         tv_details_title.setText("我的粉丝");
         lv_fans.setOnRefreshListener(this);
@@ -101,7 +104,10 @@ public class FansActivity extends BaseActivity implements View.OnClickListener,M
                 btn_refrsh.setVisibility(View.GONE);
                 String info = response.get();
                 MyLog.testLog("我的粉丝:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override
@@ -130,8 +136,13 @@ public class FansActivity extends BaseActivity implements View.OnClickListener,M
         if (fansBean!=null){
             endNo = fansBean.getLastIndex();//目标索引
             infos = fansBean.getUsers();
-            adapter = new FansAdapter(this,infos);
-            lv_fans.setAdapter(adapter);
+            if (infos.size()==0){
+                ll_fans_no.setVisibility(View.VISIBLE);
+            }else {
+                adapter = new FansAdapter(this,infos);
+                lv_fans.setAdapter(adapter);
+            }
+
         }
 
 

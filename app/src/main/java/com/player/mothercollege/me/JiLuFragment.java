@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -43,6 +44,7 @@ public class JiLuFragment extends Fragment implements MyUpDownListView.OnRefresh
     private ImageView iv_refresh;
     private Button btn_refrsh;
     private RequestQueue requestQueue;
+    private LinearLayout ll_jilu_no;
 
     int lastIndex=0;
     boolean isRefresh = true;
@@ -69,7 +71,7 @@ public class JiLuFragment extends Fragment implements MyUpDownListView.OnRefresh
         lv_jilu = (MyUpDownListView) view.findViewById(R.id.lv_jilu);
         iv_refresh = (ImageView) view.findViewById(R.id.iv_refresh);
         btn_refrsh = (Button) view.findViewById(R.id.btn_refrsh);
-
+        ll_jilu_no = (LinearLayout) view.findViewById(R.id.ll_jilu_no);
         lv_jilu.setOnRefreshListener(this);
     }
 
@@ -98,7 +100,10 @@ public class JiLuFragment extends Fragment implements MyUpDownListView.OnRefresh
                 btn_refrsh.setVisibility(View.GONE);
                 String info = response.get();
                 MyLog.testLog("我的记录:"+info);
-                parseJson(info);
+                if (info!=null){
+                    parseJson(info);
+                }
+
             }
 
             @Override
@@ -127,9 +132,13 @@ public class JiLuFragment extends Fragment implements MyUpDownListView.OnRefresh
         if (jiLuBean!=null){
             endNo = jiLuBean.getLastIndex();//目标索引
             infos = jiLuBean.getMyPayClass();
-            adapter = new JiLuAdapter(getActivity(),infos);
+            if (infos.size()==0){
+                ll_jilu_no.setVisibility(View.VISIBLE);
+            }else {
+                adapter = new JiLuAdapter(getActivity(),infos);
+                lv_jilu.setAdapter(adapter);
+            }
 
-            lv_jilu.setAdapter(adapter);
         }
 
 
